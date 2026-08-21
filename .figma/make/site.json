@@ -1,0 +1,10 @@
+{
+  "description": "Effortlessly upload files to extract and display their content, streamlining data access for users seeking quick information retrieval.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
