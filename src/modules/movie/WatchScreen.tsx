@@ -1,4 +1,5 @@
 import { useState } from "react";
+import styles from "./movie.module.css";
 
 // ─── Logo ─────────────────────────────────────────────────────────────────────
 
@@ -141,13 +142,13 @@ function Scrubber({ progress, onChange }: { progress: number; onChange: (v: numb
       onChange(Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width)));
     }}>
       {/* Track */}
-      <div className="w-full h-1 rounded-full relative" style={{ background: "#5E503F" }}>
+      <div className={`w-full h-1 rounded-full relative ${styles.scrubberTrack}`}>
         {/* Fill */}
-        <div className="h-full rounded-full" style={{ width: `${progress * 100}%`, background: "#49111C" }} />
+        <div className={`h-full rounded-full ${styles.scrubberFill}`} style={{ width: `${progress * 100}%` }} />
         {/* Handle */}
         <div
-          className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-          style={{ left: `calc(${progress * 100}% - 6px)`, background: "#F2F4F3" }}
+          className={`absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity ${styles.scrubberHandle}`}
+          style={{ left: `calc(${progress * 100}% - 6px)` }}
         />
       </div>
     </div>
@@ -172,7 +173,7 @@ function PlayerArea({ title, year, rating, match }: { title: string; year: strin
       <div className="relative w-full" style={{ aspectRatio: "16/9" }}>
         <img src={HERO_STILL} alt={title} className="w-full h-full object-cover rounded-xl" />
         {/* Bottom gradient */}
-        <div className="absolute inset-0 rounded-xl" style={{ background: "linear-gradient(to top, rgba(10,9,8,0.95) 0%, transparent 55%)" }} />
+        <div className={`absolute inset-0 rounded-xl ${styles.videoGradient}`} />
 
         {/* Center play circle */}
         <button
@@ -192,7 +193,7 @@ function PlayerArea({ title, year, rating, match }: { title: string; year: strin
             </IconBtn>
             <IconBtn label="Skip back 10s"><Skip10Icon /></IconBtn>
             <IconBtn label="Skip forward 10s"><Skip10Icon forward /></IconBtn>
-            <span className="text-xs ml-1" style={{ color: "#A9927D", fontFamily: "var(--font-body)" }}>
+            <span className={`text-xs ml-1 ${styles.timeText}`}>
               {fmt(elapsed)} / 2:22
             </span>
             <div className="flex-1" />
@@ -207,27 +208,18 @@ function PlayerArea({ title, year, rating, match }: { title: string; year: strin
       {/* Below player */}
       <div className="mt-5 flex items-start justify-between gap-4">
         <div>
-          <h2
-            className="text-3xl uppercase leading-none mb-2"
-            style={{ color: "#F2F4F3", fontFamily: "var(--font-display)", fontWeight: 800 }}
-          >
+          <h2 className={`text-3xl uppercase leading-none mb-2 ${styles.playerTitle}`}>
             {title}
           </h2>
           <div className="flex items-center gap-3">
-            <span className="text-sm font-bold" style={{ color: "#49111C" }}>{match}% Match</span>
-            <span className="text-sm" style={{ color: "#A9927D" }}>{year}</span>
-            <span className="text-xs px-1.5 py-0.5 border rounded" style={{ color: "#A9927D", borderColor: "#5E503F" }}>{rating}</span>
+            <span className={`text-sm font-bold ${styles.matchText}`}>{match}% Match</span>
+            <span className={`text-sm ${styles.metaText}`}>{year}</span>
+            <span className={`text-xs px-1.5 py-0.5 border rounded ${styles.badge}`}>{rating}</span>
           </div>
         </div>
         <button
           onClick={() => setSubscribed(s => !s)}
-          className="shrink-0 px-5 py-2 rounded-lg text-sm font-bold uppercase tracking-widest transition-all duration-150"
-          style={{
-            background: subscribed ? "transparent" : "#49111C",
-            color: "#F2F4F3",
-            border: subscribed ? "1px solid #49111C" : "none",
-            fontFamily: "var(--font-display)",
-          }}
+          className={`shrink-0 px-5 py-2 rounded-lg text-sm font-bold uppercase tracking-widest transition-all duration-150 ${subscribed ? styles.subscribeBtnActive : styles.subscribeBtnInactive}`}
         >
           {subscribed ? "✓ Following" : "+ Subscribe"}
         </button>
@@ -242,21 +234,15 @@ function EpisodePanel({ showTitle }: { showTitle: string }) {
   const [activeEp, setActiveEp] = useState(2);
 
   return (
-    <div
-      className="flex flex-col h-full rounded-xl overflow-hidden"
-      style={{ background: "#0A0908", border: "1px solid rgba(94,80,63,0.3)" }}
-    >
+    <div className={`flex flex-col h-full rounded-xl overflow-hidden ${styles.episodePanel}`}>
       {/* Panel header */}
-      <div className="px-4 pt-4 pb-3" style={{ borderBottom: "1px solid rgba(94,80,63,0.25)" }}>
-        <h3
-          className="text-base font-bold leading-tight mb-0.5"
-          style={{ color: "#F2F4F3", fontFamily: "var(--font-display)" }}
-        >
+      <div className={`px-4 pt-4 pb-3 ${styles.episodePanelHeader}`}>
+        <h3 className={`text-base font-bold leading-tight mb-0.5 ${styles.episodePanelTitle}`}>
           {showTitle}
         </h3>
-        <p className="text-xs" style={{ color: "#A9927D", fontFamily: "var(--font-body)" }}>Season 1 · Episode list</p>
+        <p className={`text-xs ${styles.episodePanelSubtitle}`}>Season 1 · Episode list</p>
         {/* Utility row */}
-        <div className="flex items-center gap-3 mt-3" style={{ color: "#A9927D" }}>
+        <div className={`flex items-center gap-3 mt-3 ${styles.episodePanelUtility}`}>
           <button className="hover:text-[#F2F4F3] transition-colors" aria-label="Loop"><LoopIcon /></button>
           <button className="hover:text-[#F2F4F3] transition-colors" aria-label="Shuffle"><ShuffleIcon /></button>
           <button className="ml-auto text-sm hover:text-[#F2F4F3] transition-colors" aria-label="More">···</button>
@@ -271,33 +257,24 @@ function EpisodePanel({ showTitle }: { showTitle: string }) {
             <button
               key={ep.ep}
               onClick={() => setActiveEp(ep.ep)}
-              className="w-full flex items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-white/5"
-              style={{
-                borderLeft: active ? "3px solid #49111C" : "3px solid transparent",
-                background: active ? "rgba(73,17,28,0.15)" : "transparent",
-                borderBottom: "1px solid rgba(94,80,63,0.15)",
-              }}
+              className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-white/5 ${styles.episodeRow} ${active ? styles.episodeRowActive : styles.episodeRowInactive}`}
             >
-              <span className="text-xs w-4 shrink-0 text-right" style={{ color: "#A9927D", fontFamily: "var(--font-body)" }}>
+              <span className={`text-xs w-4 shrink-0 text-right ${styles.episodeNum}`}>
                 {ep.ep}
               </span>
               <div className="relative shrink-0 rounded overflow-hidden" style={{ width: 80, aspectRatio: "16/9" }}>
                 <img src={ep.thumb} alt={ep.title} className="w-full h-full object-cover" />
                 <div
-                  className="absolute bottom-1 right-1 px-1 rounded text-[9px]"
-                  style={{ background: "rgba(10,9,8,0.8)", color: active ? "#49111C" : "#A9927D", fontFamily: "var(--font-body)" }}
+                  className={`absolute bottom-1 right-1 px-1 rounded text-[9px] ${styles.episodeDurationBadge} ${active ? styles.episodeDurationActive : styles.episodeDurationInactive}`}
                 >
                   {active ? "▶ Now" : ep.duration}
                 </div>
               </div>
               <div className="flex flex-col min-w-0">
-                <span
-                  className="text-xs font-semibold leading-tight truncate"
-                  style={{ color: active ? "#F2F4F3" : "#A9927D", fontFamily: "var(--font-body)" }}
-                >
+                <span className={`text-xs font-semibold leading-tight truncate ${active ? styles.episodeTitleActive : styles.episodeTitleInactive}`}>
                   {ep.title}
                 </span>
-                <span className="text-[10px] mt-0.5" style={{ color: "#5E503F", fontFamily: "var(--font-body)" }}>
+                <span className={`text-[10px] mt-0.5 ${styles.episodeSubLabel}`}>
                   S1 · E{ep.ep}
                 </span>
               </div>
@@ -358,13 +335,7 @@ function ReactionMini({ emoji, count }: { emoji: string; count: number }) {
   return (
     <button
       onClick={() => setActive(a => !a)}
-      className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs transition-colors"
-      style={{
-        background: active ? "rgba(73,17,28,0.3)" : "rgba(94,80,63,0.15)",
-        border: `1px solid ${active ? "#49111C" : "rgba(94,80,63,0.3)"}`,
-        color: active ? "#F2F4F3" : "#A9927D",
-        fontFamily: "var(--font-body)",
-      }}
+      className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs transition-colors ${active ? styles.reactionMiniActive : styles.reactionMiniInactive}`}
     >
       <span>{emoji}</span>
       <span>{active ? count + 1 : count}</span>
@@ -377,26 +348,26 @@ function CommentRow({ comment, nested = false }: {
   nested?: boolean;
 }) {
   return (
-    <div className={`flex gap-3 ${nested ? "pl-10" : ""}`} style={nested ? { borderLeft: "2px solid rgba(94,80,63,0.3)", marginLeft: 20, paddingLeft: 20 } : {}}>
+    <div className={`flex gap-3 ${nested ? `pl-10 ${styles.commentThread}` : ""}`}>
       {/* Avatar */}
       <div
-        className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold mt-0.5"
-        style={{ background: (comment as typeof SAMPLE_COMMENTS[0]).avatarColor ?? "#5E503F", color: "#F2F4F3", fontFamily: "var(--font-display)" }}
+        className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 ${styles.avatarBubble}`}
+        style={{ background: (comment as typeof SAMPLE_COMMENTS[0]).avatarColor ?? "#5E503F" }}
       >
         {comment.avatar}
       </div>
       <div className="flex-1 min-w-0">
         {/* Header */}
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-xs font-semibold" style={{ color: "#F2F4F3", fontFamily: "var(--font-body)" }}>{comment.user}</span>
-          <span className="text-[10px]" style={{ color: "#5E503F", fontFamily: "var(--font-body)" }}>{comment.time}</span>
+          <span className={`text-xs font-semibold ${styles.commentUser}`}>{comment.user}</span>
+          <span className={`text-[10px] ${styles.commentTime}`}>{comment.time}</span>
         </div>
         {/* Text */}
-        <p className="text-sm leading-relaxed mb-2" style={{ color: "#F2F4F3", fontFamily: "var(--font-body)" }}>{comment.text}</p>
+        <p className={`text-sm leading-relaxed mb-2 ${styles.commentText}`}>{comment.text}</p>
         {/* Actions */}
         <div className="flex items-center gap-2 flex-wrap">
           {comment.reactions.map(r => <ReactionMini key={r.emoji} emoji={r.emoji} count={r.count} />)}
-          <button className="text-xs transition-colors hover:text-[#49111C] ml-1" style={{ color: "#A9927D", fontFamily: "var(--font-body)" }}>
+          <button className={`text-xs transition-colors hover:text-[#49111C] ml-1 ${styles.replyBtn}`}>
             Reply
           </button>
         </div>
@@ -413,10 +384,10 @@ function ReactionButton({ emoji, label, count }: { emoji: string; label: string;
       className="flex flex-col items-center gap-1 transition-transform hover:scale-110"
     >
       <span className="text-2xl">{emoji}</span>
-      <span className="text-xs font-bold" style={{ color: active ? "#49111C" : "#F2F4F3", fontFamily: "var(--font-body)" }}>
+      <span className={`text-xs font-bold ${active ? styles.reactionCountActive : styles.reactionCountInactive}`}>
         {active ? String(parseInt(count) + 1) : count}
       </span>
-      <span className="text-[10px]" style={{ color: "#A9927D", fontFamily: "var(--font-body)" }}>{label}</span>
+      <span className={`text-[10px] ${styles.reactionLabel}`}>{label}</span>
     </button>
   );
 }
@@ -426,14 +397,14 @@ function ReactionsAndComments({ contentType }: { contentType: "movie" | "series"
   const [rulesDismissed, setRulesDismissed] = useState(false);
 
   return (
-    <div className="mt-10" style={{ borderTop: "1px solid rgba(94,80,63,0.25)", paddingTop: 32 }}>
+    <div className={`mt-10 ${styles.sectionDivider}`}>
 
       {/* ── Reactions ── */}
       <div className="flex flex-col items-center gap-3 mb-10">
-        <p className="text-sm font-semibold" style={{ color: "#F2F4F3", fontFamily: "var(--font-body)" }}>
+        <p className={`text-sm font-semibold ${styles.reactionHeading}`}>
           What did you think of this {contentType === "series" ? "episode" : "movie"}?
         </p>
-        <p className="text-xs" style={{ color: "#A9927D", fontFamily: "var(--font-body)" }}>1.9K reactions</p>
+        <p className={`text-xs ${styles.reactionSubtext}`}>1.9K reactions</p>
         <div className="flex items-center gap-10 mt-1">
           {REACTIONS.map(r => <ReactionButton key={r.label} {...r} />)}
         </div>
@@ -441,7 +412,7 @@ function ReactionsAndComments({ contentType }: { contentType: "movie" | "series"
 
       {/* ── Comments header ── */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold" style={{ color: "#F2F4F3", fontFamily: "var(--font-body)" }}>
+        <h3 className={`text-sm font-semibold ${styles.commentsHeading}`}>
           {SAMPLE_COMMENTS.length * 3} Comments
         </h3>
         <div className="flex items-center gap-1">
@@ -449,12 +420,7 @@ function ReactionsAndComments({ contentType }: { contentType: "movie" | "series"
             <button
               key={tab}
               onClick={() => setSort(tab)}
-              className="px-3 py-1 rounded-full text-xs transition-colors"
-              style={{
-                background: sort === tab ? "#49111C" : "transparent",
-                color: sort === tab ? "#F2F4F3" : "#A9927D",
-                fontFamily: "var(--font-body)",
-              }}
+              className={`px-3 py-1 rounded-full text-xs transition-colors ${sort === tab ? styles.sortTabActive : styles.sortTabInactive}`}
             >
               {tab}
             </button>
@@ -463,29 +429,22 @@ function ReactionsAndComments({ contentType }: { contentType: "movie" | "series"
       </div>
 
       {/* ── Composer (logged-out) ── */}
-      <div
-        className="rounded-lg mb-3 overflow-hidden"
-        style={{ border: "1px solid rgba(94,80,63,0.35)", background: "rgba(94,80,63,0.06)" }}
-      >
+      <div className={`rounded-lg mb-3 overflow-hidden ${styles.composerBox}`}>
         <div className="px-4 pt-3 pb-2">
-          <p className="text-sm" style={{ color: "#A9927D", fontFamily: "var(--font-body)" }}>
+          <p className={`text-sm ${styles.composerText}`}>
             Sign up to join the discussion…
           </p>
         </div>
-        <div
-          className="flex items-center justify-between px-4 py-2.5"
-          style={{ borderTop: "1px solid rgba(94,80,63,0.2)" }}
-        >
+        <div className={`flex items-center justify-between px-4 py-2.5 ${styles.composerFooter}`}>
           <div className="flex items-center gap-3">
             {["B", "I", "⊘"].map(icon => (
-              <button key={icon} className="text-xs font-bold opacity-40 cursor-not-allowed" style={{ color: "#A9927D", fontFamily: "var(--font-display)" }}>
+              <button key={icon} className={`text-xs font-bold opacity-40 cursor-not-allowed ${styles.composerIcon}`}>
                 {icon}
               </button>
             ))}
           </div>
           <button
-            className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wide transition-colors hover:bg-[#6b1927]"
-            style={{ background: "#49111C", color: "#F2F4F3", fontFamily: "var(--font-display)" }}
+            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wide transition-colors hover:bg-[#6b1927] ${styles.composerSubmit}`}
           >
             <span>+</span> Sign Up to Comment
           </button>
@@ -494,23 +453,18 @@ function ReactionsAndComments({ contentType }: { contentType: "movie" | "series"
 
       {/* ── Rules notice ── */}
       {!rulesDismissed && (
-        <div
-          className="flex items-center gap-3 px-4 py-2.5 rounded-lg mb-6"
-          style={{ border: "1px solid rgba(94,80,63,0.35)", background: "rgba(10,9,8,0.6)" }}
-        >
-          <p className="flex-1 text-xs" style={{ color: "#A9927D", fontFamily: "var(--font-body)" }}>
+        <div className={`flex items-center gap-3 px-4 py-2.5 rounded-lg mb-6 ${styles.rulesNotice}`}>
+          <p className={`flex-1 text-xs ${styles.rulesText}`}>
             By commenting, you agree to follow our comment rules.
           </p>
           <button
-            className="shrink-0 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide transition-colors hover:bg-[#6b1927]"
-            style={{ background: "#49111C", color: "#F2F4F3", fontFamily: "var(--font-display)" }}
+            className={`shrink-0 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide transition-colors hover:bg-[#6b1927] ${styles.rulesReadBtn}`}
           >
             Read Rules
           </button>
           <button
             onClick={() => setRulesDismissed(true)}
-            className="shrink-0 text-sm transition-colors hover:text-[#F2F4F3]"
-            style={{ color: "#A9927D" }}
+            className={`shrink-0 text-sm transition-colors hover:text-[#F2F4F3] ${styles.rulesDismissBtn}`}
             aria-label="Dismiss"
           >
             ×
@@ -546,16 +500,12 @@ export interface WatchProps {
 
 export default function WatchScreen({ title, year, rating, match, isSeries = false, onBack }: WatchProps) {
   return (
-    <div className="min-h-screen" style={{ background: "#0A0908" }}>
+    <div className={`min-h-screen ${styles.page}`}>
       {/* Slim top bar */}
-      <header
-        className="flex items-center gap-4 px-10 xl:px-12 h-14 sticky top-0 z-50"
-        style={{ background: "rgba(10,9,8,0.9)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(94,80,63,0.15)" }}
-      >
+      <header className={`flex items-center gap-4 px-10 xl:px-12 h-14 sticky top-0 z-50 ${styles.topBar}`}>
         <button
           onClick={onBack}
-          className="flex items-center gap-1.5 text-sm transition-colors hover:text-[#F2F4F3]"
-          style={{ color: "#A9927D", fontFamily: "var(--font-body)" }}
+          className={`flex items-center gap-1.5 text-sm transition-colors hover:text-[#F2F4F3] ${styles.backBtn}`}
           aria-label="Back to dashboard"
         >
           <BackIcon />
@@ -567,7 +517,7 @@ export default function WatchScreen({ title, year, rating, match, isSeries = fal
 
       {/* Variant label */}
       <div className="px-10 xl:px-12 pt-6 pb-1">
-        <p className="text-[10px] uppercase tracking-[0.2em]" style={{ color: "#5E503F", fontFamily: "var(--font-display)" }}>
+        <p className={`text-[10px] uppercase tracking-[0.2em] ${styles.variantLabel}`}>
           {isSeries ? "Series variant — video + episode panel" : "Movie variant — full-width, no side panel"}
         </p>
       </div>
@@ -589,10 +539,7 @@ export default function WatchScreen({ title, year, rating, match, isSeries = fal
       </div>
 
       {/* Dev handoff note */}
-      <div
-        className="mx-10 xl:mx-12 my-8 px-5 py-3 rounded-lg text-xs italic"
-        style={{ border: "1px dashed rgba(94,80,63,0.4)", color: "#5E503F", fontFamily: "var(--font-body)" }}
-      >
+      <div className={`mx-10 xl:mx-12 my-8 px-5 py-3 rounded-lg text-xs italic ${styles.devNote}`}>
         Dev note: Clicking a title opens this Watch screen. If the content is a single movie, use the Movie variant (full-width, no side panel). If it is a series, use the Series variant with the episode panel, current episode highlighted.
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import styles from "./auth.module.css";
 
 // ─── Shared assets ─────────────────────────────────────────────────────────
 
@@ -68,10 +69,7 @@ interface FieldProps {
 export function Field({ label, type = "text", placeholder, value, onChange, error, suffix }: FieldProps) {
   return (
     <div className="flex flex-col gap-[7px]">
-      <label
-        className="text-[10px] font-semibold uppercase tracking-[0.15em]"
-        style={{ color: "#A9927D", fontFamily: "var(--font-display)" }}
-      >
+      <label className={`text-[10px] font-semibold uppercase tracking-[0.15em] ${styles.fieldLabel}`}>
         {label}
       </label>
       <div className="relative">
@@ -84,20 +82,15 @@ export function Field({ label, type = "text", placeholder, value, onChange, erro
             ${error
               ? "border border-[#e50914] focus:border-[#e50914] focus:ring-1 focus:ring-[#e50914]/30"
               : "border border-[#5E503F]/60 focus:border-[#49111C] focus:ring-1 focus:ring-[#49111C]/40"
-            }`}
-          style={{
-            background: "#0f0d0c",
-            color: "#F2F4F3",
-            fontFamily: "var(--font-body)",
-          }}
+            } ${styles.fieldInput}`}
         />
         {suffix && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: "#A9927D" }}>
+          <div className={`absolute right-3 top-1/2 -translate-y-1/2 ${styles.fieldSuffix}`}>
             {suffix}
           </div>
         )}
       </div>
-      {error && <p className="text-[11px]" style={{ color: "#e50914" }}>{error}</p>}
+      {error && <p className={`text-[11px] ${styles.fieldError}`}>{error}</p>}
     </div>
   );
 }
@@ -137,8 +130,8 @@ export function PromoStats() {
         { num: "190+", label: "COUNTRIES" },
       ].map(({ num, label }) => (
         <div key={label} className="flex flex-col gap-1">
-          <span className="text-2xl font-bold" style={{ color: "#F2F4F3", fontFamily: "var(--font-display)" }}>{num}</span>
-          <span className="text-[10px] uppercase tracking-[0.18em]" style={{ color: "#5E503F", fontFamily: "var(--font-display)" }}>{label}</span>
+          <span className={`text-2xl font-bold ${styles.statNum}`}>{num}</span>
+          <span className={`text-[10px] uppercase tracking-[0.18em] ${styles.statLabel}`}>{label}</span>
         </div>
       ))}
     </div>
@@ -155,8 +148,7 @@ export function SocialButtons() {
         <button
           key={label}
           type="button"
-          className="w-full flex items-center justify-center gap-3 py-[11px] rounded-lg border text-sm transition-all duration-150 hover:border-[#A9927D]/60 hover:text-[#F2F4F3]"
-          style={{ background: "#0f0d0c", borderColor: "rgba(94,80,63,0.5)", color: "#A9927D", fontFamily: "var(--font-body)" }}
+          className={`w-full flex items-center justify-center gap-3 py-[11px] rounded-lg border text-sm transition-all duration-150 hover:border-[#A9927D]/60 hover:text-[#F2F4F3] ${styles.socialBtn}`}
         >
           {icon}
           {label}

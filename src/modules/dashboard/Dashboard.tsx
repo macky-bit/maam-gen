@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import type { Show } from "../movie/types";
 import { useTMDB } from "../movie/useTMDB";
 import { Navbar, Hero, GenreFilters, CarouselRow, Footer } from "./components";
+import styles from "./dashboard.module.css";
 
 export default function Dashboard({
   onSignOut,
@@ -54,20 +55,20 @@ export default function Dashboard({
   );
 
   return (
-    <div className="min-h-screen" style={{ background: "#0A0908" }}>
+    <div className={`min-h-screen ${styles.page}`}>
       <Navbar onSignOut={onSignOut} searchOpen={searchOpen} setSearchOpen={setSearchOpen} />
 
       <main>
         {loading && (
-          <div className="flex items-center justify-center" style={{ height: "78vh", color: "#A9927D" }}>
-            <p className="text-sm animate-pulse" style={{ fontFamily: "var(--font-body)" }}>Loading StreamFlix…</p>
+          <div className="flex items-center justify-center" style={{ height: "78vh" }}>
+            <p className={`text-sm animate-pulse ${styles.loadingText}`}>Loading StreamFlix…</p>
           </div>
         )}
 
         {error && !loading && (
           <div className="flex flex-col items-center justify-center gap-3 px-6 text-center" style={{ height: "78vh" }}>
-            <p className="text-sm font-semibold" style={{ color: "#e50914" }}>{error}</p>
-            <p className="text-xs" style={{ color: "#5E503F" }}>
+            <p className={`text-sm font-semibold ${styles.errorText}`}>{error}</p>
+            <p className={`text-xs ${styles.errorHint}`}>
               Get a free API key at themoviedb.org and swap it into src/modules/movie/tmdb.ts.
             </p>
           </div>

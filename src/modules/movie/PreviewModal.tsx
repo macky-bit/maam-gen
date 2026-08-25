@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Show } from "./types";
 import { fetchTrailerKey, fetchSimilar } from "./tmdb";
+import styles from "./movie.module.css";
 
 // ─── Icons (kept inline/no extra deps, matching the rest of the app) ───────
 
@@ -107,27 +108,24 @@ export default function PreviewModal({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto p-3 sm:p-6 md:p-10"
-      style={{ background: "rgba(10,9,8,0.85)", backdropFilter: "blur(4px)" }}
+      className={`fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto p-3 sm:p-6 md:p-10 ${styles.overlay}`}
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-3xl rounded-xl overflow-hidden shadow-2xl my-4 md:my-8"
-        style={{ background: "#0f0d0c", border: "1px solid rgba(94,80,63,0.3)" }}
+        className={`relative w-full max-w-3xl rounded-xl overflow-hidden shadow-2xl my-4 md:my-8 ${styles.modal}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-30 w-9 h-9 rounded-full flex items-center justify-center transition-colors"
-          style={{ background: "rgba(10,9,8,0.7)", color: "#F2F4F3" }}
+          className={`absolute top-4 right-4 z-30 w-9 h-9 rounded-full flex items-center justify-center transition-colors ${styles.closeBtn}`}
           aria-label="Close"
         >
           <CloseIcon />
         </button>
 
         {/* ─── Trailer / hero media ─────────────────────────────────── */}
-        <div className="relative w-full aspect-video" style={{ background: "#0A0908" }}>
+        <div className={`relative w-full aspect-video ${styles.mediaBg}`}>
           {trailerKey ? (
             <iframe
               key={trailerKey}
@@ -147,31 +145,23 @@ export default function PreviewModal({
             />
           )}
 
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{ background: "linear-gradient(to top, #0f0d0c 0%, transparent 45%, rgba(10,9,8,0.3) 100%)" }}
-          />
+          <div className={`absolute inset-0 pointer-events-none ${styles.mediaGradient}`} />
 
           <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 flex items-end justify-between gap-3">
             <div>
-              <h2
-                className="uppercase leading-none tracking-tight mb-3 text-2xl md:text-4xl"
-                style={{ color: "#F2F4F3", fontFamily: "var(--font-display)", fontWeight: 800 }}
-              >
+              <h2 className={`uppercase leading-none tracking-tight mb-3 text-2xl md:text-4xl ${styles.modalTitle}`}>
                 {show.title}
               </h2>
               <div className="flex items-center gap-3 flex-wrap">
                 <button
                   onClick={() => onPlay?.(show)}
-                  className="flex items-center gap-2 px-5 md:px-6 py-2 rounded-lg font-bold hover:bg-[#d0d2d1] active:scale-[0.98] transition-all duration-150 text-sm md:text-base"
-                  style={{ background: "#F2F4F3", color: "#0A0908", fontFamily: "var(--font-display)", letterSpacing: "0.05em" }}
+                  className={`flex items-center gap-2 px-5 md:px-6 py-2 rounded-lg font-bold hover:bg-[#d0d2d1] active:scale-[0.98] transition-all duration-150 text-sm md:text-base ${styles.filledBtn}`}
                 >
                   <PlayIcon />
                   Play
                 </button>
                 <button
-                  className="w-9 h-9 md:w-10 md:h-10 rounded-full border flex items-center justify-center transition-colors"
-                  style={{ borderColor: "#5E503F", color: "#F2F4F3", background: "rgba(10,9,8,0.4)" }}
+                  className={`w-9 h-9 md:w-10 md:h-10 rounded-full border flex items-center justify-center transition-colors ${styles.circleBtn}`}
                   aria-label="Add to list"
                 >
                   <PlusIcon />
@@ -182,8 +172,7 @@ export default function PreviewModal({
             {trailerKey && (
               <button
                 onClick={() => setMuted((m) => !m)}
-                className="w-9 h-9 md:w-10 md:h-10 rounded-full border flex items-center justify-center transition-colors flex-shrink-0"
-                style={{ borderColor: "#5E503F", color: "#F2F4F3", background: "rgba(10,9,8,0.4)" }}
+                className={`w-9 h-9 md:w-10 md:h-10 rounded-full border flex items-center justify-center transition-colors flex-shrink-0 ${styles.circleBtn}`}
                 aria-label={muted ? "Unmute" : "Mute"}
               >
                 <MuteIcon muted={muted} />
@@ -193,33 +182,33 @@ export default function PreviewModal({
         </div>
 
         {/* ─── Details ────────────────────────────────────────────────── */}
-        <div className="p-4 md:p-8" style={{ fontFamily: "var(--font-body)" }}>
+        <div className={`p-4 md:p-8 ${styles.detailsWrap}`}>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-3 flex-wrap">
                 {typeof show.match === "number" && (
-                  <span className="font-semibold text-sm" style={{ color: "#49111C" }}>
+                  <span className={`font-semibold text-sm ${styles.matchText}`}>
                     {show.match}% Match
                   </span>
                 )}
-                <span className="text-sm" style={{ color: "#A9927D" }}>{show.year}</span>
-                <span className="text-xs px-1.5 py-0.5 border rounded" style={{ color: "#A9927D", borderColor: "#5E503F" }}>
+                <span className={`text-sm ${styles.metaText}`}>{show.year}</span>
+                <span className={`text-xs px-1.5 py-0.5 border rounded ${styles.badge}`}>
                   {show.rating}
                 </span>
                 {!trailerKey && !loadingTrailer && (
-                  <span className="text-xs italic" style={{ color: "#5E503F" }}>
+                  <span className={`text-xs italic ${styles.noTrailerText}`}>
                     No trailer available
                   </span>
                 )}
               </div>
-              <p className="text-sm md:text-base leading-relaxed" style={{ color: "#F2F4F3" }}>
+              <p className={`text-sm md:text-base leading-relaxed ${styles.descriptionText}`}>
                 {show.description || "No description available."}
               </p>
             </div>
-            <div className="text-sm space-y-2" style={{ color: "#A9927D" }}>
+            <div className={`text-sm space-y-2 ${styles.genresText}`}>
               {show.genres.length > 0 && (
                 <p>
-                  <span style={{ color: "#5E503F" }}>Genres: </span>
+                  <span className={styles.genresLabel}>Genres: </span>
                   {show.genres.join(", ")}
                 </p>
               )}
@@ -229,10 +218,7 @@ export default function PreviewModal({
           {/* More Like This */}
           {similar.length > 0 && (
             <div className="mt-8">
-              <h3
-                className="font-bold text-lg md:text-xl tracking-wide mb-4"
-                style={{ color: "#F2F4F3", fontFamily: "var(--font-display)" }}
-              >
+              <h3 className={`font-bold text-lg md:text-xl tracking-wide mb-4 ${styles.similarHeading}`}>
                 More Like This
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -240,8 +226,7 @@ export default function PreviewModal({
                   <div
                     key={s.id}
                     onClick={() => onSelect?.(s)}
-                    className="cursor-pointer group rounded-lg overflow-hidden"
-                    style={{ background: "#0A0908" }}
+                    className={`cursor-pointer group rounded-lg overflow-hidden ${styles.similarCard}`}
                   >
                     <div className="relative overflow-hidden" style={{ aspectRatio: "16/9" }}>
                       <img
@@ -253,15 +238,15 @@ export default function PreviewModal({
                     <div className="p-2">
                       <div className="flex items-center justify-between mb-1">
                         {typeof s.match === "number" && (
-                          <span className="text-xs font-semibold" style={{ color: "#49111C" }}>
+                          <span className={`text-xs font-semibold ${styles.matchText}`}>
                             {s.match}% Match
                           </span>
                         )}
-                        <span className="text-xs px-1 border rounded" style={{ color: "#A9927D", borderColor: "#5E503F" }}>
+                        <span className={`text-xs px-1 border rounded ${styles.badge}`}>
                           {s.rating}
                         </span>
                       </div>
-                      <p className="text-xs line-clamp-2" style={{ color: "#A9927D" }}>
+                      <p className={`text-xs line-clamp-2 ${styles.similarDesc}`}>
                         {s.description}
                       </p>
                     </div>

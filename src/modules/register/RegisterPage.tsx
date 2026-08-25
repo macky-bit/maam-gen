@@ -7,6 +7,7 @@ import {
   PromoStats,
   SocialButtons,
 } from "../auth/AuthUI";
+import styles from "../auth/auth.module.css";
 
 export default function RegisterPage({
   onNavigate,
@@ -44,7 +45,7 @@ export default function RegisterPage({
   };
 
   return (
-    <div className="flex min-h-screen w-full" style={{ background: "#0A0908" }}>
+    <div className={`flex min-h-screen w-full ${styles.page}`}>
       {/* ── LEFT: Cinematic section ── */}
       <div className="relative hidden lg:flex lg:w-[60%] flex-col justify-end overflow-hidden">
         <img
@@ -53,35 +54,23 @@ export default function RegisterPage({
           aria-hidden
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0" style={{ background: "#0A0908", opacity: 0.86 }} />
-        <div className="absolute inset-0" style={{ background: "#49111C", opacity: 0.08 }} />
-        <div
-          className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse at center, transparent 40%, rgba(10,9,8,0.55) 100%)" }}
-        />
+        <div className={`absolute inset-0 ${styles.overlayBase}`} />
+        <div className={`absolute inset-0 ${styles.overlayWine}`} />
+        <div className={`absolute inset-0 ${styles.overlayRadial}`} />
 
         <div className="relative z-10 px-14 pb-16 max-w-[560px]">
-          <p
-            className="text-[11px] uppercase tracking-[0.22em] mb-6"
-            style={{ color: "#A9927D", fontFamily: "var(--font-display)" }}
-          >
+          <p className={`text-[11px] uppercase tracking-[0.22em] mb-6 ${styles.eyebrow}`}>
             Premium Streaming
           </p>
 
-          <div
-            className="leading-none mb-6"
-            style={{ fontFamily: "var(--font-display)", fontWeight: 800 }}
-          >
-            <div className="text-[72px] xl:text-[80px] uppercase" style={{ color: "#F2F4F3" }}>UNLIMITED</div>
-            <div className="text-[72px] xl:text-[80px] uppercase" style={{ color: "#A9927D" }}>MOVIES,</div>
-            <div className="text-[72px] xl:text-[80px] uppercase" style={{ color: "#F2F4F3" }}>TV SHOWS,</div>
-            <div className="text-[72px] xl:text-[80px] uppercase" style={{ color: "#A9927D" }}>AND MORE.</div>
+          <div className={`leading-none mb-6 ${styles.headline}`}>
+            <div className={`text-[72px] xl:text-[80px] uppercase ${styles.headlineCream}`}>UNLIMITED</div>
+            <div className={`text-[72px] xl:text-[80px] uppercase ${styles.headlineTaupe}`}>MOVIES,</div>
+            <div className={`text-[72px] xl:text-[80px] uppercase ${styles.headlineCream}`}>TV SHOWS,</div>
+            <div className={`text-[72px] xl:text-[80px] uppercase ${styles.headlineTaupe}`}>AND MORE.</div>
           </div>
 
-          <p
-            className="text-sm leading-relaxed mb-10 max-w-[420px]"
-            style={{ color: "#A9927D", fontFamily: "var(--font-body)" }}
-          >
+          <p className={`text-sm leading-relaxed mb-10 max-w-[420px] ${styles.promoText}`}>
             Create your account and start streaming thousands of titles anytime, anywhere — in stunning quality.
           </p>
 
@@ -90,31 +79,25 @@ export default function RegisterPage({
       </div>
 
       {/* Divider */}
-      <div className="hidden lg:block w-px self-stretch" style={{ background: "rgba(94,80,63,0.2)" }} />
+      <div className={`hidden lg:block w-px self-stretch ${styles.divider}`} />
 
       {/* ── RIGHT: Registration form ── */}
-      <div
-        className="flex-1 lg:w-[40%] flex flex-col overflow-y-auto"
-        style={{ background: "#0A0908" }}
-      >
+      <div className={`flex-1 lg:w-[40%] flex flex-col overflow-y-auto ${styles.page}`}>
         {/* Mobile background */}
         <div className="lg:hidden absolute inset-0 pointer-events-none">
           <img src={BG_IMAGE} alt="" aria-hidden className="w-full h-full object-cover opacity-10" />
-          <div className="absolute inset-0" style={{ background: "#0A0908", opacity: 0.88 }} />
+          <div className={`absolute inset-0 ${styles.mobileOverlay}`} />
         </div>
 
         <div className="relative z-10 flex flex-col h-full px-6 sm:px-10 xl:px-14 py-10">
           <div className="mb-10">{LOGO_SVG}</div>
 
           <div className="mb-8">
-            <h1
-              className="text-4xl sm:text-5xl xl:text-[52px] uppercase leading-none tracking-tight mb-2"
-              style={{ color: "#F2F4F3", fontFamily: "var(--font-display)", fontWeight: 800 }}
-            >
+            <h1 className={`text-4xl sm:text-5xl xl:text-[52px] uppercase leading-none tracking-tight mb-2 ${styles.formTitle}`}>
               Account
             </h1>
-            <p className="text-sm" style={{ color: "#A9927D", fontFamily: "var(--font-body)" }}>
-              Join <span className="font-semibold" style={{ color: "#F2F4F3" }}>STREAMFLIX</span> and enjoy unlimited entertainment.
+            <p className={`text-sm ${styles.formSubtitle}`}>
+              Join <span className={`font-semibold ${styles.brandHighlight}`}>STREAMFLIX</span> and enjoy unlimited entertainment.
             </p>
           </div>
 
@@ -138,25 +121,20 @@ export default function RegisterPage({
                   onChange={(e) => setAgreed(e.target.checked)}
                   className="mt-0.5 w-4 h-4 shrink-0 accent-[#49111C] rounded"
                 />
-                <span className="text-xs leading-relaxed" style={{ color: "#A9927D", fontFamily: "var(--font-body)" }}>
+                <span className={`text-xs leading-relaxed ${styles.checkboxLabel}`}>
                   I agree to the{" "}
                   <button type="button" className="underline hover:text-[#F2F4F3] transition-colors">Terms of Service</button>
                   {" "}and{" "}
                   <button type="button" className="underline hover:text-[#F2F4F3] transition-colors">Privacy Policy</button>.
                 </span>
               </label>
-              {errors.terms && <p className="text-[11px] pl-6" style={{ color: "#e50914" }}>{errors.terms}</p>}
+              {errors.terms && <p className={`text-[11px] pl-6 ${styles.errorText}`}>{errors.terms}</p>}
             </div>
 
             {/* CTA */}
             <button
               type="submit"
-              className="w-full py-3 rounded-lg text-sm font-bold uppercase tracking-[0.15em] transition-all duration-150 hover:bg-[#6b1927] active:scale-[0.99]"
-              style={{
-                background: "#49111C",
-                color: "#F2F4F3",
-                fontFamily: "var(--font-display)",
-              }}
+              className={`w-full py-3 rounded-lg text-sm font-bold uppercase tracking-[0.15em] transition-all duration-150 hover:bg-[#6b1927] active:scale-[0.99] ${styles.submitBtn}`}
             >
               Create Account
             </button>
@@ -164,24 +142,20 @@ export default function RegisterPage({
 
           {/* OR divider */}
           <div className="flex items-center gap-3 my-5">
-            <div className="flex-1 h-px" style={{ background: "rgba(94,80,63,0.4)" }} />
-            <span className="text-xs uppercase tracking-widest" style={{ color: "#5E503F", fontFamily: "var(--font-display)" }}>or</span>
-            <div className="flex-1 h-px" style={{ background: "rgba(94,80,63,0.4)" }} />
+            <div className={`flex-1 h-px ${styles.orDivider}`} />
+            <span className={`text-xs uppercase tracking-widest ${styles.orText}`}>or</span>
+            <div className={`flex-1 h-px ${styles.orDivider}`} />
           </div>
 
           <SocialButtons />
 
           {/* Sign in link */}
-          <p
-            className="mt-6 text-center text-sm"
-            style={{ color: "#5E503F", fontFamily: "var(--font-body)" }}
-          >
+          <p className={`mt-6 text-center text-sm ${styles.footerText}`}>
             Already have an account?{" "}
             <button
               type="button"
               onClick={() => onNavigate("login")}
-              className="transition-colors hover:text-[#F2F4F3]"
-              style={{ color: "#A9927D" }}
+              className={`transition-colors hover:text-[#F2F4F3] ${styles.footerLink}`}
             >
               Sign In
             </button>

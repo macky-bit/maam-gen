@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import type { Show } from "../movie/types";
+import styles from "./dashboard.module.css";
 
 // ─── Logo ─────────────────────────────────────────────────────────────────────
 
@@ -95,28 +96,24 @@ export function MovieCard({
       <img src={show.image} alt={show.title} className="w-full h-full object-cover" />
 
       {showProgress && show.progress !== undefined && (
-        <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: "rgba(94,80,63,0.5)" }}>
-          <div className="h-full rounded-full" style={{ width: `${show.progress}%`, background: "#49111C" }} />
+        <div className={`absolute bottom-0 left-0 right-0 h-1 ${styles.progressTrack}`}>
+          <div className={`h-full rounded-full ${styles.progressFill}`} style={{ width: `${show.progress}%` }} />
         </div>
       )}
 
       {hovered && (
-        <div
-          className="absolute inset-0 flex flex-col justify-end p-3"
-          style={{ background: "linear-gradient(to top, rgba(10,9,8,0.97) 0%, rgba(10,9,8,0.5) 60%, transparent 100%)" }}
-        >
-          <p className="text-xs font-bold leading-tight mb-1 line-clamp-2" style={{ color: "#F2F4F3", fontFamily: "var(--font-display)" }}>
+        <div className={`absolute inset-0 flex flex-col justify-end p-3 ${styles.cardOverlay}`}>
+          <p className={`text-xs font-bold leading-tight mb-1 line-clamp-2 ${styles.cardTitle}`}>
             {show.title}
           </p>
           <div className="flex items-center gap-1.5 mb-2 flex-wrap">
-            {typeof show.match === "number" && <span className="text-[10px] font-bold" style={{ color: "#49111C" }}>{show.match}%</span>}
-            <span className="text-[10px]" style={{ color: "#A9927D" }}>{show.year}</span>
-            <span className="text-[10px] px-1 border rounded" style={{ color: "#A9927D", borderColor: "#5E503F" }}>{show.rating}</span>
+            {typeof show.match === "number" && <span className={`text-[10px] font-bold ${styles.cardMatch}`}>{show.match}%</span>}
+            <span className={`text-[10px] ${styles.cardMeta}`}>{show.year}</span>
+            <span className={`text-[10px] px-1 border rounded ${styles.cardBadge}`}>{show.rating}</span>
           </div>
           <div className="flex gap-1.5">
             <button
-              className="flex items-center justify-center rounded-full w-7 h-7 transition-colors"
-              style={{ background: "#F2F4F3" }}
+              className={`flex items-center justify-center rounded-full w-7 h-7 transition-colors ${styles.playBtn}`}
               aria-label="Play"
               onClick={(e) => { e.stopPropagation(); onPlay?.(show); }}
             >
@@ -124,16 +121,14 @@ export function MovieCard({
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); setInList((l) => !l); }}
-              className="flex items-center justify-center rounded-full w-7 h-7 border transition-colors"
-              style={{ background: "transparent", borderColor: inList ? "#49111C" : "#5E503F", color: inList ? "#49111C" : "#A9927D" }}
+              className={`flex items-center justify-center rounded-full w-7 h-7 border transition-colors ${inList ? styles.listBtnActive : styles.listBtnInactive}`}
               aria-label={inList ? "Remove from list" : "Add to list"}
             >
               <span className="text-xs leading-none">{inList ? "✓" : "+"}</span>
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); onInfo?.(show); }}
-              className="flex items-center justify-center rounded-full w-7 h-7 border transition-colors"
-              style={{ background: "transparent", borderColor: "#5E503F", color: "#A9927D" }}
+              className={`flex items-center justify-center rounded-full w-7 h-7 border transition-colors ${styles.infoBtn}`}
               aria-label="More info"
             >
               <InfoIcon />
@@ -151,17 +146,8 @@ export function Top10Card({ show, rank, onInfo }: { show: Show; rank: number; on
   return (
     <div className="relative shrink-0 flex items-end cursor-pointer w-[140px] sm:w-[160px]" onClick={() => onInfo?.(show)}>
       <span
-        className="absolute left-0 bottom-0 z-10 leading-none select-none"
-        style={{
-          fontFamily: "var(--font-display)",
-          fontWeight: 800,
-          fontSize: 96,
-          color: "rgba(10,9,8,0.85)",
-          WebkitTextStroke: "2px rgba(94,80,63,0.5)",
-          lineHeight: 1,
-          bottom: -8,
-          left: -10,
-        }}
+        className={`absolute left-0 bottom-0 z-10 leading-none select-none ${styles.rankNumber}`}
+        style={{ bottom: -8, left: -10 }}
       >
         {rank}
       </span>
@@ -203,11 +189,11 @@ export function CarouselRow({
   return (
     <section className="px-4 sm:px-10 xl:px-12">
       <div className="flex items-center gap-3 mb-3">
-        <h2 className="text-lg font-bold" style={{ color: "#F2F4F3", fontFamily: "var(--font-display)" }}>
+        <h2 className={`text-lg font-bold ${styles.rowTitle}`}>
           {title}
         </h2>
         {exploreAll && (
-          <button className="text-xs font-medium transition-colors hover:text-[#F2F4F3]" style={{ color: "#49111C", fontFamily: "var(--font-body)" }}>
+          <button className={`text-xs font-medium transition-colors hover:text-[#F2F4F3] ${styles.exploreAllBtn}`}>
             Explore All &rsaquo;
           </button>
         )}
@@ -216,17 +202,15 @@ export function CarouselRow({
       <div className="relative group">
         <button
           onClick={() => scroll("left")}
-          className="hidden sm:flex absolute left-0 top-0 bottom-0 z-10 w-10 items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-          style={{ background: "linear-gradient(to right, rgba(10,9,8,0.9), transparent)" }}
+          className={`hidden sm:flex absolute left-0 top-0 bottom-0 z-10 w-10 items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity ${styles.scrollFadeLeft}`}
           aria-label="Scroll left"
         >
-          <span style={{ color: "#F2F4F3", fontSize: 20 }}>‹</span>
+          <span className={styles.scrollArrow}>‹</span>
         </button>
 
         <div
           ref={ref}
-          className="flex gap-3 overflow-x-auto pb-2 scrollbar-none"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          className={`flex gap-3 overflow-x-auto pb-2 ${styles.noScrollbar}`}
         >
           {shows.map((show, i) =>
             top10 ? (
@@ -239,11 +223,10 @@ export function CarouselRow({
 
         <button
           onClick={() => scroll("right")}
-          className="hidden sm:flex absolute right-0 top-0 bottom-0 z-10 w-10 items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-          style={{ background: "linear-gradient(to left, rgba(10,9,8,0.9), transparent)" }}
+          className={`hidden sm:flex absolute right-0 top-0 bottom-0 z-10 w-10 items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity ${styles.scrollFadeRight}`}
           aria-label="Scroll right"
         >
-          <span style={{ color: "#F2F4F3", fontSize: 20 }}>›</span>
+          <span className={styles.scrollArrow}>›</span>
         </button>
       </div>
     </section>
@@ -268,19 +251,16 @@ export function Navbar({
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
-    <header
-      className="fixed top-0 left-0 right-0 z-50 flex items-center gap-4 sm:gap-6 px-4 sm:px-10 xl:px-12 h-14"
-      style={{ background: "rgba(10,9,8,0.92)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(94,80,63,0.15)" }}
-    >
+    <header className={`fixed top-0 left-0 right-0 z-50 flex items-center gap-4 sm:gap-6 px-4 sm:px-10 xl:px-12 h-14 ${styles.header}`}>
       {/* Mobile menu button */}
       <button
         className="md:hidden flex flex-col justify-center gap-1 w-6 h-6"
         onClick={() => setMobileNavOpen((v) => !v)}
         aria-label="Menu"
       >
-        <span className="block h-0.5 w-full" style={{ background: "#F2F4F3" }} />
-        <span className="block h-0.5 w-full" style={{ background: "#F2F4F3" }} />
-        <span className="block h-0.5 w-full" style={{ background: "#F2F4F3" }} />
+        <span className={`block h-0.5 w-full ${styles.hamburgerBar}`} />
+        <span className={`block h-0.5 w-full ${styles.hamburgerBar}`} />
+        <span className={`block h-0.5 w-full ${styles.hamburgerBar}`} />
       </button>
 
       <div className="shrink-0 mr-2">{LOGO_SVG}</div>
@@ -289,14 +269,7 @@ export function Navbar({
         {NAV_LINKS.map((link) => (
           <button
             key={link}
-            className="text-sm transition-colors whitespace-nowrap"
-            style={{
-              color: link === "Home" ? "#F2F4F3" : "#A9927D",
-              fontFamily: "var(--font-body)",
-              fontWeight: link === "Home" ? 600 : 400,
-              borderBottom: link === "Home" ? "2px solid #49111C" : "2px solid transparent",
-              paddingBottom: 2,
-            }}
+            className={`text-sm transition-colors whitespace-nowrap ${styles.navLink} ${link === "Home" ? styles.navLinkActive : styles.navLinkInactive}`}
           >
             {link}
           </button>
@@ -304,15 +277,11 @@ export function Navbar({
       </nav>
 
       {mobileNavOpen && (
-        <nav
-          className="md:hidden absolute top-14 left-0 right-0 flex flex-col py-2"
-          style={{ background: "#0A0908", borderBottom: "1px solid rgba(94,80,63,0.2)" }}
-        >
+        <nav className={`md:hidden absolute top-14 left-0 right-0 flex flex-col py-2 ${styles.mobileNav}`}>
           {NAV_LINKS.map((link) => (
             <button
               key={link}
-              className="text-left px-4 py-2.5 text-sm"
-              style={{ color: link === "Home" ? "#F2F4F3" : "#A9927D", fontFamily: "var(--font-body)" }}
+              className={`text-left px-4 py-2.5 text-sm ${link === "Home" ? styles.mobileNavLinkActive : styles.mobileNavLinkInactive}`}
               onClick={() => setMobileNavOpen(false)}
             >
               {link}
@@ -328,12 +297,11 @@ export function Navbar({
           <input
             autoFocus
             placeholder="Search movies, shows, genres..."
-            className="w-32 sm:w-56 px-3 py-1.5 text-sm rounded-lg outline-none"
-            style={{ background: "#0f0d0c", border: "1px solid #5E503F", color: "#F2F4F3", fontFamily: "var(--font-body)" }}
+            className={`w-32 sm:w-56 px-3 py-1.5 text-sm rounded-lg outline-none ${styles.searchInput}`}
             onBlur={() => setSearchOpen(false)}
           />
         ) : (
-          <button onClick={() => setSearchOpen(true)} className="transition-colors hover:text-[#F2F4F3]" style={{ color: "#A9927D" }} aria-label="Search">
+          <button onClick={() => setSearchOpen(true)} className={`transition-colors hover:text-[#F2F4F3] ${styles.iconBtn}`} aria-label="Search">
             <SearchIcon />
           </button>
         )}
@@ -341,24 +309,23 @@ export function Navbar({
         <div className="relative">
           <button
             onClick={() => { setNotifOpen((n) => !n); setProfileOpen(false); }}
-            className="relative transition-colors hover:text-[#F2F4F3]"
-            style={{ color: "#A9927D" }}
+            className={`relative transition-colors hover:text-[#F2F4F3] ${styles.iconBtn}`}
             aria-label="Notifications"
           >
             <BellIcon />
-            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full" style={{ background: "#49111C" }} />
+            <span className={`absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full ${styles.notifDot}`} />
           </button>
           {notifOpen && (
-            <div className="absolute right-0 top-8 w-64 sm:w-72 rounded-xl overflow-hidden shadow-2xl" style={{ background: "#0f0d0c", border: "1px solid rgba(94,80,63,0.4)" }}>
+            <div className={`absolute right-0 top-8 w-64 sm:w-72 rounded-xl overflow-hidden shadow-2xl ${styles.dropdown}`}>
               {[
                 { title: "New episode available", desc: "House of the Dragon S3E1 is now streaming", time: "2m ago" },
                 { title: "You might like this", desc: "Based on your history: The Godfather", time: "1h ago" },
                 { title: "Watchlist updated", desc: "3 new titles added to My List picks", time: "3h ago" },
               ].map((n) => (
-                <div key={n.title} className="flex flex-col gap-0.5 px-4 py-3 border-b cursor-pointer hover:bg-white/5 transition-colors" style={{ borderColor: "rgba(94,80,63,0.2)" }}>
-                  <span className="text-xs font-semibold" style={{ color: "#F2F4F3", fontFamily: "var(--font-body)" }}>{n.title}</span>
-                  <span className="text-xs" style={{ color: "#A9927D", fontFamily: "var(--font-body)" }}>{n.desc}</span>
-                  <span className="text-[10px]" style={{ color: "#5E503F" }}>{n.time}</span>
+                <div key={n.title} className={`flex flex-col gap-0.5 px-4 py-3 border-b cursor-pointer hover:bg-white/5 transition-colors ${styles.notifRow}`}>
+                  <span className={`text-xs font-semibold ${styles.notifTitle}`}>{n.title}</span>
+                  <span className={`text-xs ${styles.notifDesc}`}>{n.desc}</span>
+                  <span className={`text-[10px] ${styles.notifTime}`}>{n.time}</span>
                 </div>
               ))}
             </div>
@@ -367,18 +334,18 @@ export function Navbar({
 
         <div className="relative">
           <button onClick={() => { setProfileOpen((p) => !p); setNotifOpen(false); }} className="flex items-center gap-1.5" aria-label="Profile">
-            <span className="w-7 h-7 rounded flex items-center justify-center text-xs font-bold" style={{ background: "#49111C", color: "#F2F4F3", fontFamily: "var(--font-display)" }}>A</span>
-            <span className="hidden sm:inline" style={{ color: "#A9927D" }}><ChevronDown /></span>
+            <span className={`w-7 h-7 rounded flex items-center justify-center text-xs font-bold ${styles.avatarBadge}`}>A</span>
+            <span className={`hidden sm:inline ${styles.iconBtn}`}><ChevronDown /></span>
           </button>
           {profileOpen && (
-            <div className="absolute right-0 top-9 w-44 rounded-xl overflow-hidden shadow-2xl" style={{ background: "#0f0d0c", border: "1px solid rgba(94,80,63,0.4)" }}>
+            <div className={`absolute right-0 top-9 w-44 rounded-xl overflow-hidden shadow-2xl ${styles.dropdown}`}>
               {["Profile", "Account", "Settings", "Help Center"].map((item) => (
-                <button key={item} className="w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-[#49111C]/30" style={{ color: "#F2F4F3", fontFamily: "var(--font-body)" }}>
+                <button key={item} className={`w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-[#49111C]/30 ${styles.dropdownItem}`}>
                   {item}
                 </button>
               ))}
-              <div className="border-t" style={{ borderColor: "rgba(94,80,63,0.3)" }} />
-              <button onClick={onSignOut} className="w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-[#49111C]/30" style={{ color: "#A9927D", fontFamily: "var(--font-body)" }}>
+              <div className={`border-t ${styles.dropdownDivider}`} />
+              <button onClick={onSignOut} className={`w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-[#49111C]/30 ${styles.dropdownItemMuted}`}>
                 Sign Out
               </button>
             </div>
@@ -406,41 +373,36 @@ export function Hero({
   return (
     <section className="relative w-full" style={{ height: "78vh", minHeight: 420 }}>
       <img src={bg} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover object-top" />
-      <div className="absolute inset-0" style={{ background: "rgba(10,9,8,0.55)" }} />
-      <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(10,9,8,0.95) 0%, rgba(10,9,8,0.4) 60%, transparent 100%)" }} />
-      <div className="absolute inset-0" style={{ background: "linear-gradient(to top, #0A0908 0%, transparent 45%)" }} />
-      <div className="absolute inset-0" style={{ background: "rgba(73,17,28,0.07)" }} />
+      <div className={`absolute inset-0 ${styles.heroDim}`} />
+      <div className={`absolute inset-0 ${styles.heroGradientRight}`} />
+      <div className={`absolute inset-0 ${styles.heroGradientTop}`} />
+      <div className={`absolute inset-0 ${styles.heroWineWash}`} />
 
       <div className="absolute bottom-16 sm:bottom-20 left-4 sm:left-10 xl:left-12 right-4 sm:right-auto max-w-[520px]">
-        <p className="text-[10px] uppercase tracking-[0.25em] mb-3" style={{ color: "#A9927D", fontFamily: "var(--font-display)" }}>
+        <p className={`text-[10px] uppercase tracking-[0.25em] mb-3 ${styles.heroEyebrow}`}>
           StreamFlix {show.mediaType === "tv" ? "Series" : "Original"}
         </p>
-        <h1
-          className="text-3xl sm:text-5xl xl:text-6xl uppercase leading-none mb-4"
-          style={{ color: "#F2F4F3", fontFamily: "var(--font-display)", fontWeight: 800 }}
-        >
+        <h1 className={`text-3xl sm:text-5xl xl:text-6xl uppercase leading-none mb-4 ${styles.heroTitle}`}>
           {show.title}
         </h1>
         <div className="flex items-center gap-3 mb-4 flex-wrap">
-          {typeof show.match === "number" && <span className="text-sm font-bold" style={{ color: "#49111C" }}>{show.match}% Match</span>}
-          <span className="text-sm" style={{ color: "#A9927D" }}>{show.year}</span>
-          <span className="text-xs px-1.5 py-0.5 border rounded" style={{ color: "#A9927D", borderColor: "#5E503F" }}>{show.rating}</span>
+          {typeof show.match === "number" && <span className={`text-sm font-bold ${styles.heroMatch}`}>{show.match}% Match</span>}
+          <span className={`text-sm ${styles.heroMeta}`}>{show.year}</span>
+          <span className={`text-xs px-1.5 py-0.5 border rounded ${styles.heroBadge}`}>{show.rating}</span>
         </div>
-        <p className="text-sm leading-relaxed mb-6 line-clamp-3 sm:line-clamp-4" style={{ color: "#F2F4F3", fontFamily: "var(--font-body)", maxWidth: 460 }}>
+        <p className={`text-sm leading-relaxed mb-6 line-clamp-3 sm:line-clamp-4 ${styles.heroDescription}`}>
           {show.description || "No description available."}
         </p>
         <div className="flex gap-3">
           <button
-            className="flex items-center gap-2 px-5 sm:px-6 py-3 rounded-lg text-sm font-bold transition-all duration-150 hover:bg-[#d0d2d1] active:scale-[0.98]"
-            style={{ background: "#F2F4F3", color: "#0A0908", fontFamily: "var(--font-display)", letterSpacing: "0.05em" }}
+            className={`flex items-center gap-2 px-5 sm:px-6 py-3 rounded-lg text-sm font-bold transition-all duration-150 hover:bg-[#d0d2d1] active:scale-[0.98] ${styles.heroPlayBtn}`}
             onClick={() => onWatch(show)}
           >
             <PlayIcon size={14} color="#0A0908" />
             Play
           </button>
           <button
-            className="flex items-center gap-2 px-5 sm:px-6 py-3 rounded-lg text-sm font-bold transition-all duration-150 hover:bg-[#6b1927] active:scale-[0.98]"
-            style={{ background: "#49111C", color: "#F2F4F3", fontFamily: "var(--font-display)", letterSpacing: "0.05em" }}
+            className={`flex items-center gap-2 px-5 sm:px-6 py-3 rounded-lg text-sm font-bold transition-all duration-150 hover:bg-[#6b1927] active:scale-[0.98] ${styles.heroInfoBtn}`}
             onClick={() => onInfo(show)}
           >
             <span className="text-base leading-none">ⓘ</span>
@@ -452,13 +414,12 @@ export function Hero({
       <div className="absolute bottom-20 right-4 sm:right-10 xl:right-12 flex flex-col items-end gap-3">
         <button
           onClick={() => setMuted((m) => !m)}
-          className="w-9 h-9 rounded-full flex items-center justify-center transition-colors hover:border-[#A9927D]"
-          style={{ border: "1px solid #5E503F", background: "rgba(10,9,8,0.5)", color: "#F2F4F3" }}
+          className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors hover:border-[#A9927D] ${styles.heroMuteBtn}`}
           aria-label={muted ? "Unmute" : "Mute"}
         >
           <MuteIcon muted={muted} />
         </button>
-        <span className="px-2 py-0.5 text-xs font-bold" style={{ background: "#49111C", color: "#F2F4F3", fontFamily: "var(--font-display)" }}>
+        <span className={`px-2 py-0.5 text-xs font-bold ${styles.heroRatingBadge}`}>
           {show.rating}
         </span>
       </div>
@@ -477,14 +438,7 @@ export function GenreFilters({ active, setActive }: { active: string; setActive:
         <button
           key={g}
           onClick={() => setActive(g)}
-          className="px-4 py-1.5 rounded-full text-sm transition-all duration-150"
-          style={{
-            background: active === g ? "#F2F4F3" : "rgba(94,80,63,0.25)",
-            color: active === g ? "#0A0908" : "#F2F4F3",
-            border: active === g ? "none" : "1px solid rgba(94,80,63,0.4)",
-            fontFamily: "var(--font-body)",
-            fontWeight: active === g ? 600 : 400,
-          }}
+          className={`px-4 py-1.5 rounded-full text-sm transition-all duration-150 ${active === g ? styles.genrePillActive : styles.genrePillInactive}`}
         >
           {g}
         </button>
@@ -503,15 +457,15 @@ const FOOTER_LINKS = [
 
 export function Footer() {
   return (
-    <footer className="px-4 sm:px-10 xl:px-12 py-10 mt-8" style={{ borderTop: "1px solid rgba(94,80,63,0.2)" }}>
+    <footer className={`px-4 sm:px-10 xl:px-12 py-10 mt-8 ${styles.footer}`}>
       <div className="flex flex-wrap gap-x-5 gap-y-2 mb-4">
         {FOOTER_LINKS.map((link) => (
-          <button key={link} className="text-xs transition-colors hover:text-[#A9927D]" style={{ color: "#5E503F", fontFamily: "var(--font-body)" }}>
+          <button key={link} className={`text-xs transition-colors hover:text-[#A9927D] ${styles.footerLink}`}>
             {link}
           </button>
         ))}
       </div>
-      <p className="text-xs" style={{ color: "#5E503F", fontFamily: "var(--font-body)" }}>
+      <p className={`text-xs ${styles.footerCopy}`}>
         &copy;STREAMFLIX 2026
       </p>
     </footer>
