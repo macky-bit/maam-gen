@@ -1,87 +1,86 @@
 import type { Show } from "./types";
 
 // ─── TMDB CONFIG ────────────────────────────────────────────────────────────
-// Public read-only TMDB key used so the dashboard can show real movies/shows
-// without a database or backend of your own. Swap for your own free key at
-// https://www.themoviedb.org/settings/api if this one gets rate-limited.
-export const TMDB_API_KEY = "80063cfa253b90bb6fb289cf86116b34";
+// Client-side TMDB key loaded from .env.local. This remains public in the
+// browser bundle; use a server proxy if the key must be kept secret.
+export const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 export const TMDB_BASE = "https://api.themoviedb.org/3";
 export const TMDB_IMG = "https://image.tmdb.org/t/p";
 
 // Map TMDB genre IDs -> names
 export const GENRE_MAP: Record<number, string> = {
-  28: "Action",
-  12: "Adventure",
-  16: "Animation",
-  35: "Comedy",
-  80: "Crime",
-  99: "Documentary",
-  18: "Drama",
-  10751: "Family",
-  14: "Fantasy",
-  36: "Historical",
-  27: "Horror",
-  10402: "Music",
-  9648: "Mystery",
-  10749: "Romance",
-  878: "Sci-Fi",
-  53: "Thriller",
-  10770: "TV Movie",
-  37: "Western",
+	28: "Action",
+	12: "Adventure",
+	16: "Animation",
+	35: "Comedy",
+	80: "Crime",
+	99: "Documentary",
+	18: "Drama",
+	10751: "Family",
+	14: "Fantasy",
+	36: "Historical",
+	27: "Horror",
+	10402: "Music",
+	9648: "Mystery",
+	10749: "Romance",
+	878: "Sci-Fi",
+	53: "Thriller",
+	10770: "TV Movie",
+	37: "Western",
 };
 
 // Fetch helper — always returns [] on error so the UI never crashes
 export async function tmdb<T>(
-  path: string,
-  params: Record<string, string> = {},
+	path: string,
+	params: Record<string, string> = {},
 ): Promise<T[]> {
-  try {
-    const url = new URL(`${TMDB_BASE}${path}`);
-    url.searchParams.set("api_key", TMDB_API_KEY);
-    url.searchParams.set("language", "en-US");
-    Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-    const res = await fetch(url.toString());
-    if (!res.ok) throw new Error(`TMDB ${res.status}`);
-    const data = await res.json();
-    return data.results ?? [];
-  } catch (e) {
-    console.error("TMDB fetch error:", e);
-    return [];
-  }
+	try {
+		const url = new URL(`${TMDB_BASE}${path}`);
+		url.searchParams.set("api_key", TMDB_API_KEY);
+		url.searchParams.set("language", "en-US");
+		Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+		const res = await fetch(url.toString());
+		if (!res.ok) throw new Error(`TMDB ${res.status}`);
+		const data = await res.json();
+		return data.results ?? [];
+	} catch (e) {
+		console.error("TMDB fetch error:", e);
+		return [];
+	}
 }
 
 // Convert a raw TMDB movie/TV item into our Show shape
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function toShow(
-  item: any,
-  isHero = false,
-  mediaType: "movie" | "tv" = "movie",
+	item: any,
+	isHero = false,
+	mediaType: "movie" | "tv" = "movie",
 ): Show {
-  const title = item.title ?? item.name ?? "Untitled";
-  const year = (item.release_date ?? item.first_air_date ?? "").slice(0, 4);
-  const genres = ((item.genre_ids as number[]) ?? [])
-    .map((id) => GENRE_MAP[id])
-    .filter(Boolean)
-    .slice(0, 3) as string[];
-  const vote = Math.round((item.vote_average ?? 0) * 10);
-  return {
-    id: item.id,
-    title,
-    year,
-    rating: "TV-MA", // TMDB's free tier doesn't expose certification; default it
-    duration: "",
-    genres,
-    image: item.poster_path
-      ? `${TMDB_IMG}/w342${item.poster_path}`
-      : "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=400&h=600&fit=crop",
-    hero:
-      isHero && item.backdrop_path
-        ? `${TMDB_IMG}/original${item.backdrop_path}`
-        : undefined,
-    description: item.overview ?? "",
-    match: vote,
-    mediaType,
-  };
+	const title = item.title ?? item.name ?? "Untitled";
+	const year = (item.release_date ?? item.first_air_date ?? "").slice(0, 4);
+	const genres = ((item.genre_ids as number[]) ?? [])
+		.map((id) => GENRE_MAP[id])
+		.filter(Boolean)
+		.slice(0, 3) as string[];
+	const vote = Math.round((item.vote_average ?? 0) * 10);
+	return {
+		id: item.id,
+		title,
+		year,
+		rating: "TV-MA", // TMDB's free tier doesn't expose certification; default it
+		duration: "",
+		genres,
+		image: item.poster_path
+			? `${TMDB_IMG}/w342${item.poster_path}`
+			: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=400&h=600&fit=crop",
+		hero:
+			isHero && item.backdrop_path
+				? `${TMDB_IMG}/original${item.backdrop_path}`
+				: undefined,
+		description: item.overview ?? "",
+		match: vote,
+		mediaType,
+	};
 }
 
 /**
@@ -89,35 +88,35 @@ export function toShow(
  * a teaser if no trailer is tagged). Returns null if nothing usable exists.
  */
 export async function fetchTrailerKey(
-  id: number,
-  mediaType: "movie" | "tv" = "movie",
+	id: number,
+	mediaType: "movie" | "tv" = "movie",
 ): Promise<string | null> {
-  try {
-    const url = new URL(`${TMDB_BASE}/${mediaType}/${id}/videos`);
-    url.searchParams.set("api_key", TMDB_API_KEY);
-    url.searchParams.set("language", "en-US");
-    const res = await fetch(url.toString());
-    if (!res.ok) throw new Error(`TMDB ${res.status}`);
-    const data = await res.json();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const vids: any[] = data.results ?? [];
-    const youtube = vids.filter((v) => v.site === "YouTube");
-    const trailer =
-      youtube.find((v) => v.type === "Trailer") ??
-      youtube.find((v) => v.type === "Teaser") ??
-      youtube[0];
-    return trailer?.key ?? null;
-  } catch (e) {
-    console.error("TMDB videos fetch error:", e);
-    return null;
-  }
+	try {
+		const url = new URL(`${TMDB_BASE}/${mediaType}/${id}/videos`);
+		url.searchParams.set("api_key", TMDB_API_KEY);
+		url.searchParams.set("language", "en-US");
+		const res = await fetch(url.toString());
+		if (!res.ok) throw new Error(`TMDB ${res.status}`);
+		const data = await res.json();
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const vids: any[] = data.results ?? [];
+		const youtube = vids.filter((v) => v.site === "YouTube");
+		const trailer =
+			youtube.find((v) => v.type === "Trailer") ??
+			youtube.find((v) => v.type === "Teaser") ??
+			youtube[0];
+		return trailer?.key ?? null;
+	} catch (e) {
+		console.error("TMDB videos fetch error:", e);
+		return null;
+	}
 }
 
 /** Fetch "More Like This" titles for a given show. */
 export async function fetchSimilar(
-  id: number,
-  mediaType: "movie" | "tv" = "movie",
+	id: number,
+	mediaType: "movie" | "tv" = "movie",
 ): Promise<Show[]> {
-  const raw = await tmdb(`/${mediaType}/${id}/similar`);
-  return raw.map((m) => toShow(m, false, mediaType)).slice(0, 8);
+	const raw = await tmdb(`/${mediaType}/${id}/similar`);
+	return raw.map((m) => toShow(m, false, mediaType)).slice(0, 8);
 }
