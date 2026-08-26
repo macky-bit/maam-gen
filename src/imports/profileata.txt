@@ -1,0 +1,815 @@
+Create a complete “Profile” webpage for our existing STREAMFLIX project.
+
+Use the attached Profile reference image as the main reference for the page structure, navigation bar, content hierarchy, spacing, settings layout, and overall appearance.
+
+IMPORTANT: Inspect movie(2).zip before creating the page. The Profile page must look like it belongs to the existing STREAMFLIX project.
+
+CORE RULES
+
+- Do not redesign the existing STREAMFLIX brand.
+- Do not replace STREAMFLIX branding with Netflix branding.
+- Do not use the Netflix logo, Netflix font, or Netflix color palette.
+- Use the attached image only as a reference for the Profile page’s layout.
+- Do not change or remove existing STREAMFLIX features unless specifically instructed in this prompt.
+- Use the exact typography, font families, font sizes, font weights, text casing, line heights, and letter spacing found in movie(2).zip.
+- Keep Barlow Condensed as the primary STREAMFLIX display font wherever it is already used.
+- Use the same body font found in the attached project for supporting text.
+- Reuse the existing button styles, icons, controls, borders, corner radiuses, shadows, overlays, spacing, and interactions from movie(2).zip.
+- Maintain consistency with the existing Home, Movies, TV Shows, New & Popular, My List, preview modal, and viewing pages.
+- Do not introduce a completely different design system.
+- Do not use excessive borders.
+- Do not place every section inside a separate card.
+- Do not use glassmorphism.
+- Do not add animations.
+- Simple hover, focus, pressed, dropdown, modal, and interface transitions are allowed.
+- Do not add unnecessary statistics, graphs, charts, achievements, or recommendations.
+- Do not add sections that are not requested.
+- Do not mention or display an API key.
+- Leave the API key or API configuration blank so I can add it later.
+- Make every visible control interactive in the prototype.
+- The finished page must be responsive on desktop, tablet, and mobile.
+
+COLOR PALETTE
+
+Use only the existing STREAMFLIX color palette:
+
+- Main background / Ink: #0A0908
+- Primary accent / Wine: #49111C
+- Main text / Cream: #F2F4F3
+- Secondary text / Taupe: #A9927D
+- Borders and muted details / Stone: #5E503F
+
+Do not use Netflix red.
+
+The entire page must use the black #0A0908 background, including:
+
+- Navigation bar
+- Main Profile page
+- Settings area
+- Viewing Activity area
+- Profile Lock area
+- Continue Watching area
+- Footer area, if one exists
+
+Do not use a white or light navigation bar.
+
+Use #49111C only for:
+
+- STREAMFLIX logo
+- Profile avatars
+- Primary buttons
+- Active toggle states
+- Selected controls
+- Progress bars
+- Small emphasis details
+- Hover and focus states
+
+Do not overuse the wine accent.
+
+DESIGN DIRECTION
+
+Create a clean, spacious, and minimal Profile page.
+
+It should feel:
+
+- Premium
+- Easy to scan
+- Consistent
+- Modern
+- Content-focused
+- Less like an analytics dashboard
+- Fully integrated with the existing STREAMFLIX project
+
+Use fewer visible containers and lighter visual separation.
+
+Prefer:
+
+- Open sections
+- Subtle dividers
+- Clear alignment
+- Strong content hierarchy
+- Comfortable spacing
+- Restrained accent colors
+- Continuous black surfaces
+
+Avoid:
+
+- Too many bordered cards
+- Large statistics
+- Heavy outlines
+- Excessive shadows
+- Dense dashboard layouts
+- Bright surfaces
+- White navigation bars
+- Large unused areas
+- Unnecessary decorative elements
+- Excessive rounded containers
+
+NAVIGATION BAR
+
+For the Profile page, use a simplified black navigation bar.
+
+The navigation bar must contain only:
+
+- STREAMFLIX logo on the left
+- Current profile avatar on the right
+- Small dropdown indicator beside the avatar
+
+Do not display the main browsing navigation links.
+
+Remove:
+
+- Home
+- TV Shows
+- Movies
+- New & Popular
+- My List
+
+Also do not display:
+
+- Search icon
+- Notification icon
+- Games
+- Kids
+- Browse by Languages
+- Manage Profiles text
+- Additional buttons
+- Hamburger menu
+
+Keep a large amount of clean empty space between the logo and the profile control.
+
+The navigation bar should remain intentionally simple.
+
+NAVIGATION BAR BACKGROUND
+
+Use:
+
+- Solid #0A0908 background
+- Subtle bottom border using #5E503F at low opacity
+- No gradient
+- No image
+- No blur effect
+- No glass effect
+- No visible card container
+
+The navigation bar and the main Profile page should appear as one continuous dark interface.
+
+The only separation should be a subtle bottom border.
+
+The navigation bar should be approximately 72–80 pixels tall on desktop.
+
+Vertically center the logo and profile control.
+
+Keep the navigation bar fixed or sticky at the top while scrolling.
+
+NAVIGATION CONTAINER
+
+Use a centered maximum-width inner navigation container.
+
+Desktop:
+
+- Keep the STREAMFLIX logo aligned to the left side of the centered container.
+- Keep the profile avatar aligned to the right side.
+- Use generous horizontal padding.
+- Align the navigation content with the main Profile page container.
+
+Do not place the logo or avatar directly against the viewport edges.
+
+STREAMFLIX LOGO
+
+Keep the existing STREAMFLIX wordmark.
+
+Do not use the Netflix logo.
+
+Logo styling:
+
+- Color: #49111C
+- Use the existing STREAMFLIX display font and letter styling.
+- Keep it compact and readable.
+- Preserve the exact wordmark style found in the project.
+- Do not place it inside a box.
+- Do not add a shadow, background, glow, or outline.
+
+PROFILE CONTROL
+
+Display the current profile avatar on the right side of the navbar.
+
+Avatar content:
+
+“KC”
+
+Avatar styling:
+
+- Background: #49111C
+- Initials: #F2F4F3
+- Square shape
+- Small corner radius
+- Comfortable clickable size
+- Same profile identity used throughout STREAMFLIX
+
+Place a small downward-facing dropdown arrow beside the avatar.
+
+Arrow styling:
+
+- Color: #A9927D
+- Small and unobtrusive
+- Vertically aligned with the avatar
+
+Make the complete avatar-and-arrow area interactive.
+
+PROFILE DROPDOWN
+
+Clicking the avatar or arrow should open a compact dropdown menu underneath the avatar.
+
+Include:
+
+- Profile
+- Manage Profiles
+- Help
+- Sign Out
+
+Dropdown styling:
+
+- Background: #0A0908 or a slightly elevated dark surface
+- Primary text: #F2F4F3
+- Secondary text: #A9927D
+- Border: #5E503F at low opacity
+- Active indicator: #49111C
+- Hover background: a subtle #49111C tint
+- Soft shadow
+- Small corner radius
+
+Mark “Profile” as the current selection.
+
+Align the dropdown to the right edge of the profile control.
+
+Do not use a light dropdown.
+
+Do not open a full-page navigation menu.
+
+PAGE CONTAINER
+
+Use a centered maximum-width content container beneath the navigation bar.
+
+Desktop requirements:
+
+- Keep the content centered.
+- Use generous horizontal margins.
+- Align the page content with the navbar’s inner container.
+- Keep section edges aligned.
+- Use comfortable vertical spacing.
+- Avoid stretching content across the entire viewport.
+- Keep the design compact enough to display the major sections within one desktop viewport when possible.
+
+Use #0A0908 for the entire background.
+
+PAGE HEADING
+
+Place the main heading at the top-left of the content area.
+
+Heading:
+
+“Profile”
+
+Use:
+
+- The existing STREAMFLIX display font
+- #F2F4F3 text
+- A clear but restrained size
+- The same heading style used throughout the project
+
+Do not include an unnecessary subtitle under the heading.
+
+PROFILE IDENTITY SECTION
+
+Create a compact profile identity section beneath the page heading.
+
+Do not surround the complete identity area with a heavy bordered card.
+
+Arrange the content horizontally.
+
+Left:
+
+- Large KC avatar
+
+Middle:
+
+- Kevin Chan
+- Primary Profile
+- Member since 2026
+
+Right or directly beside the information:
+
+- Edit Profile button
+
+Keep the identity section aligned with the Playback & Display column.
+
+PROFILE AVATAR
+
+Display:
+
+“KC”
+
+Styling:
+
+- Background: #49111C
+- Initials: #F2F4F3
+- Square shape
+- Small corner radius
+- Larger than the navbar avatar
+- Same avatar design used in the navbar
+
+Do not replace the avatar with a photograph unless the user selects one through Edit Profile.
+
+PROFILE INFORMATION
+
+Use this hierarchy:
+
+“Kevin Chan”
+
+- Most prominent text in the identity section
+- Color: #F2F4F3
+- Use the existing STREAMFLIX heading typography
+
+“Primary Profile”
+
+- Color: #A9927D
+- Smaller than the profile name
+
+“Member since 2026”
+
+- Use muted secondary text
+- Smaller than Primary Profile
+
+EDIT PROFILE BUTTON
+
+Add an “Edit Profile” button beside the profile information.
+
+Use the existing secondary outlined-button style.
+
+Styling:
+
+- Background: transparent
+- Border: #A9927D or #5E503F
+- Text: #F2F4F3
+- Hover border or background accent: #49111C
+- Same radius, height, padding, and typography as the existing project buttons
+
+Do not make Edit Profile visually stronger than Save Changes.
+
+EDIT PROFILE INTERACTION
+
+Clicking Edit Profile should open a compact modal or place the identity section into an editable state.
+
+Allow the user to change:
+
+- Profile name
+- Profile avatar
+- Default language
+- Maturity rating
+
+Include:
+
+- Save
+- Cancel
+
+Do not allow the user to modify:
+
+“Member since 2026”
+
+Reuse the existing modal appearance and overlay behavior from movie(2).zip.
+
+MANAGE PROFILES
+
+Do not permanently display Manage Profiles beside the page heading.
+
+Manage Profiles should be available through the profile dropdown in the navigation bar.
+
+Selecting Manage Profiles should open an interface that allows users to:
+
+- Choose another profile
+- Add a new profile
+- Edit an existing profile
+
+Do not include account deletion.
+
+MAIN SETTINGS LAYOUT
+
+Under the profile identity section, create a clean two-column layout.
+
+Left column:
+
+- Playback & Display
+- Approximately two-thirds of the available width
+
+Right column:
+
+- Viewing Activity
+- Profile Lock
+- Approximately one-third of the available width
+
+Use a subtle vertical divider between the two columns.
+
+Do not place each column inside a large bordered card.
+
+Keep both columns aligned cleanly.
+
+LEFT COLUMN — PLAYBACK & DISPLAY
+
+Section heading:
+
+“Playback & Display”
+
+Include:
+
+1. Autoplay Next Episode
+2. Autoplay Previews
+3. Subtitle Appearance
+4. Maturity Rating
+5. Default Language
+
+Display every setting in a clean horizontal row.
+
+Each row should include:
+
+- Small icon on the left
+- Setting label
+- Supporting description where appropriate
+- Interactive control aligned on the right
+- Subtle divider beneath the row
+
+Do not place each setting inside its own card.
+
+Keep all icons:
+
+- Consistent in size
+- Vertically aligned
+- Styled using #A9927D
+- Consistent with the icons used in movie(2).zip
+
+AUTOPLAY NEXT EPISODE
+
+Label:
+
+“Autoplay Next Episode”
+
+Supporting text:
+
+“Automatically play the next episode of a series.”
+
+Add an interactive toggle on the right.
+
+Default state:
+
+On
+
+Toggle styling:
+
+- Off track: #5E503F
+- On track: #49111C
+- Handle: #F2F4F3
+- Visible keyboard focus state
+- Clear visual difference between On and Off
+
+AUTOPLAY PREVIEWS
+
+Label:
+
+“Autoplay Previews”
+
+Supporting text:
+
+“Automatically play previews while browsing.”
+
+Add an interactive toggle on the right.
+
+Default state:
+
+Off
+
+Use the same toggle style as Autoplay Next Episode.
+
+SUBTITLE APPEARANCE
+
+Label:
+
+“Subtitle Appearance”
+
+Supporting text:
+
+“Customize the appearance of subtitles.”
+
+Current value:
+
+“Medium”
+
+Add a dropdown indicator on the right.
+
+Dropdown options:
+
+- Small
+- Medium
+- Large
+
+The dropdown may contain a small subtitle preview area.
+
+Do not create a separate page for subtitle settings.
+
+MATURITY RATING
+
+Label:
+
+“Maturity Rating”
+
+Supporting text:
+
+“Show titles of all maturity ratings for this profile.”
+
+Current value:
+
+“All Maturity Ratings”
+
+Add a dropdown indicator on the right.
+
+Allow the user to select an appropriate maturity setting.
+
+Use the same dropdown style as the other controls.
+
+DEFAULT LANGUAGE
+
+Label:
+
+“Default Language”
+
+Supporting text:
+
+“Select the default language for audio and subtitles.”
+
+Current value:
+
+“English”
+
+Add a dropdown indicator on the right.
+
+Show a short sample list of languages when opened.
+
+Do not create a separate language-selection page.
+
+SAVE CHANGES BUTTON
+
+Place a “Save Changes” button beneath the settings rows.
+
+This must be the primary action on the Profile page.
+
+Style:
+
+- Background: #49111C
+- Text: #F2F4F3
+- Same font, radius, padding, and height as the existing STREAMFLIX primary buttons
+- Slightly darker wine hover state
+- Clear pressed, focused, active, and disabled states
+
+The button should only become active after a setting has been changed.
+
+After saving, display a subtle inline confirmation:
+
+“Profile settings saved.”
+
+Do not show a large popup for successful changes.
+
+RIGHT COLUMN — VIEWING ACTIVITY
+
+Section heading:
+
+“Viewing Activity”
+
+Keep this section simple.
+
+Include one primary row:
+
+- History icon
+- Watch History
+- Right-facing arrow
+
+Supporting text:
+
+“Review the movies and episodes you have watched.”
+
+Clicking Watch History should open a viewing-history panel or page.
+
+The history should contain:
+
+- Content thumbnail
+- Movie or episode title
+- Date watched
+- Remove-from-history control
+
+Do not display:
+
+- Titles Watched statistic
+- Hours Watched statistic
+- Large analytics numbers
+- Charts
+- Graphs
+
+RIGHT COLUMN — PROFILE LOCK
+
+Place Profile Lock beneath Viewing Activity.
+
+Section heading:
+
+“Profile Lock”
+
+Include:
+
+- Lock icon
+- Set PIN
+- Right-facing arrow
+
+Supporting text:
+
+“Require a PIN to access this profile.”
+
+Clicking Set PIN should open a compact modal.
+
+The modal must contain:
+
+- Four-digit PIN field
+- Confirm PIN field
+- Save PIN button
+- Cancel button
+
+Use masked PIN inputs.
+
+If a PIN already exists, replace Set PIN with:
+
+“Change PIN”
+
+Do not include:
+
+- Account password
+- Payment information
+- Billing details
+- Subscription management
+
+SECTION SEPARATION
+
+Use:
+
+- Subtle #5E503F dividers
+- Small differences between dark surfaces
+- Consistent spacing
+- Minimal shadows
+- A subtle vertical divider between columns
+
+Avoid:
+
+- Heavy bordered cards
+- Bright outlines
+- Large containers around every section
+- Excessive shadows
+- Unnecessary background panels
+
+CONTINUE WATCHING
+
+Add a full-width Continue Watching section beneath the settings.
+
+Heading:
+
+“Continue Watching”
+
+Display four landscape cards:
+
+- Outer Banks
+- Classroom of the Elite
+- Mickey 17
+- Insidious: The Red Door
+
+Card requirements:
+
+- Wide 16:9 thumbnails
+- Equal card widths
+- Consistent gaps
+- Same corner radius used throughout the project
+- High-quality content artwork
+- Title displayed inside a subtle bottom overlay
+- Thin progress bar at the bottom
+- #49111C progress fill
+- #5E503F remaining track
+
+Do not place the complete Continue Watching row inside a heavy bordered container.
+
+Keep the section consistent with the other STREAMFLIX content rows.
+
+CONTINUE WATCHING INTERACTIONS
+
+When a card is hovered:
+
+- Slightly elevate or enlarge it.
+- Display a subtle dark overlay.
+- Reveal Play and More Information controls.
+- Keep the title and progress bar visible.
+- Do not break the row layout.
+- Do not overlap important content.
+
+Clicking Play should open the existing viewing screen from movie(2).zip.
+
+Clicking More Information should open the existing preview modal.
+
+Do not redesign either interface.
+
+Add an optional three-dot menu containing:
+
+“Remove from Continue Watching”
+
+Removing a title should reorganize the remaining cards without leaving an empty space.
+
+RESPONSIVE DESIGN
+
+DESKTOP
+
+- Keep the entire interface black.
+- Display the simplified black navigation bar.
+- Place STREAMFLIX on the left.
+- Place the KC avatar and arrow on the right.
+- Use the two-column settings layout.
+- Make Playback & Display wider than the right column.
+- Display four Continue Watching cards.
+- Keep the content centered with a maximum width.
+
+TABLET
+
+- Reduce the navigation padding proportionally.
+- Keep the same logo-and-profile navbar layout.
+- Do not add browsing links.
+- Keep two settings columns when enough width is available.
+- Stack the right column beneath Playback & Display if the layout becomes crowded.
+- Display two or three Continue Watching cards or allow horizontal scrolling.
+
+MOBILE
+
+- Reduce the STREAMFLIX logo size slightly.
+- Keep the KC avatar and arrow accessible.
+- Do not add a hamburger menu.
+- Keep the navbar black.
+- Stack every Profile section vertically.
+- Place the profile avatar above or beside the profile information.
+- Place Edit Profile underneath the identity details if necessary.
+- Display settings as full-width rows.
+- Keep every control easy to tap.
+- Display Continue Watching as a horizontally scrollable row.
+- Show approximately one and a half cards to indicate scrolling.
+- Make hover controls accessible through tapping.
+- Prevent text, icons, controls, and cards from being cut off.
+
+ACCESSIBILITY AND USABILITY
+
+- Maintain strong text contrast.
+- Provide clear hover, focused, pressed, active, and disabled states.
+- Ensure every control has a comfortable clickable area.
+- Add labels or tooltips to icon-only buttons.
+- Do not rely only on color to communicate toggle states.
+- Keep keyboard focus indicators visible.
+- Allow all controls to be used with a keyboard.
+- Use clear confirmation messages after saving changes.
+- Keep text readable on smaller screens.
+- Close dropdowns when the user clicks outside or presses Escape.
+- Ensure the wine STREAMFLIX logo remains readable against the black navbar.
+- Ensure every form control has an accessible label.
+
+FINAL RESULT
+
+The final Profile page must use one continuous black background from the top navigation bar to the bottom of the page.
+
+The completed page must include:
+
+- Black #0A0908 navigation bar
+- STREAMFLIX logo on the left
+- KC avatar and dropdown arrow on the right
+- No browsing links in the Profile navbar
+- No search or notification icons
+- Profile heading
+- Profile identity section
+- Edit Profile
+- Profile dropdown
+- Manage Profiles inside the dropdown
+- Playback & Display settings
+- Autoplay Next Episode
+- Autoplay Previews
+- Subtitle Appearance
+- Maturity Rating
+- Default Language
+- Save Changes
+- Viewing Activity
+- Watch History
+- Profile Lock
+- Set PIN
+- Continue Watching
+
+The page should feel clean, spacious, premium, and less dashboard-like.
+
+Use open sections, subtle dividers, clear alignment, and comfortable spacing instead of surrounding every section with a heavy bordered card.
+
+Every visual detail must remain consistent with movie(2).zip, including its exact color palette, typography, font sizing, icons, buttons, dropdowns, modal styling, content cards, preview modal, viewing screen, and interaction behavior.
+
+Do not change anything outside the requirements above.
