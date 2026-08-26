@@ -1,1084 +1,1193 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 
-// ─── Color tokens ────────────────────────────────────────────────
-const C = {
-  ink: "#0A0908",
-  wine: "#49111C",
-  wineDark: "#370D16",
-  cream: "#F2F4F3",
-  taupe: "#A9927D",
-  stone: "#5E503F",
-  surfaceElevated: "#110F0E",
-};
+// ─── Icons ────────────────────────────────────────────────────────────────────
 
-// ─── Help articles data ──────────────────────────────────────────
-const ARTICLES = [
-  {
-    id: "reset-password",
-    title: "How to reset your password",
-    category: "Account & Profiles",
-    content: [
-      "Go to the StreamFlix sign-in page.",
-      "Click \"Forgot password?\" below the password field.",
-      "Enter the email address linked to your account.",
-      "Check your inbox for a reset link and click it.",
-      "Enter and confirm your new password.",
-      "Select Save. You can now sign in with the new password.",
-    ],
-  },
-  {
-    id: "edit-profile",
-    title: "How to edit your profile",
-    category: "Account & Profiles",
-    content: [
-      "Open the profile menu from any page.",
-      "Select Profile or Manage Profiles.",
-      "Choose the profile you want to update.",
-      "Change the profile name, avatar, language, or maturity rating.",
-      "Select Save.",
-    ],
-  },
-  {
-    id: "subtitle-appearance",
-    title: "How to change subtitle appearance",
-    category: "Subtitles & Language",
-    content: [
-      "While watching a title, open the audio and subtitles menu.",
-      "Select Subtitle Appearance.",
-      "Adjust font size, style, color, and background.",
-      "Changes apply immediately during playback.",
-    ],
-  },
-  {
-    id: "manage-profile-settings",
-    title: "How to manage profile settings",
-    category: "Account & Profiles",
-    content: [
-      "Select your profile icon in the top-right corner.",
-      "Choose Manage Profiles.",
-      "Select the profile you want to configure.",
-      "Update name, avatar, language, maturity rating, and autoplay preferences.",
-      "Select Save when done.",
-    ],
-  },
-  {
-    id: "remove-from-mylist",
-    title: "How to remove a title from My List",
-    category: "My List",
-    content: [
-      "Navigate to My List from the main menu.",
-      "Hover over the title you want to remove.",
-      "Click the checkmark icon to toggle it off your list.",
-      "The title is immediately removed from My List.",
-    ],
-  },
-  {
-    id: "remove-continue-watching",
-    title: "How to remove a title from Continue Watching",
-    category: "Continue Watching",
-    content: [
-      "Find the title in the Continue Watching row on the Home page.",
-      "Hover over the title thumbnail.",
-      "Click the three-dot menu icon.",
-      "Select Remove from Row.",
-      "The title is removed from Continue Watching.",
-    ],
-  },
-  {
-    id: "video-not-playing",
-    title: "Why a video is not playing",
-    category: "Playback",
-    content: [
-      "Check your internet connection — StreamFlix requires a stable connection.",
-      "Restart the StreamFlix app or refresh the browser page.",
-      "Clear your browser cache if using the web app.",
-      "Check for app updates and install any available updates.",
-      "Try a different device or browser.",
-      "If the issue persists, contact our support team.",
-    ],
-  },
-  {
-    id: "change-language",
-    title: "How to change your default language",
-    category: "Subtitles & Language",
-    content: [
-      "Select your profile icon and choose Account.",
-      "Under Profile & Parental Controls, select your profile.",
-      "Next to Language, select Change.",
-      "Choose your preferred language from the list.",
-      "Select Save. The change applies immediately.",
-    ],
-  },
-  {
-    id: "set-profile-pin",
-    title: "How to set a profile PIN",
-    category: "Privacy & Security",
-    content: [
-      "Select your profile icon and choose Account.",
-      "Under Profile & Parental Controls, select your profile.",
-      "Next to Profile Lock, select Change.",
-      "Enter your account password to confirm.",
-      "Toggle on Require a PIN to access the selected profile.",
-      "Enter and confirm your 4-digit PIN.",
-      "Select Save.",
-    ],
-  },
-  {
-    id: "autoplay-settings",
-    title: "How to manage autoplay settings",
-    category: "Account & Profiles",
-    content: [
-      "Select your profile icon and choose Account.",
-      "Under Profile & Parental Controls, select your profile.",
-      "Under Playback Settings, select Change.",
-      "Toggle Autoplay next episode in a series on or off.",
-      "Toggle Autoplay previews while browsing on or off.",
-      "Select Save.",
-    ],
-  },
-  {
-    id: "watch-history",
-    title: "How to view your watch history",
-    category: "My List",
-    content: [
-      "Select your profile icon and choose Account.",
-      "Under Profile & Parental Controls, select your profile.",
-      "Click Viewing Activity.",
-      "Browse your complete watch history.",
-      "To hide a title, click the hide icon next to it.",
-    ],
-  },
-  {
-    id: "account-secure",
-    title: "How to keep your account secure",
-    category: "Privacy & Security",
-    content: [
-      "Use a unique, strong password that you do not use elsewhere.",
-      "Enable two-step verification in Account settings.",
-      "Review the devices signed in to your account regularly.",
-      "Sign out of devices you no longer use.",
-      "Never share your account password.",
-    ],
-  },
-  {
-    id: "parental-controls",
-    title: "How to manage parental controls",
-    category: "Privacy & Security",
-    content: [
-      "Select your profile icon and choose Account.",
-      "Under Profile & Parental Controls, select the profile to restrict.",
-      "Next to Viewing Restrictions, select Change.",
-      "Set the maturity rating appropriate for the profile.",
-      "Optionally enable a Profile Lock PIN so the settings cannot be changed without it.",
-      "Select Save.",
-    ],
-  },
-  {
-    id: "change-profile-settings",
-    title: "How to change profile settings",
-    category: "Account & Profiles",
-    content: [
-      "Select your profile icon in the top-right corner.",
-      "Choose Manage Profiles.",
-      "Select the profile you want to update.",
-      "Modify name, avatar, language, maturity rating, or autoplay behavior.",
-      "Select Save when finished.",
-    ],
-  },
-];
-
-// ─── Icons ───────────────────────────────────────────────────────
-function SearchIcon({ size = 20, color = C.taupe }: { size?: number; color?: string }) {
+function IconHome() {
   return (
-    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-      <circle cx="8.5" cy="8.5" r="5.75" stroke={color} strokeWidth="1.5" />
-      <path d="M13.5 13.5L17 17" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9.75L12 3l9 6.75V21a1 1 0 01-1 1H4a1 1 0 01-1-1V9.75z" />
+      <path d="M9 22V12h6v10" />
     </svg>
   );
 }
 
-function ChevronDownIcon({ size = 12, color = C.taupe }: { size?: number; color?: string }) {
+function IconCard() {
   return (
-    <svg width={size} height={size} viewBox="0 0 12 12" fill="none" aria-hidden="true">
-      <path d="M2 4L6 8L10 4" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="5" width="20" height="14" rx="2" />
+      <path d="M2 10h20" />
     </svg>
   );
 }
 
-function ChevronRightIcon({ size = 14, color = C.taupe }: { size?: number; color?: string }) {
+function IconShield() {
   return (
-    <svg width={size} height={size} viewBox="0 0 14 14" fill="none" aria-hidden="true">
-      <path d="M5 3L9 7L5 11" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
     </svg>
   );
 }
 
-function XIcon({ size = 16, color = C.taupe }: { size?: number; color?: string }) {
+function IconMonitor() {
   return (
-    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M3 3L13 13M13 3L3 13" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="3" width="20" height="14" rx="2" />
+      <path d="M8 21h8M12 17v4" />
     </svg>
   );
 }
 
-function ArticleIcon({ size = 16, color = C.taupe }: { size?: number; color?: string }) {
+function IconUsers() {
   return (
-    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <rect x="2" y="2" width="12" height="12" rx="1.5" stroke={color} strokeWidth="1.25" />
-      <path d="M5 6H11M5 8.5H11M5 11H8.5" stroke={color} strokeWidth="1.25" strokeLinecap="round" />
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="9" cy="7" r="4" />
+      <path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2" />
+      <path d="M16 3.13a4 4 0 010 7.75" />
+      <path d="M21 21v-2a4 4 0 00-3-3.87" />
     </svg>
   );
 }
 
-function ArrowLeftIcon({ size = 16, color = C.taupe }: { size?: number; color?: string }) {
+function IconLock() {
   return (
-    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M10 3L5 8L10 13" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2" />
+      <path d="M7 11V7a5 5 0 0110 0v4" />
     </svg>
   );
 }
 
-// ─── Highlight matching text ─────────────────────────────────────
-function Highlighted({ text, query }: { text: string; query: string }) {
-  if (!query.trim()) return <>{text}</>;
-  const idx = text.toLowerCase().indexOf(query.toLowerCase());
-  if (idx === -1) return <>{text}</>;
+function IconChevronRight() {
   return (
-    <>
-      {text.slice(0, idx)}
-      <mark style={{ background: C.wine, color: C.cream, borderRadius: 2, padding: "0 2px" }}>
-        {text.slice(idx, idx + query.length)}
-      </mark>
-      {text.slice(idx + query.length)}
-    </>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 18l6-6-6-6" />
+    </svg>
   );
 }
 
-// ─── Support Modal ───────────────────────────────────────────────
-function SupportModal({ onClose }: { onClose: () => void }) {
-  const [topic, setTopic] = useState("");
-  const [subject, setSubject] = useState("");
-  const [description, setDescription] = useState("");
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [submitted, setSubmitted] = useState(false);
-  const overlayRef = useRef<HTMLDivElement>(null);
+function IconChevronDown() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 9l6 6 6-6" />
+    </svg>
+  );
+}
 
-  const topics = [
-    "Account & Profiles",
-    "Playback",
-    "My List",
-    "Continue Watching",
-    "Subtitles & Language",
-    "Privacy & Security",
-    "Other",
-  ];
+function IconCreditCard() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="5" width="20" height="14" rx="2" />
+      <path d="M2 10h20" />
+    </svg>
+  );
+}
 
-  const validate = () => {
-    const e: Record<string, string> = {};
-    if (!topic) e.topic = "Please select a help topic.";
-    if (!subject.trim()) e.subject = "Please enter a subject.";
-    if (!description.trim()) e.description = "Please describe the issue.";
-    return e;
-  };
+function IconEye({ open }: { open: boolean }) {
+  return open ? (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  ) : (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" />
+      <line x1="1" y1="1" x2="23" y2="23" />
+    </svg>
+  );
+}
 
-  const handleSubmit = (ev: React.FormEvent) => {
-    ev.preventDefault();
-    const e = validate();
-    if (Object.keys(e).length > 0) { setErrors(e); return; }
-    setSubmitted(true);
-  };
+function IconX() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
 
+function IconPhone() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81 19.79 19.79 0 01.01 2.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z" />
+    </svg>
+  );
+}
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type Section = "overview" | "membership" | "security" | "devices" | "profiles" | "privacy";
+type Modal = null | "email" | "password" | "phone" | "delete1" | "delete2" | "signout" | "billing" | "cancelMembership" | "updatePayment";
+
+// ─── Modal Overlay ────────────────────────────────────────────────────────────
+
+function ModalOverlay({ onClose, children }: { onClose: () => void; children: React.ReactNode }) {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [onClose]);
-
-  const fieldStyle: React.CSSProperties = {
-    width: "100%",
-    background: "#1A1714",
-    border: `1px solid ${C.stone}`,
-    borderRadius: 6,
-    color: C.cream,
-    fontFamily: "'Barlow', sans-serif",
-    fontSize: 14,
-    padding: "10px 14px",
-    outline: "none",
-    transition: "border-color 0.15s",
-  };
-
-  const labelStyle: React.CSSProperties = {
-    display: "block",
-    color: C.cream,
-    fontSize: 13,
-    fontWeight: 500,
-    marginBottom: 6,
-  };
-
   return (
     <div
-      ref={overlayRef}
-      onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}
-      style={{
-        position: "fixed", inset: 0, zIndex: 200,
-        background: "rgba(10,9,8,0.85)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        padding: "16px",
-      }}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Contact Support"
+      className="fixed inset-0 z-50 flex items-center justify-center px-4"
+      style={{ backgroundColor: "rgba(10,9,8,0.85)" }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div style={{
-        background: C.surfaceElevated,
-        border: `1px solid rgba(94,80,63,0.4)`,
-        borderRadius: 10,
-        width: "100%",
-        maxWidth: 520,
-        maxHeight: "90vh",
-        overflowY: "auto",
-        padding: "32px 28px",
-        boxShadow: "0 20px 60px rgba(0,0,0,0.6)",
-      }}>
-        {submitted ? (
-          <div style={{ textAlign: "center", padding: "32px 0" }}>
-            <div style={{
-              width: 56, height: 56, borderRadius: "50%",
-              background: C.wine, margin: "0 auto 20px",
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M5 12L10 17L19 8" stroke={C.cream} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <p style={{ color: C.cream, fontSize: 18, fontWeight: 600, margin: "0 0 12px" }}>
-              Your support request has been submitted.
-            </p>
-            <p style={{ color: C.taupe, fontSize: 14, margin: "0 0 28px" }}>
-              Our team will get back to you shortly.
-            </p>
-            <button
-              onClick={onClose}
-              style={{
-                background: C.wine, color: C.cream, border: "none",
-                borderRadius: 6, padding: "10px 28px", fontFamily: "'Barlow', sans-serif",
-                fontSize: 14, fontWeight: 600, cursor: "pointer",
-              }}
-            >
-              Close
-            </button>
-          </div>
+      {children}
+    </div>
+  );
+}
+
+function ModalBox({ children, title, onClose }: { children: React.ReactNode; title: string; onClose: () => void }) {
+  return (
+    <div
+      className="w-full max-w-md rounded-lg p-6 relative"
+      style={{ backgroundColor: "#111110", border: "1px solid rgba(94,80,63,0.4)", boxShadow: "0 20px 60px rgba(0,0,0,0.7)" }}
+    >
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="font-display text-xl font-semibold tracking-wide" style={{ color: "#F2F4F3" }}>{title}</h2>
+        <button onClick={onClose} className="p-1 rounded transition-colors" style={{ color: "#A9927D" }}
+          onMouseEnter={e => (e.currentTarget.style.color = "#F2F4F3")}
+          onMouseLeave={e => (e.currentTarget.style.color = "#A9927D")}
+          aria-label="Close modal">
+          <IconX />
+        </button>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function FormField({ label, type, value, onChange, placeholder, error, showToggle, show, onToggle }: {
+  label: string; type: string; value: string; onChange: (v: string) => void;
+  placeholder?: string; error?: string; showToggle?: boolean; show?: boolean; onToggle?: () => void;
+}) {
+  return (
+    <div className="mb-4">
+      <label className="block text-xs font-medium mb-1.5 tracking-wide uppercase" style={{ color: "#A9927D" }}>{label}</label>
+      <div className="relative">
+        <input
+          type={showToggle ? (show ? "text" : "password") : type}
+          value={value}
+          onChange={e => onChange(e.target.value)}
+          placeholder={placeholder}
+          className="w-full px-3 py-2.5 rounded text-sm outline-none transition-colors"
+          style={{
+            backgroundColor: "#0A0908",
+            border: `1px solid ${error ? "#49111C" : "rgba(94,80,63,0.5)"}`,
+            color: "#F2F4F3",
+            fontFamily: "Barlow, sans-serif",
+          }}
+          onFocus={e => { e.currentTarget.style.borderColor = "#49111C"; }}
+          onBlur={e => { e.currentTarget.style.borderColor = error ? "#49111C" : "rgba(94,80,63,0.5)"; }}
+        />
+        {showToggle && (
+          <button type="button" onClick={onToggle}
+            className="absolute right-3 top-1/2 -translate-y-1/2"
+            style={{ color: "#A9927D" }}
+            aria-label={show ? "Hide" : "Show"}>
+            <IconEye open={!!show} />
+          </button>
+        )}
+      </div>
+      {error && <p className="mt-1 text-xs" style={{ color: "#A9927D" }}>{error}</p>}
+    </div>
+  );
+}
+
+function ModalActions({ onCancel, onSave, saveLabel = "Save", loading }: {
+  onCancel: () => void; onSave: () => void; saveLabel?: string; loading?: boolean;
+}) {
+  return (
+    <div className="flex gap-3 mt-6">
+      <button onClick={onCancel}
+        className="flex-1 py-2.5 rounded text-sm font-medium transition-colors"
+        style={{ border: "1px solid rgba(94,80,63,0.5)", color: "#A9927D", backgroundColor: "transparent" }}
+        onMouseEnter={e => { e.currentTarget.style.borderColor = "#A9927D"; e.currentTarget.style.color = "#F2F4F3"; }}
+        onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(94,80,63,0.5)"; e.currentTarget.style.color = "#A9927D"; }}>
+        Cancel
+      </button>
+      <button onClick={onSave} disabled={loading}
+        className="flex-1 py-2.5 rounded text-sm font-semibold transition-colors"
+        style={{ backgroundColor: loading ? "rgba(73,17,28,0.5)" : "#49111C", color: "#F2F4F3" }}
+        onMouseEnter={e => { if (!loading) e.currentTarget.style.backgroundColor = "#5a1522"; }}
+        onMouseLeave={e => { if (!loading) e.currentTarget.style.backgroundColor = "#49111C"; }}>
+        {loading ? "Saving…" : saveLabel}
+      </button>
+    </div>
+  );
+}
+
+// ─── Change Email Modal ───────────────────────────────────────────────────────
+
+function ChangeEmailModal({ onClose }: { onClose: () => void }) {
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const [showPass, setShowPass] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  function validate() {
+    const e: Record<string, string> = {};
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) e.email = "Enter a valid email address.";
+    if (!pass) e.pass = "Enter your current password.";
+    return e;
+  }
+
+  function save() {
+    const e = validate();
+    if (Object.keys(e).length) { setErrors(e); return; }
+    setLoading(true);
+    setTimeout(() => { setLoading(false); setSuccess(true); setTimeout(onClose, 1200); }, 1000);
+  }
+
+  return (
+    <ModalOverlay onClose={onClose}>
+      <ModalBox title="Change Email" onClose={onClose}>
+        {success ? (
+          <p className="text-sm py-4 text-center" style={{ color: "#A9927D" }}>Email updated.</p>
         ) : (
           <>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
-              <h2 style={{ margin: 0, color: C.cream, fontSize: 20, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700 }}>
-                Contact Support
-              </h2>
-              <button
-                onClick={onClose}
-                style={{ background: "none", border: "none", cursor: "pointer", padding: 4, display: "flex", alignItems: "center" }}
-                aria-label="Close"
-              >
-                <XIcon color={C.taupe} size={18} />
+            <FormField label="New Email Address" type="email" value={email} onChange={v => { setEmail(v); setErrors(p => ({ ...p, email: "" })); }} placeholder="you@example.com" error={errors.email} />
+            <FormField label="Current Password" type="password" value={pass} onChange={v => { setPass(v); setErrors(p => ({ ...p, pass: "" })); }} showToggle show={showPass} onToggle={() => setShowPass(x => !x)} error={errors.pass} />
+            <ModalActions onCancel={onClose} onSave={save} loading={loading} />
+          </>
+        )}
+      </ModalBox>
+    </ModalOverlay>
+  );
+}
+
+// ─── Change Password Modal ────────────────────────────────────────────────────
+
+function ChangePasswordModal({ onClose }: { onClose: () => void }) {
+  const [cur, setCur] = useState("");
+  const [next, setNext] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [show, setShow] = useState({ cur: false, next: false, confirm: false });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  function validate() {
+    const e: Record<string, string> = {};
+    if (!cur) e.cur = "Enter your current password.";
+    if (!next || next.length < 8) e.next = "Password must be at least 8 characters.";
+    if (next !== confirm) e.confirm = "The passwords do not match.";
+    return e;
+  }
+
+  function save() {
+    const e = validate();
+    if (Object.keys(e).length) { setErrors(e); return; }
+    setLoading(true);
+    setTimeout(() => { setLoading(false); setSuccess(true); setTimeout(onClose, 1200); }, 1000);
+  }
+
+  return (
+    <ModalOverlay onClose={onClose}>
+      <ModalBox title="Change Password" onClose={onClose}>
+        {success ? (
+          <p className="text-sm py-4 text-center" style={{ color: "#A9927D" }}>Password changed.</p>
+        ) : (
+          <>
+            <FormField label="Current Password" type="password" value={cur} onChange={v => { setCur(v); setErrors(p => ({ ...p, cur: "" })); }} showToggle show={show.cur} onToggle={() => setShow(s => ({ ...s, cur: !s.cur }))} error={errors.cur} />
+            <FormField label="New Password" type="password" value={next} onChange={v => { setNext(v); setErrors(p => ({ ...p, next: "" })); }} showToggle show={show.next} onToggle={() => setShow(s => ({ ...s, next: !s.next }))} error={errors.next} />
+            <FormField label="Confirm New Password" type="password" value={confirm} onChange={v => { setConfirm(v); setErrors(p => ({ ...p, confirm: "" })); }} showToggle show={show.confirm} onToggle={() => setShow(s => ({ ...s, confirm: !s.confirm }))} error={errors.confirm} />
+            <ModalActions onCancel={onClose} onSave={save} loading={loading} />
+          </>
+        )}
+      </ModalBox>
+    </ModalOverlay>
+  );
+}
+
+// ─── Add Phone Modal ──────────────────────────────────────────────────────────
+
+function AddPhoneModal({ onClose }: { onClose: () => void }) {
+  const [country, setCountry] = useState("US +1");
+  const [phone, setPhone] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  function save() {
+    const e: Record<string, string> = {};
+    if (!phone || phone.replace(/\D/g, "").length < 7) e.phone = "Enter a valid phone number.";
+    if (Object.keys(e).length) { setErrors(e); return; }
+    setLoading(true);
+    setTimeout(() => { setLoading(false); setSuccess(true); setTimeout(onClose, 1200); }, 1000);
+  }
+
+  return (
+    <ModalOverlay onClose={onClose}>
+      <ModalBox title="Add Phone Number" onClose={onClose}>
+        {success ? (
+          <p className="text-sm py-4 text-center" style={{ color: "#A9927D" }}>Phone number added.</p>
+        ) : (
+          <>
+            <div className="mb-4">
+              <label className="block text-xs font-medium mb-1.5 tracking-wide uppercase" style={{ color: "#A9927D" }}>Country or Region</label>
+              <select value={country} onChange={e => setCountry(e.target.value)}
+                className="w-full px-3 py-2.5 rounded text-sm outline-none"
+                style={{ backgroundColor: "#0A0908", border: "1px solid rgba(94,80,63,0.5)", color: "#F2F4F3", fontFamily: "Barlow, sans-serif" }}>
+                <option>US +1</option><option>UK +44</option><option>CA +1</option><option>AU +61</option><option>DE +49</option>
+              </select>
+            </div>
+            <FormField label="Phone Number" type="tel" value={phone} onChange={v => { setPhone(v); setErrors(p => ({ ...p, phone: "" })); }} placeholder="(555) 000-0000" error={errors.phone} />
+            <ModalActions onCancel={onClose} onSave={save} loading={loading} saveLabel="Add" />
+          </>
+        )}
+      </ModalBox>
+    </ModalOverlay>
+  );
+}
+
+// ─── Delete Account Modals ────────────────────────────────────────────────────
+
+function DeleteAccountModal1({ onClose, onContinue }: { onClose: () => void; onContinue: () => void }) {
+  return (
+    <ModalOverlay onClose={onClose}>
+      <ModalBox title="Delete Account?" onClose={onClose}>
+        <p className="text-sm leading-relaxed mb-6" style={{ color: "#A9927D" }}>
+          This action will permanently delete your account, profiles, saved titles, and viewing information.
+        </p>
+        <div className="flex gap-3">
+          <button onClick={onClose}
+            className="flex-1 py-2.5 rounded text-sm font-medium transition-colors"
+            style={{ border: "1px solid rgba(94,80,63,0.5)", color: "#A9927D", backgroundColor: "transparent" }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "#A9927D"; e.currentTarget.style.color = "#F2F4F3"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(94,80,63,0.5)"; e.currentTarget.style.color = "#A9927D"; }}>
+            Cancel
+          </button>
+          <button onClick={onContinue}
+            className="flex-1 py-2.5 rounded text-sm font-semibold transition-colors"
+            style={{ backgroundColor: "#49111C", color: "#F2F4F3" }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#5a1522"; }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#49111C"; }}>
+            Continue
+          </button>
+        </div>
+      </ModalBox>
+    </ModalOverlay>
+  );
+}
+
+function DeleteAccountModal2({ onClose }: { onClose: () => void }) {
+  const [input, setInput] = useState("");
+  const valid = input === "DELETE";
+  return (
+    <ModalOverlay onClose={onClose}>
+      <ModalBox title="Confirm Deletion" onClose={onClose}>
+        <p className="text-sm mb-4" style={{ color: "#A9927D" }}>
+          Type <span style={{ color: "#F2F4F3", fontFamily: "monospace" }}>DELETE</span> to permanently remove your account.
+        </p>
+        <input
+          type="text"
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          placeholder="DELETE"
+          className="w-full px-3 py-2.5 rounded text-sm outline-none mb-6"
+          style={{ backgroundColor: "#0A0908", border: "1px solid rgba(94,80,63,0.5)", color: "#F2F4F3", fontFamily: "monospace", letterSpacing: "0.1em" }}
+          onFocus={e => { e.currentTarget.style.borderColor = "#49111C"; }}
+          onBlur={e => { e.currentTarget.style.borderColor = "rgba(94,80,63,0.5)"; }}
+        />
+        <div className="flex gap-3">
+          <button onClick={onClose}
+            className="flex-1 py-2.5 rounded text-sm font-medium transition-colors"
+            style={{ border: "1px solid rgba(94,80,63,0.5)", color: "#A9927D", backgroundColor: "transparent" }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "#A9927D"; e.currentTarget.style.color = "#F2F4F3"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(94,80,63,0.5)"; e.currentTarget.style.color = "#A9927D"; }}>
+            Cancel
+          </button>
+          <button disabled={!valid}
+            className="flex-1 py-2.5 rounded text-sm font-semibold transition-colors"
+            style={{ backgroundColor: valid ? "#49111C" : "rgba(73,17,28,0.3)", color: "#F2F4F3", cursor: valid ? "pointer" : "not-allowed" }}>
+            Delete Account
+          </button>
+        </div>
+      </ModalBox>
+    </ModalOverlay>
+  );
+}
+
+// ─── Sign Out All Devices Modal ───────────────────────────────────────────────
+
+function SignOutAllModal({ onClose }: { onClose: () => void }) {
+  const [done, setDone] = useState(false);
+  return (
+    <ModalOverlay onClose={onClose}>
+      <ModalBox title="Sign Out of All Devices?" onClose={onClose}>
+        {done ? (
+          <p className="text-sm py-4 text-center" style={{ color: "#A9927D" }}>Signed out of all devices.</p>
+        ) : (
+          <>
+            <p className="text-sm mb-6" style={{ color: "#A9927D" }}>You will be signed out of all devices except this one. You will need to sign in again on those devices.</p>
+            <div className="flex gap-3">
+              <button onClick={onClose}
+                className="flex-1 py-2.5 rounded text-sm font-medium transition-colors"
+                style={{ border: "1px solid rgba(94,80,63,0.5)", color: "#A9927D", backgroundColor: "transparent" }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = "#A9927D"; e.currentTarget.style.color = "#F2F4F3"; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(94,80,63,0.5)"; e.currentTarget.style.color = "#A9927D"; }}>
+                Cancel
+              </button>
+              <button onClick={() => { setDone(true); setTimeout(onClose, 1200); }}
+                className="flex-1 py-2.5 rounded text-sm font-semibold transition-colors"
+                style={{ backgroundColor: "#49111C", color: "#F2F4F3" }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#5a1522"; }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#49111C"; }}>
+                Sign Out All
               </button>
             </div>
-            <form onSubmit={handleSubmit} noValidate style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-              <div>
-                <label style={labelStyle} htmlFor="support-topic">Help Topic</label>
-                <select
-                  id="support-topic"
-                  value={topic}
-                  onChange={(e) => { setTopic(e.target.value); setErrors((p) => ({ ...p, topic: "" })); }}
-                  style={{ ...fieldStyle, appearance: "none", cursor: "pointer" }}
-                  onFocus={(e) => (e.target.style.borderColor = C.wine)}
-                  onBlur={(e) => (e.target.style.borderColor = errors.topic ? "#7a2030" : C.stone)}
-                >
-                  <option value="" disabled style={{ background: C.ink }}>Select a topic</option>
-                  {topics.map((t) => (
-                    <option key={t} value={t} style={{ background: C.ink }}>{t}</option>
-                  ))}
-                </select>
-                {errors.topic && <p style={{ color: "#c9596a", fontSize: 12, margin: "6px 0 0" }}>{errors.topic}</p>}
-              </div>
-              <div>
-                <label style={labelStyle} htmlFor="support-subject">Subject</label>
-                <input
-                  id="support-subject"
-                  type="text"
-                  value={subject}
-                  onChange={(e) => { setSubject(e.target.value); setErrors((p) => ({ ...p, subject: "" })); }}
-                  placeholder="Brief description of your issue"
-                  style={{ ...fieldStyle, ...(errors.subject ? { borderColor: "#7a2030" } : {}) }}
-                  onFocus={(e) => (e.target.style.borderColor = C.wine)}
-                  onBlur={(e) => (e.target.style.borderColor = errors.subject ? "#7a2030" : C.stone)}
-                />
-                {errors.subject && <p style={{ color: "#c9596a", fontSize: 12, margin: "6px 0 0" }}>{errors.subject}</p>}
-              </div>
-              <div>
-                <label style={labelStyle} htmlFor="support-description">Description</label>
-                <textarea
-                  id="support-description"
-                  value={description}
-                  onChange={(e) => { setDescription(e.target.value); setErrors((p) => ({ ...p, description: "" })); }}
-                  placeholder="Please describe the issue in detail"
-                  rows={5}
-                  style={{ ...fieldStyle, resize: "vertical", ...(errors.description ? { borderColor: "#7a2030" } : {}) }}
-                  onFocus={(e) => (e.target.style.borderColor = C.wine)}
-                  onBlur={(e) => (e.target.style.borderColor = errors.description ? "#7a2030" : C.stone)}
-                />
-                {errors.description && <p style={{ color: "#c9596a", fontSize: 12, margin: "6px 0 0" }}>{errors.description}</p>}
-              </div>
-              <div>
-                <label style={labelStyle} htmlFor="support-attachment">Attachment (optional)</label>
-                <input
-                  id="support-attachment"
-                  type="file"
-                  style={{
-                    ...fieldStyle,
-                    color: C.taupe,
-                    cursor: "pointer",
-                    padding: "8px 14px",
-                  }}
-                />
-              </div>
-              <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
-                <button
-                  type="submit"
-                  style={{
-                    flex: 1, background: C.wine, color: C.cream, border: "none",
-                    borderRadius: 6, padding: "12px", fontFamily: "'Barlow', sans-serif",
-                    fontSize: 14, fontWeight: 600, cursor: "pointer",
-                    transition: "background 0.15s",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = C.wineDark)}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = C.wine)}
-                >
-                  Submit Request
-                </button>
-                <button
-                  type="button"
-                  onClick={onClose}
-                  style={{
-                    flex: 1, background: "transparent", color: C.taupe,
-                    border: `1px solid ${C.stone}`, borderRadius: 6, padding: "12px",
-                    fontFamily: "'Barlow', sans-serif", fontSize: 14, fontWeight: 600, cursor: "pointer",
-                    transition: "border-color 0.15s, color 0.15s",
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = C.wine; e.currentTarget.style.color = C.cream; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = C.stone; e.currentTarget.style.color = C.taupe; }}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
           </>
+        )}
+      </ModalBox>
+    </ModalOverlay>
+  );
+}
+
+// ─── Billing Details Modal ────────────────────────────────────────────────────
+
+function BillingDetailsModal({ onClose }: { onClose: () => void }) {
+  return (
+    <ModalOverlay onClose={onClose}>
+      <ModalBox title="Billing Details" onClose={onClose}>
+        <div className="space-y-3">
+          {[
+            { label: "Plan", value: "StreamFlix Premium" },
+            { label: "Amount", value: "$17.99 / month" },
+            { label: "Payment Method", value: "•••• 4242" },
+            { label: "Next Billing Date", value: "September 27, 2026" },
+          ].map(row => (
+            <div key={row.label} className="flex justify-between py-2" style={{ borderBottom: "1px solid rgba(94,80,63,0.2)" }}>
+              <span className="text-sm" style={{ color: "#A9927D" }}>{row.label}</span>
+              <span className="text-sm font-medium" style={{ color: "#F2F4F3" }}>{row.value}</span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-5">
+          <p className="text-xs font-medium mb-3 tracking-wide uppercase" style={{ color: "#A9927D" }}>Billing History</p>
+          {["Aug 27, 2026", "Jul 27, 2026", "Jun 27, 2026"].map(date => (
+            <div key={date} className="flex justify-between py-2" style={{ borderBottom: "1px solid rgba(94,80,63,0.15)" }}>
+              <span className="text-sm" style={{ color: "#A9927D" }}>{date}</span>
+              <span className="text-sm" style={{ color: "#F2F4F3" }}>$17.99</span>
+            </div>
+          ))}
+        </div>
+        <button onClick={onClose}
+          className="w-full mt-6 py-2.5 rounded text-sm font-medium transition-colors"
+          style={{ border: "1px solid rgba(94,80,63,0.5)", color: "#A9927D", backgroundColor: "transparent" }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = "#A9927D"; e.currentTarget.style.color = "#F2F4F3"; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(94,80,63,0.5)"; e.currentTarget.style.color = "#A9927D"; }}>
+          Close
+        </button>
+      </ModalBox>
+    </ModalOverlay>
+  );
+}
+
+// ─── Divider ──────────────────────────────────────────────────────────────────
+
+function Divider() {
+  return <div style={{ borderTop: "1px solid rgba(94,80,63,0.25)" }} />;
+}
+
+function SectionHeading({ children }: { children: React.ReactNode }) {
+  return <h2 className="font-display text-base font-semibold tracking-wider uppercase mb-4" style={{ color: "#A9927D" }}>{children}</h2>;
+}
+
+// ─── Overview Content ─────────────────────────────────────────────────────────
+
+function OverviewContent({ setSection, setModal }: { setSection: (s: Section) => void; setModal: (m: Modal) => void }) {
+  return (
+    <div className="space-y-8">
+      {/* Membership Summary */}
+      <div className="rounded-lg p-5" style={{ backgroundColor: "#0f0e0d", border: "1px solid rgba(94,80,63,0.3)" }}>
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-medium tracking-widest uppercase mb-1" style={{ color: "#A9927D" }}>Membership</p>
+            <p className="font-display text-2xl font-bold tracking-wide" style={{ color: "#F2F4F3" }}>StreamFlix Premium</p>
+          </div>
+          <div className="flex flex-col gap-1.5 items-start">
+            <span className="flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium"
+              style={{ border: "1px solid #49111C", color: "#F2F4F3" }}>
+              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#7a9f6e" }} />
+              Active
+            </span>
+            <span className="text-xs" style={{ color: "#A9927D" }}>Member since 2026</span>
+          </div>
+          <button onClick={() => setSection("membership")}
+            className="px-5 py-2.5 rounded text-sm font-semibold transition-colors whitespace-nowrap"
+            style={{ backgroundColor: "#49111C", color: "#F2F4F3" }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#5a1522"; }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#49111C"; }}>
+            Manage Membership
+          </button>
+        </div>
+      </div>
+
+      {/* Account Information */}
+      <div>
+        <SectionHeading>Account Information</SectionHeading>
+        <div className="space-y-0">
+          {[
+            { label: "Email", value: "kevin@example.com", action: "Change", modal: "email" as Modal },
+            { label: "Password", value: "••••••••••", action: "Change", modal: "password" as Modal },
+            { label: "Phone", value: "Not added", action: "Add", modal: "phone" as Modal, muted: true },
+          ].map((row, i, arr) => (
+            <div key={row.label}>
+              <div className="flex items-center py-4 gap-4">
+                <span className="w-24 text-sm font-medium flex-shrink-0" style={{ color: "#F2F4F3" }}>{row.label}</span>
+                <span className="flex-1 text-sm" style={{ color: row.muted ? "#A9927D" : "#F2F4F3" }}>{row.value}</span>
+                <button onClick={() => setModal(row.modal)}
+                  className="text-sm transition-colors flex-shrink-0"
+                  style={{ color: "#A9927D" }}
+                  onMouseEnter={e => { e.currentTarget.style.color = "#F2F4F3"; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = "#A9927D"; }}>
+                  {row.action}
+                </button>
+              </div>
+              {i < arr.length - 1 && <Divider />}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Divider />
+
+      {/* Plan & Billing */}
+      <div>
+        <SectionHeading>Plan &amp; Billing</SectionHeading>
+        <div className="flex flex-wrap items-center gap-4 py-1">
+          <div className="flex flex-wrap items-center gap-4 flex-1">
+            <span className="text-sm font-bold" style={{ color: "#F2F4F3" }}>Premium</span>
+            <span style={{ color: "rgba(94,80,63,0.5)", fontSize: "1px", borderLeft: "1px solid rgba(94,80,63,0.4)", height: "16px", display: "inline-block" }} />
+            <span className="text-sm" style={{ color: "#F2F4F3" }}>4K + HDR</span>
+            <span style={{ color: "rgba(94,80,63,0.5)", fontSize: "1px", borderLeft: "1px solid rgba(94,80,63,0.4)", height: "16px", display: "inline-block" }} />
+            <span className="flex items-center gap-1.5 text-sm" style={{ color: "#F2F4F3" }}>
+              <span style={{ color: "#A9927D" }}><IconCreditCard /></span>
+              •••• 4242
+            </span>
+            <span style={{ color: "rgba(94,80,63,0.5)", fontSize: "1px", borderLeft: "1px solid rgba(94,80,63,0.4)", height: "16px", display: "inline-block" }} />
+            <span className="text-sm" style={{ color: "#A9927D" }}>Next billing date: <span style={{ color: "#F2F4F3" }}>September 27, 2026</span></span>
+          </div>
+          <button onClick={() => setModal("billing")}
+            className="px-4 py-2 rounded text-sm font-medium transition-colors whitespace-nowrap"
+            style={{ border: "1px solid rgba(94,80,63,0.5)", color: "#A9927D", backgroundColor: "transparent" }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "#A9927D"; e.currentTarget.style.color = "#F2F4F3"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(94,80,63,0.5)"; e.currentTarget.style.color = "#A9927D"; }}>
+            View billing details
+          </button>
+        </div>
+      </div>
+
+      <Divider />
+
+      {/* Quick Links */}
+      <div>
+        <SectionHeading>Quick Links</SectionHeading>
+        <div>
+          {[
+            { label: "Security Settings", icon: <IconShield />, target: "security" as Section },
+            { label: "Manage Devices", icon: <IconMonitor />, target: "devices" as Section },
+            { label: "Manage Profiles", icon: <IconUsers />, target: "profiles" as Section },
+          ].map((link, i, arr) => (
+            <div key={link.label}>
+              <button onClick={() => setSection(link.target)}
+                className="w-full flex items-center gap-3 py-4 transition-colors group"
+                style={{ color: "#F2F4F3" }}
+                onMouseEnter={e => { e.currentTarget.style.color = "#49111C"; }}
+                onMouseLeave={e => { e.currentTarget.style.color = "#F2F4F3"; }}>
+                <span style={{ color: "#A9927D" }} className="group-hover:text-current transition-colors">{link.icon}</span>
+                <span className="flex-1 text-sm text-left">{link.label}</span>
+                <span style={{ color: "#A9927D" }}><IconChevronRight /></span>
+              </button>
+              {i < arr.length - 1 && <Divider />}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Divider />
+
+      {/* Account Actions */}
+      <div className="pb-6">
+        <SectionHeading>Account Actions</SectionHeading>
+        <button onClick={() => setModal("delete1")}
+          className="text-sm transition-colors"
+          style={{ color: "#A9927D" }}
+          onMouseEnter={e => { e.currentTarget.style.color = "#F2F4F3"; }}
+          onMouseLeave={e => { e.currentTarget.style.color = "#A9927D"; }}>
+          Delete Account
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Membership Page ──────────────────────────────────────────────────────────
+
+function MembershipPage({ setModal }: { setModal: (m: Modal) => void }) {
+  const [cancelling, setCancelling] = useState(false);
+  return (
+    <div className="space-y-8 pb-6">
+      <div>
+        <SectionHeading>Current Plan</SectionHeading>
+        <div className="rounded-lg p-5 mb-4" style={{ backgroundColor: "#0f0e0d", border: "1px solid rgba(94,80,63,0.3)" }}>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="font-display text-2xl font-bold tracking-wide mb-1" style={{ color: "#F2F4F3" }}>StreamFlix Premium</p>
+              <div className="flex flex-wrap gap-3 mt-3">
+                {["4K + HDR", "Dolby Audio", "4 Screens", "Downloads"].map(f => (
+                  <span key={f} className="text-xs px-2.5 py-1 rounded" style={{ border: "1px solid rgba(94,80,63,0.4)", color: "#A9927D" }}>{f}</span>
+                ))}
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="font-display text-xl font-bold" style={{ color: "#F2F4F3" }}>$17.99</p>
+              <p className="text-xs" style={{ color: "#A9927D" }}>per month</p>
+            </div>
+          </div>
+        </div>
+        <button className="text-sm font-medium px-4 py-2 rounded transition-colors"
+          style={{ border: "1px solid rgba(94,80,63,0.5)", color: "#A9927D", backgroundColor: "transparent" }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = "#A9927D"; e.currentTarget.style.color = "#F2F4F3"; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(94,80,63,0.5)"; e.currentTarget.style.color = "#A9927D"; }}>
+          Change Plan
+        </button>
+      </div>
+
+      <Divider />
+
+      <div>
+        <SectionHeading>Billing</SectionHeading>
+        <div className="space-y-0">
+          {[
+            { label: "Payment Method", value: "•••• 4242", action: "Update", onClick: () => setModal("updatePayment") },
+            { label: "Next Billing Date", value: "September 27, 2026", action: null },
+            { label: "Amount", value: "$17.99 / month", action: null },
+          ].map((row, i, arr) => (
+            <div key={row.label}>
+              <div className="flex items-center py-4 gap-4">
+                <span className="w-36 text-sm flex-shrink-0" style={{ color: "#A9927D" }}>{row.label}</span>
+                <span className="flex-1 text-sm" style={{ color: "#F2F4F3" }}>{row.value}</span>
+                {row.action && (
+                  <button onClick={row.onClick} className="text-sm transition-colors flex-shrink-0" style={{ color: "#A9927D" }}
+                    onMouseEnter={e => { e.currentTarget.style.color = "#F2F4F3"; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = "#A9927D"; }}>
+                    {row.action}
+                  </button>
+                )}
+              </div>
+              {i < arr.length - 1 && <Divider />}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Divider />
+
+      <div>
+        <SectionHeading>Billing History</SectionHeading>
+        <div>
+          {[
+            { date: "Aug 27, 2026", amount: "$17.99", status: "Paid" },
+            { date: "Jul 27, 2026", amount: "$17.99", status: "Paid" },
+            { date: "Jun 27, 2026", amount: "$17.99", status: "Paid" },
+          ].map((row, i, arr) => (
+            <div key={row.date}>
+              <div className="flex items-center py-3 gap-4">
+                <span className="flex-1 text-sm" style={{ color: "#A9927D" }}>{row.date}</span>
+                <span className="text-sm" style={{ color: "#F2F4F3" }}>{row.amount}</span>
+                <span className="text-xs px-2 py-0.5 rounded" style={{ border: "1px solid rgba(94,80,63,0.3)", color: "#A9927D" }}>{row.status}</span>
+              </div>
+              {i < arr.length - 1 && <Divider />}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Divider />
+
+      <div>
+        <p className="text-xs font-medium mb-3 tracking-widest uppercase" style={{ color: "#A9927D" }}>Danger Zone</p>
+        {!cancelling ? (
+          <button onClick={() => setCancelling(true)}
+            className="text-sm transition-colors"
+            style={{ color: "#A9927D" }}
+            onMouseEnter={e => { e.currentTarget.style.color = "#F2F4F3"; }}
+            onMouseLeave={e => { e.currentTarget.style.color = "#A9927D"; }}>
+            Cancel Membership
+          </button>
+        ) : (
+          <div className="rounded-lg p-4" style={{ border: "1px solid rgba(73,17,28,0.5)", backgroundColor: "rgba(73,17,28,0.08)" }}>
+            <p className="text-sm mb-4" style={{ color: "#A9927D" }}>Are you sure you want to cancel? You will lose access at the end of your current billing period.</p>
+            <div className="flex gap-3">
+              <button onClick={() => setCancelling(false)}
+                className="px-4 py-2 rounded text-sm font-medium transition-colors"
+                style={{ border: "1px solid rgba(94,80,63,0.5)", color: "#A9927D", backgroundColor: "transparent" }}>
+                Keep Membership
+              </button>
+              <button className="px-4 py-2 rounded text-sm font-semibold transition-colors"
+                style={{ backgroundColor: "#49111C", color: "#F2F4F3" }}>
+                Confirm Cancel
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>
   );
 }
 
-// ─── Article Page ────────────────────────────────────────────────
-function ArticlePage({
-  article,
-  onBack,
-  onContactUs,
-}: {
-  article: typeof ARTICLES[0];
-  onBack: () => void;
-  onContactUs: () => void;
-}) {
+// ─── Security Page ────────────────────────────────────────────────────────────
+
+function SecurityPage({ setModal }: { setModal: (m: Modal) => void }) {
+  const [twoStep, setTwoStep] = useState(false);
   return (
-    <main style={{ maxWidth: 720, margin: "0 auto", padding: "48px 24px 80px" }}>
-      {/* Breadcrumb */}
-      <nav aria-label="Breadcrumb" style={{ marginBottom: 28 }}>
-        <button
-          onClick={onBack}
-          style={{
-            background: "none", border: "none", cursor: "pointer",
-            display: "inline-flex", alignItems: "center", gap: 6,
-            color: C.taupe, fontFamily: "'Barlow', sans-serif", fontSize: 13,
-            padding: 0,
-            transition: "color 0.15s",
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = C.cream)}
-          onMouseLeave={(e) => (e.currentTarget.style.color = C.taupe)}
-        >
-          <ArrowLeftIcon size={14} color="currentColor" />
-          Help Center
-        </button>
-        <span style={{ color: C.stone, margin: "0 8px", fontSize: 13 }}>/</span>
-        <span style={{ color: C.stone, fontSize: 13 }}>{article.category}</span>
-        <span style={{ color: C.stone, margin: "0 8px", fontSize: 13 }}>/</span>
-        <span style={{ color: C.taupe, fontSize: 13 }}>{article.title}</span>
-      </nav>
-
-      {/* Header */}
-      <h1 style={{
-        fontFamily: "'Barlow Condensed', sans-serif",
-        fontSize: "clamp(28px, 5vw, 40px)",
-        fontWeight: 700,
-        color: C.cream,
-        margin: "0 0 12px",
-        lineHeight: 1.15,
-      }}>
-        {article.title}
-      </h1>
-      <p style={{ color: C.stone, fontSize: 13, margin: "0 0 32px" }}>
-        Last updated: August 2026 · {article.category}
-      </p>
-
-      <div style={{ borderTop: `1px solid rgba(94,80,63,0.3)`, marginBottom: 32 }} />
-
-      {/* Steps */}
-      <ol style={{ padding: 0, margin: "0 0 40px", listStyle: "none", display: "flex", flexDirection: "column", gap: 16 }}>
-        {article.content.map((step, i) => (
-          <li key={i} style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
-            <span style={{
-              flexShrink: 0, width: 28, height: 28, borderRadius: "50%",
-              background: C.wine, color: C.cream, fontFamily: "'Barlow Condensed', sans-serif",
-              fontSize: 14, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center",
-            }}>
-              {i + 1}
-            </span>
-            <p style={{ color: C.taupe, fontSize: 15, lineHeight: 1.6, margin: 0, paddingTop: 4 }}>{step}</p>
-          </li>
-        ))}
-      </ol>
-
-      <div style={{ borderTop: `1px solid rgba(94,80,63,0.3)`, marginBottom: 32 }} />
-
-      {/* Related articles */}
-      <h3 style={{ color: C.cream, fontSize: 16, fontWeight: 600, margin: "0 0 16px" }}>Related Articles</h3>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 40 }}>
-        {ARTICLES.filter((a) => a.category === article.category && a.id !== article.id).slice(0, 3).map((a) => (
-          <a
-            key={a.id}
-            href="#"
-            onClick={(e) => e.preventDefault()}
-            style={{
-              color: C.taupe, fontSize: 14, textDecoration: "underline",
-              textDecorationColor: "rgba(169,146,125,0.4)",
-              transition: "color 0.15s",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = C.cream)}
-            onMouseLeave={(e) => (e.currentTarget.style.color = C.taupe)}
-          >
-            {a.title}
-          </a>
-        ))}
+    <div className="space-y-8 pb-6">
+      <div>
+        <SectionHeading>Security</SectionHeading>
+        <div className="space-y-0">
+          {[
+            { label: "Password", value: "Last changed 30 days ago", action: "Change", onClick: () => setModal("password") },
+            { label: "Phone", value: "Not added", action: "Add", onClick: () => setModal("phone"), muted: true },
+          ].map((row, i, arr) => (
+            <div key={row.label}>
+              <div className="flex items-center py-4 gap-4">
+                <span className="w-36 text-sm font-medium flex-shrink-0" style={{ color: "#F2F4F3" }}>{row.label}</span>
+                <span className="flex-1 text-sm" style={{ color: row.muted ? "#A9927D" : "#A9927D" }}>{row.value}</span>
+                <button onClick={row.onClick} className="text-sm transition-colors flex-shrink-0" style={{ color: "#A9927D" }}
+                  onMouseEnter={e => { e.currentTarget.style.color = "#F2F4F3"; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = "#A9927D"; }}>
+                  {row.action}
+                </button>
+              </div>
+              {i < arr.length - 1 && <Divider />}
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Actions */}
-      <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-        <button
-          onClick={onBack}
-          style={{
-            background: "transparent", color: C.taupe,
-            border: `1px solid ${C.stone}`, borderRadius: 6, padding: "10px 22px",
-            fontFamily: "'Barlow', sans-serif", fontSize: 14, fontWeight: 600, cursor: "pointer",
-            transition: "border-color 0.15s, color 0.15s",
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.borderColor = C.wine; e.currentTarget.style.color = C.cream; }}
-          onMouseLeave={(e) => { e.currentTarget.style.borderColor = C.stone; e.currentTarget.style.color = C.taupe; }}
-        >
-          ← Back to Help Center
-        </button>
-        <button
-          onClick={onContactUs}
-          style={{
-            background: C.wine, color: C.cream, border: "none",
-            borderRadius: 6, padding: "10px 22px",
-            fontFamily: "'Barlow', sans-serif", fontSize: 14, fontWeight: 600, cursor: "pointer",
-            transition: "background 0.15s",
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = C.wineDark)}
-          onMouseLeave={(e) => (e.currentTarget.style.background = C.wine)}
-        >
-          Contact Support
+      <Divider />
+
+      <div>
+        <SectionHeading>Two-Step Verification</SectionHeading>
+        <div className="flex items-center justify-between py-2">
+          <div>
+            <p className="text-sm font-medium mb-1" style={{ color: "#F2F4F3" }}>Two-Step Verification</p>
+            <p className="text-xs" style={{ color: "#A9927D" }}>{twoStep ? "Enabled — your account has extra protection." : "Add an extra layer of security to your account."}</p>
+          </div>
+          <button onClick={() => setTwoStep(x => !x)}
+            className="relative w-10 h-5 rounded-full transition-colors flex-shrink-0"
+            style={{ backgroundColor: twoStep ? "#49111C" : "rgba(94,80,63,0.4)" }}
+            role="switch" aria-checked={twoStep} aria-label="Toggle two-step verification">
+            <span className="absolute top-0.5 w-4 h-4 rounded-full transition-transform"
+              style={{ backgroundColor: "#F2F4F3", transform: twoStep ? "translateX(20px)" : "translateX(2px)" }} />
+          </button>
+        </div>
+      </div>
+
+      <Divider />
+
+      <div>
+        <SectionHeading>Recent Account Access</SectionHeading>
+        <div>
+          {[
+            { device: "Chrome on Mac", location: "New York, US", time: "Active now" },
+            { device: "Safari on iPhone", location: "New York, US", time: "2 hours ago" },
+            { device: "StreamFlix TV App", location: "New York, US", time: "Yesterday" },
+          ].map((row, i, arr) => (
+            <div key={row.device}>
+              <div className="flex items-center py-3 gap-4">
+                <div className="flex-1">
+                  <p className="text-sm" style={{ color: "#F2F4F3" }}>{row.device}</p>
+                  <p className="text-xs mt-0.5" style={{ color: "#A9927D" }}>{row.location}</p>
+                </div>
+                <span className="text-xs" style={{ color: "#A9927D" }}>{row.time}</span>
+              </div>
+              {i < arr.length - 1 && <Divider />}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Divider />
+
+      <div>
+        <button onClick={() => setModal("signout")}
+          className="text-sm transition-colors"
+          style={{ color: "#A9927D" }}
+          onMouseEnter={e => { e.currentTarget.style.color = "#F2F4F3"; }}
+          onMouseLeave={e => { e.currentTarget.style.color = "#A9927D"; }}>
+          Sign Out of All Devices
         </button>
       </div>
-    </main>
-  );
-}
-
-// ─── Profile Dropdown ────────────────────────────────────────────
-function ProfileDropdown({ onClose, onBackToStreamflix }: { onClose: () => void; onBackToStreamflix: () => void }) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
-    };
-    const keyHandler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    document.addEventListener("mousedown", handler);
-    document.addEventListener("keydown", keyHandler);
-    return () => { document.removeEventListener("mousedown", handler); document.removeEventListener("keydown", keyHandler); };
-  }, [onClose]);
-
-  const itemStyle: React.CSSProperties = {
-    display: "block", width: "100%", padding: "10px 16px",
-    background: "none", border: "none", textAlign: "left",
-    color: C.cream, fontSize: 14, fontFamily: "'Barlow', sans-serif",
-    cursor: "pointer", transition: "background 0.12s",
-  };
-
-  return (
-    <div
-      ref={ref}
-      style={{
-        position: "absolute", top: "calc(100% + 8px)", right: 0,
-        background: "#12100F",
-        border: `1px solid rgba(94,80,63,0.5)`,
-        borderRadius: 8,
-        minWidth: 200,
-        zIndex: 100,
-        boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
-        overflow: "hidden",
-      }}
-      role="menu"
-    >
-      {["Profile", "Manage Profiles"].map((label) => (
-        <button
-          key={label}
-          style={itemStyle}
-          role="menuitem"
-          onMouseEnter={(e) => (e.currentTarget.style.background = `rgba(73,17,28,0.4)`)}
-          onMouseLeave={(e) => (e.currentTarget.style.background = "none")}
-          onClick={onClose}
-        >
-          {label}
-        </button>
-      ))}
-      <div style={{ borderTop: `1px solid rgba(94,80,63,0.3)`, margin: "4px 0" }} />
-      <button
-        style={{ ...itemStyle }}
-        role="menuitem"
-        onMouseEnter={(e) => (e.currentTarget.style.background = `rgba(73,17,28,0.4)`)}
-        onMouseLeave={(e) => (e.currentTarget.style.background = "none")}
-        onClick={() => { onClose(); onBackToStreamflix(); }}
-      >
-        Back to StreamFlix
-      </button>
-      <button
-        style={{ ...itemStyle, color: C.taupe }}
-        role="menuitem"
-        onMouseEnter={(e) => (e.currentTarget.style.background = `rgba(73,17,28,0.4)`)}
-        onMouseLeave={(e) => (e.currentTarget.style.background = "none")}
-        onClick={onClose}
-      >
-        Sign Out
-      </button>
     </div>
   );
 }
 
-// ─── Main App ────────────────────────────────────────────────────
-export default function App() {
-  const [query, setQuery] = useState("");
-  const [focused, setFocused] = useState(false);
-  const [suggestions, setSuggestions] = useState<typeof ARTICLES>([]);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const [selectedArticle, setSelectedArticle] = useState<typeof ARTICLES[0] | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const suggestionsRef = useRef<HTMLDivElement>(null);
-  const searchContainerRef = useRef<HTMLDivElement>(null);
+// ─── Devices Page ─────────────────────────────────────────────────────────────
 
-  const filtered = query.trim().length > 0
-    ? ARTICLES.filter((a) => a.title.toLowerCase().includes(query.toLowerCase()))
-    : [];
-
-  useEffect(() => {
-    setSuggestions(filtered);
-    setActiveIndex(-1);
-  }, [query]);
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!focused || suggestions.length === 0) return;
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setActiveIndex((i) => Math.min(i + 1, suggestions.length - 1));
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setActiveIndex((i) => Math.max(i - 1, -1));
-    } else if (e.key === "Enter") {
-      if (activeIndex >= 0) { setSelectedArticle(suggestions[activeIndex]); setFocused(false); }
-    } else if (e.key === "Escape") {
-      setFocused(false);
-    }
-  };
-
-  const handleClickOutside = useCallback((e: MouseEvent) => {
-    if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
-      setFocused(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [handleClickOutside]);
-
-  const showSuggestions = focused && query.trim().length > 0;
-
-  if (selectedArticle) {
-    return (
-      <div style={{ minHeight: "100vh", background: C.ink }}>
-        <Navbar
-          showDropdown={showDropdown}
-          setShowDropdown={setShowDropdown}
-          onBackToStreamflix={() => setSelectedArticle(null)}
-        />
-        <ArticlePage
-          article={selectedArticle}
-          onBack={() => setSelectedArticle(null)}
-          onContactUs={() => setShowModal(true)}
-        />
-        {showModal && <SupportModal onClose={() => setShowModal(false)} />}
-      </div>
-    );
-  }
-
+function DevicesPage() {
+  const [devices, setDevices] = useState([
+    { id: 1, name: "Chrome on Mac", type: "Computer", location: "New York, US", last: "Active now", download: true },
+    { id: 2, name: "Safari on iPhone 15", type: "Mobile", location: "New York, US", last: "2 hours ago", download: true },
+    { id: 3, name: "StreamFlix Smart TV", type: "TV", location: "New York, US", last: "Yesterday", download: false },
+    { id: 4, name: "Firefox on Windows", type: "Computer", location: "New York, US", last: "3 days ago", download: false },
+  ]);
   return (
-    <div style={{ minHeight: "100vh", background: C.ink, display: "flex", flexDirection: "column" }}>
-      <Navbar
-        showDropdown={showDropdown}
-        setShowDropdown={setShowDropdown}
-        onBackToStreamflix={() => {}}
-      />
-
-      {/* Main content */}
-      <main style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 24px 80px" }}>
-        {/* Heading */}
-        <h1 style={{
-          fontFamily: "'Barlow Condensed', sans-serif",
-          fontSize: "clamp(36px, 6vw, 56px)",
-          fontWeight: 700,
-          color: C.cream,
-          textAlign: "center",
-          margin: "0 0 32px",
-          letterSpacing: "-0.5px",
-        }}>
-          How can we help?
-        </h1>
-
-        {/* Search */}
-        <div ref={searchContainerRef} style={{ width: "100%", maxWidth: 860, position: "relative" }}>
-          <div style={{
-            display: "flex", alignItems: "center",
-            background: "#151311",
-            border: `1.5px solid ${focused ? C.wine : C.stone}`,
-            borderRadius: 8,
-            padding: "0 16px",
-            height: 56,
-            transition: "border-color 0.2s",
-            gap: 12,
-          }}>
-            <SearchIcon color={focused ? C.cream : C.taupe} size={20} />
-            <input
-              ref={inputRef}
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onFocus={() => setFocused(true)}
-              onKeyDown={handleKeyDown}
-              placeholder="Type a question, topic, or issue"
-              aria-label="Search Help Center"
-              aria-autocomplete="list"
-              aria-expanded={showSuggestions}
-              style={{
-                flex: 1, background: "none", border: "none", outline: "none",
-                color: C.cream, fontFamily: "'Barlow', sans-serif", fontSize: 16,
-                caretColor: C.wine,
-              }}
-            />
-            {query && (
-              <button
-                onClick={() => { setQuery(""); inputRef.current?.focus(); }}
-                style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", padding: 4 }}
-                aria-label="Clear search"
-              >
-                <XIcon color={C.taupe} />
-              </button>
-            )}
-          </div>
-
-          {/* Suggestions panel */}
-          {showSuggestions && (
-            <div
-              ref={suggestionsRef}
-              role="listbox"
-              aria-label="Search suggestions"
-              style={{
-                position: "absolute", top: "calc(100% + 6px)", left: 0, right: 0,
-                background: "#151311",
-                border: `1px solid rgba(94,80,63,0.5)`,
-                borderRadius: 8,
-                zIndex: 50,
-                boxShadow: "0 12px 40px rgba(0,0,0,0.5)",
-                overflow: "hidden",
-              }}
-            >
-              {suggestions.length > 0 ? (
-                suggestions.map((article, i) => (
-                  <button
-                    key={article.id}
-                    role="option"
-                    aria-selected={i === activeIndex}
-                    onClick={() => { setSelectedArticle(article); setFocused(false); }}
-                    style={{
-                      display: "flex", alignItems: "center", gap: 12,
-                      width: "100%", padding: "12px 16px", background: i === activeIndex ? `rgba(73,17,28,0.5)` : "none",
-                      border: "none", cursor: "pointer",
-                      borderBottom: i < suggestions.length - 1 ? `1px solid rgba(94,80,63,0.2)` : "none",
-                      textAlign: "left",
-                      transition: "background 0.12s",
-                    }}
-                    onMouseEnter={(e) => { setActiveIndex(i); e.currentTarget.style.background = `rgba(73,17,28,0.4)`; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = i === activeIndex ? `rgba(73,17,28,0.5)` : "none"; }}
-                  >
-                    <ArticleIcon color={C.taupe} />
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ margin: 0, color: C.cream, fontSize: 14, fontWeight: 500 }}>
-                        <Highlighted text={article.title} query={query} />
-                      </p>
-                      <p style={{ margin: 0, color: C.taupe, fontSize: 12 }}>{article.category}</p>
-                    </div>
-                    <ChevronRightIcon color={C.stone} />
-                  </button>
-                ))
-              ) : (
-                <div style={{ padding: "20px 16px", textAlign: "center" }}>
-                  <p style={{ color: C.cream, fontSize: 14, margin: "0 0 6px", fontWeight: 500 }}>
-                    No help articles match your search.
-                  </p>
-                  <p style={{ color: C.taupe, fontSize: 13, margin: 0 }}>
-                    Try using fewer or different keywords.
-                  </p>
+    <div className="space-y-8 pb-6">
+      <div>
+        <SectionHeading>Signed-In Devices</SectionHeading>
+        <div>
+          {devices.map((d, i, arr) => (
+            <div key={d.id}>
+              <div className="flex items-center py-4 gap-4">
+                <div className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "rgba(94,80,63,0.15)" }}>
+                  <span style={{ color: "#A9927D" }}><IconMonitor /></span>
                 </div>
-              )}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium" style={{ color: "#F2F4F3" }}>{d.name}</p>
+                  <p className="text-xs mt-0.5" style={{ color: "#A9927D" }}>{d.type} · {d.location} · {d.last}</p>
+                </div>
+                {d.download && <span className="text-xs px-2 py-0.5 rounded hidden sm:inline" style={{ border: "1px solid rgba(94,80,63,0.3)", color: "#A9927D" }}>Downloads</span>}
+                <button onClick={() => setDevices(prev => prev.filter(x => x.id !== d.id))}
+                  className="text-xs flex-shrink-0 transition-colors"
+                  style={{ color: "#A9927D" }}
+                  onMouseEnter={e => { e.currentTarget.style.color = "#F2F4F3"; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = "#A9927D"; }}>
+                  Sign Out
+                </button>
+              </div>
+              {i < arr.length - 1 && <Divider />}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Profiles Page ────────────────────────────────────────────────────────────
+
+function ProfilesPage() {
+  const [profiles] = useState([
+    { id: 1, initials: "KC", name: "Kevin", rating: "All", lang: "English", locked: false, primary: true },
+    { id: 2, initials: "MR", name: "Movies", rating: "18+", lang: "English", locked: false, primary: false },
+    { id: 3, initials: "KI", name: "Kids", rating: "G", lang: "English", locked: true, primary: false },
+  ]);
+  const [adding, setAdding] = useState(false);
+  const [newName, setNewName] = useState("");
+  return (
+    <div className="space-y-8 pb-6">
+      <div>
+        <SectionHeading>Profiles</SectionHeading>
+        <div>
+          {profiles.map((p, i, arr) => (
+            <div key={p.id}>
+              <div className="flex items-center py-4 gap-4">
+                <div className="w-9 h-9 rounded font-display font-bold text-sm flex items-center justify-center flex-shrink-0"
+                  style={{ backgroundColor: "#49111C", color: "#F2F4F3" }}>
+                  {p.initials}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium" style={{ color: "#F2F4F3" }}>{p.name} {p.primary && <span className="text-xs ml-1" style={{ color: "#A9927D" }}>(Primary)</span>}</p>
+                  <p className="text-xs mt-0.5" style={{ color: "#A9927D" }}>{p.rating} · {p.lang}{p.locked ? " · Locked" : ""}</p>
+                </div>
+                <button className="text-xs transition-colors" style={{ color: "#A9927D" }}
+                  onMouseEnter={e => { e.currentTarget.style.color = "#F2F4F3"; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = "#A9927D"; }}>
+                  Edit
+                </button>
+              </div>
+              {i < arr.length - 1 && <Divider />}
+            </div>
+          ))}
+        </div>
+        <div className="mt-4">
+          {!adding ? (
+            <button onClick={() => setAdding(true)}
+              className="text-sm font-medium px-4 py-2 rounded transition-colors"
+              style={{ border: "1px solid rgba(94,80,63,0.5)", color: "#A9927D", backgroundColor: "transparent" }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "#A9927D"; e.currentTarget.style.color = "#F2F4F3"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(94,80,63,0.5)"; e.currentTarget.style.color = "#A9927D"; }}>
+              + Add Profile
+            </button>
+          ) : (
+            <div className="rounded-lg p-4" style={{ border: "1px solid rgba(94,80,63,0.3)", backgroundColor: "#0f0e0d" }}>
+              <p className="text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: "#A9927D" }}>Profile Name</p>
+              <input value={newName} onChange={e => setNewName(e.target.value)} placeholder="New profile name"
+                className="w-full px-3 py-2.5 rounded text-sm outline-none mb-3"
+                style={{ backgroundColor: "#0A0908", border: "1px solid rgba(94,80,63,0.5)", color: "#F2F4F3", fontFamily: "Barlow, sans-serif" }} />
+              <div className="flex gap-3">
+                <button onClick={() => { setAdding(false); setNewName(""); }}
+                  className="px-4 py-2 rounded text-sm transition-colors"
+                  style={{ border: "1px solid rgba(94,80,63,0.5)", color: "#A9927D", backgroundColor: "transparent" }}>Cancel</button>
+                <button onClick={() => { setAdding(false); setNewName(""); }}
+                  className="px-4 py-2 rounded text-sm font-semibold transition-colors"
+                  style={{ backgroundColor: "#49111C", color: "#F2F4F3" }}>Save</button>
+              </div>
             </div>
           )}
         </div>
-
-        {/* Recommended links */}
-        <div style={{ marginTop: 28, textAlign: "center", maxWidth: 860, width: "100%" }}>
-          <p style={{
-            color: C.cream, fontSize: 14, display: "inline",
-            fontWeight: 500, marginRight: 8,
-          }}>
-            Recommended for you:
-          </p>
-          <span style={{ display: "inline", flexWrap: "wrap", gap: "8px 0" }}>
-            {[
-              { id: "account-secure", label: "How to keep your account secure" },
-              { id: "parental-controls", label: "How to manage parental controls" },
-              { id: "change-profile-settings", label: "How to change profile settings" },
-            ].map((link, i, arr) => {
-              const article = ARTICLES.find((a) => a.id === link.id)!;
-              return (
-                <span key={link.id}>
-                  <button
-                    onClick={() => setSelectedArticle(article)}
-                    style={{
-                      background: "none", border: "none", cursor: "pointer",
-                      color: C.taupe, fontSize: 14, fontFamily: "'Barlow', sans-serif",
-                      textDecoration: "underline",
-                      textDecorationColor: "rgba(169,146,125,0.5)",
-                      padding: "0 2px",
-                      transition: "color 0.15s",
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = C.cream; e.currentTarget.style.textDecorationColor = C.cream; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = C.taupe; e.currentTarget.style.textDecorationColor = "rgba(169,146,125,0.5)"; }}
-                  >
-                    {link.label}
-                  </button>
-                  {i < arr.length - 1 && (
-                    <span style={{ color: C.stone, margin: "0 8px", fontSize: 14, opacity: 0.6 }}>|</span>
-                  )}
-                </span>
-              );
-            })}
-          </span>
-        </div>
-
-        {/* Divider */}
-        <div style={{ width: "100%", maxWidth: 860, borderTop: `1px solid rgba(94,80,63,0.25)`, margin: "40px 0" }} />
-
-        {/* Still need help */}
-        <div style={{ textAlign: "center" }}>
-          <h2 style={{
-            fontFamily: "'Barlow Condensed', sans-serif",
-            fontSize: "clamp(28px, 4vw, 40px)",
-            fontWeight: 700,
-            color: C.cream,
-            margin: "0 0 10px",
-          }}>
-            Still need help?
-          </h2>
-          <p style={{ color: C.taupe, fontSize: 15, margin: "0 0 28px" }}>
-            Our support team is here for you.
-          </p>
-          <div style={{
-            display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap",
-          }}>
-            <button
-              onClick={() => setShowModal(true)}
-              style={{
-                background: C.wine, color: C.cream, border: "none",
-                borderRadius: 6, padding: "12px 32px",
-                fontFamily: "'Barlow', sans-serif", fontSize: 15, fontWeight: 600,
-                cursor: "pointer", transition: "background 0.15s",
-                minWidth: 140,
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = C.wineDark)}
-              onMouseLeave={(e) => (e.currentTarget.style.background = C.wine)}
-            >
-              Contact Us
-            </button>
-            <button
-              style={{
-                background: "transparent", color: C.taupe,
-                border: `1px solid ${C.stone}`, borderRadius: 6, padding: "12px 32px",
-                fontFamily: "'Barlow', sans-serif", fontSize: 15, fontWeight: 600,
-                cursor: "pointer", transition: "border-color 0.15s, color 0.15s",
-                minWidth: 140,
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = C.wine; e.currentTarget.style.color = C.cream; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = C.stone; e.currentTarget.style.color = C.taupe; }}
-            >
-              Back to StreamFlix
-            </button>
-          </div>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer style={{
-        borderTop: `1px solid rgba(94,80,63,0.25)`,
-        background: C.ink,
-        padding: "24px",
-      }}>
-        <div style={{
-          maxWidth: 1200, margin: "0 auto",
-          display: "flex", flexWrap: "wrap", alignItems: "center",
-          gap: "12px 24px", justifyContent: "space-between",
-        }}>
-          <span style={{
-            fontFamily: "'Barlow Condensed', sans-serif",
-            fontWeight: 800, fontSize: 18,
-            color: C.wine, letterSpacing: "0.04em",
-          }}>
-            STREAMFLIX
-          </span>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px 20px" }}>
-            {["Terms of Use", "Privacy", "Help Center", "Back to StreamFlix"].map((item) => (
-              <a
-                key={item}
-                href="#"
-                onClick={(e) => e.preventDefault()}
-                style={{
-                  color: C.taupe, fontSize: 13, textDecoration: "none",
-                  transition: "color 0.15s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = C.cream)}
-                onMouseLeave={(e) => (e.currentTarget.style.color = C.taupe)}
-              >
-                {item}
-              </a>
-            ))}
-          </div>
-        </div>
-      </footer>
-
-      {showModal && <SupportModal onClose={() => setShowModal(false)} />}
+      </div>
     </div>
   );
 }
 
-// ─── Navbar ──────────────────────────────────────────────────────
-function Navbar({
-  showDropdown,
-  setShowDropdown,
-  onBackToStreamflix,
-}: {
-  showDropdown: boolean;
-  setShowDropdown: (v: boolean) => void;
-  onBackToStreamflix: () => void;
-}) {
-  return (
-    <header style={{
-      position: "sticky", top: 0, zIndex: 80,
-      background: C.ink,
-      borderBottom: `1px solid rgba(94,80,63,0.25)`,
-      height: 72,
-      display: "flex", alignItems: "center",
-    }}>
-      <div style={{
-        maxWidth: 1200, width: "100%", margin: "0 auto",
-        padding: "0 24px",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-      }}>
-        {/* Left */}
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <span style={{
-            fontFamily: "'Barlow Condensed', sans-serif",
-            fontWeight: 800, fontSize: 24,
-            color: C.wine, letterSpacing: "0.04em",
-            lineHeight: 1,
-          }}>
-            STREAMFLIX
-          </span>
-          <div style={{
-            width: 1, height: 30,
-            background: `rgba(94,80,63,0.5)`,
-          }} />
-          <span style={{
-            fontFamily: "'Barlow', sans-serif",
-            fontSize: 15, fontWeight: 400,
-            color: C.cream,
-            letterSpacing: "0.01em",
-          }}>
-            Help Center
-          </span>
-        </div>
+// ─── Privacy Page ─────────────────────────────────────────────────────────────
 
-        {/* Right: Profile */}
-        <div style={{ position: "relative" }}>
-          <button
-            onClick={() => setShowDropdown(!showDropdown)}
-            aria-haspopup="true"
-            aria-expanded={showDropdown}
-            aria-label="Profile menu"
-            style={{
-              background: "none", border: "none", cursor: "pointer",
-              display: "flex", alignItems: "center", gap: 8,
-              padding: "4px",
-            }}
-          >
-            <div style={{
-              width: 34, height: 34,
-              background: C.wine, borderRadius: 4,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontFamily: "'Barlow Condensed', sans-serif",
-              fontWeight: 700, fontSize: 14,
-              color: C.cream,
-              letterSpacing: "0.05em",
-            }}>
-              KC
+function PrivacyPage() {
+  const [prefs, setPrefs] = useState({ personalization: true, comms: false, viewingData: true });
+  return (
+    <div className="space-y-8 pb-6">
+      <div>
+        <SectionHeading>Privacy Preferences</SectionHeading>
+        <div className="space-y-0">
+          {[
+            { key: "personalization" as const, label: "Personalization", desc: "Allow StreamFlix to use your viewing history to personalize recommendations." },
+            { key: "viewingData" as const, label: "Viewing Data", desc: "Allow StreamFlix to use your data to improve the service." },
+            { key: "comms" as const, label: "Marketing Communications", desc: "Receive emails about new releases, features, and offers." },
+          ].map((item, i, arr) => (
+            <div key={item.key}>
+              <div className="flex items-start justify-between py-4 gap-4">
+                <div className="flex-1">
+                  <p className="text-sm font-medium mb-0.5" style={{ color: "#F2F4F3" }}>{item.label}</p>
+                  <p className="text-xs leading-relaxed" style={{ color: "#A9927D" }}>{item.desc}</p>
+                </div>
+                <button onClick={() => setPrefs(p => ({ ...p, [item.key]: !p[item.key] }))}
+                  className="relative w-10 h-5 rounded-full transition-colors flex-shrink-0 mt-0.5"
+                  style={{ backgroundColor: prefs[item.key] ? "#49111C" : "rgba(94,80,63,0.4)" }}
+                  role="switch" aria-checked={prefs[item.key]} aria-label={`Toggle ${item.label}`}>
+                  <span className="absolute top-0.5 w-4 h-4 rounded-full transition-transform"
+                    style={{ backgroundColor: "#F2F4F3", transform: prefs[item.key] ? "translateX(20px)" : "translateX(2px)" }} />
+                </button>
+              </div>
+              {i < arr.length - 1 && <Divider />}
             </div>
-            <ChevronDownIcon color={C.taupe} size={12} />
+          ))}
+        </div>
+      </div>
+      <Divider />
+      <div>
+        <button className="text-sm font-medium transition-colors px-4 py-2 rounded"
+          style={{ border: "1px solid rgba(94,80,63,0.5)", color: "#A9927D", backgroundColor: "transparent" }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = "#A9927D"; e.currentTarget.style.color = "#F2F4F3"; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(94,80,63,0.5)"; e.currentTarget.style.color = "#A9927D"; }}>
+          Download Account Data
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Update Payment Modal ─────────────────────────────────────────────────────
+
+function UpdatePaymentModal({ onClose }: { onClose: () => void }) {
+  const [card, setCard] = useState("");
+  const [exp, setExp] = useState("");
+  const [cvv, setCvv] = useState("");
+  const [done, setDone] = useState(false);
+  function save() {
+    if (!card || !exp || !cvv) return;
+    setDone(true);
+    setTimeout(onClose, 1200);
+  }
+  return (
+    <ModalOverlay onClose={onClose}>
+      <ModalBox title="Update Payment Method" onClose={onClose}>
+        {done ? (
+          <p className="text-sm py-4 text-center" style={{ color: "#A9927D" }}>Billing information updated.</p>
+        ) : (
+          <>
+            <FormField label="Card Number" type="text" value={card} onChange={setCard} placeholder="•••• •••• •••• ••••" />
+            <div className="grid grid-cols-2 gap-3">
+              <FormField label="Expiry" type="text" value={exp} onChange={setExp} placeholder="MM / YY" />
+              <FormField label="CVV" type="password" value={cvv} onChange={setCvv} placeholder="•••" />
+            </div>
+            <ModalActions onCancel={onClose} onSave={save} saveLabel="Update" />
+          </>
+        )}
+      </ModalBox>
+    </ModalOverlay>
+  );
+}
+
+// ─── Sidebar ──────────────────────────────────────────────────────────────────
+
+const sidebarItems: { key: Section; label: string; icon: React.ReactNode }[] = [
+  { key: "overview", label: "Overview", icon: <IconHome /> },
+  { key: "membership", label: "Membership", icon: <IconCard /> },
+  { key: "security", label: "Security", icon: <IconShield /> },
+  { key: "devices", label: "Devices", icon: <IconMonitor /> },
+  { key: "profiles", label: "Profiles", icon: <IconUsers /> },
+  { key: "privacy", label: "Privacy", icon: <IconLock /> },
+];
+
+function Sidebar({ active, setActive }: { active: Section; setActive: (s: Section) => void }) {
+  return (
+    <nav className="w-full md:w-48 lg:w-56 flex-shrink-0" aria-label="Account navigation">
+      <ul className="flex md:flex-col gap-0.5">
+        {sidebarItems.map(item => {
+          const isActive = item.key === active;
+          return (
+            <li key={item.key} className="flex-1 md:flex-initial">
+              <button
+                onClick={() => setActive(item.key)}
+                className="w-full flex items-center gap-2.5 py-3 px-3 rounded transition-colors relative text-left"
+                style={{
+                  color: isActive ? "#F2F4F3" : "#A9927D",
+                  backgroundColor: isActive ? "rgba(73,17,28,0.15)" : "transparent",
+                }}
+                onMouseEnter={e => { if (!isActive) { e.currentTarget.style.color = "#F2F4F3"; } }}
+                onMouseLeave={e => { if (!isActive) { e.currentTarget.style.color = "#A9927D"; } }}
+                aria-current={isActive ? "page" : undefined}>
+                {isActive && (
+                  <span className="absolute left-0 top-1 bottom-1 w-0.5 rounded-full hidden md:block" style={{ backgroundColor: "#49111C" }} />
+                )}
+                <span style={{ color: isActive ? "#49111C" : "inherit" }}>{item.icon}</span>
+                <span className="text-sm font-medium hidden sm:block">{item.label}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+}
+
+// ─── Navbar ───────────────────────────────────────────────────────────────────
+
+const dropdownItems = [
+  { label: "Profile", key: "profile" },
+  { label: "Account", key: "account", active: true },
+  { label: "Manage Profiles", key: "manage" },
+  { label: "Help Center", key: "help" },
+  { label: "Back to StreamFlix", key: "back" },
+  { label: "Sign Out", key: "signout" },
+];
+
+function Navbar() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false); };
+    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    document.addEventListener("mousedown", handler);
+    document.addEventListener("keydown", esc);
+    return () => { document.removeEventListener("mousedown", handler); document.removeEventListener("keydown", esc); };
+  }, []);
+
+  return (
+    <header className="sticky top-0 z-40 w-full" style={{ backgroundColor: "#0A0908", borderBottom: "1px solid rgba(94,80,63,0.2)" }}>
+      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between" style={{ height: "72px" }}>
+        {/* Wordmark */}
+        <span className="font-display text-2xl font-black tracking-widest uppercase select-none" style={{ color: "#49111C", letterSpacing: "0.15em" }}>
+          STREAMFLIX
+        </span>
+
+        {/* Profile Control */}
+        <div className="relative" ref={ref}>
+          <button
+            onClick={() => setOpen(x => !x)}
+            className="flex items-center gap-2 rounded p-0.5 transition-opacity hover:opacity-80 focus:outline-none focus-visible:ring-2"
+            style={{ "--tw-ring-color": "#49111C" } as React.CSSProperties}
+            aria-haspopup="true" aria-expanded={open} aria-label="Profile menu">
+            <span className="w-9 h-9 rounded font-display font-bold text-sm flex items-center justify-center flex-shrink-0"
+              style={{ backgroundColor: "#49111C", color: "#F2F4F3" }}>
+              KC
+            </span>
+            <span style={{ color: "#A9927D" }}><IconChevronDown /></span>
           </button>
-          {showDropdown && (
-            <ProfileDropdown
-              onClose={() => setShowDropdown(false)}
-              onBackToStreamflix={onBackToStreamflix}
-            />
+
+          {open && (
+            <div className="absolute right-0 top-full mt-2 w-48 rounded-lg overflow-hidden"
+              style={{ backgroundColor: "#111110", border: "1px solid rgba(94,80,63,0.35)", boxShadow: "0 12px 40px rgba(0,0,0,0.6)" }}>
+              {dropdownItems.map((item, i) => (
+                <button key={item.key}
+                  onClick={() => setOpen(false)}
+                  className="w-full text-left px-4 py-2.5 text-sm transition-colors flex items-center justify-between"
+                  style={{
+                    color: item.active ? "#F2F4F3" : "#A9927D",
+                    backgroundColor: item.active ? "rgba(73,17,28,0.2)" : "transparent",
+                    borderTop: i > 0 && item.key === "signout" ? "1px solid rgba(94,80,63,0.2)" : "none",
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = "rgba(73,17,28,0.25)"; e.currentTarget.style.color = "#F2F4F3"; }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = item.active ? "rgba(73,17,28,0.2)" : "transparent"; e.currentTarget.style.color = item.active ? "#F2F4F3" : "#A9927D"; }}>
+                  {item.label}
+                  {item.active && <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#49111C" }} />}
+                </button>
+              ))}
+            </div>
           )}
         </div>
       </div>
     </header>
+  );
+}
+
+// ─── App ──────────────────────────────────────────────────────────────────────
+
+export default function App() {
+  const [section, setSection] = useState<Section>("overview");
+  const [modal, setModal] = useState<Modal>(null);
+  const [deleteStep, setDeleteStep] = useState(1);
+
+  const sectionTitles: Record<Section, string> = {
+    overview: "Account",
+    membership: "Membership",
+    security: "Security",
+    devices: "Devices",
+    profiles: "Profiles",
+    privacy: "Privacy",
+  };
+
+  return (
+    <div className="min-h-screen" style={{ backgroundColor: "#0A0908" }}>
+      <Navbar />
+
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 md:py-10">
+        {/* Page Heading */}
+        <h1 className="font-display font-black tracking-wider mb-6 md:mb-8"
+          style={{ color: "#F2F4F3", fontSize: "clamp(32px, 5vw, 48px)" }}>
+          {sectionTitles[section]}
+        </h1>
+
+        {/* Layout */}
+        <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
+          {/* Sidebar */}
+          <Sidebar active={section} setActive={setSection} />
+
+          {/* Content */}
+          <div className="flex-1 min-w-0">
+            {section === "overview" && <OverviewContent setSection={setSection} setModal={setModal} />}
+            {section === "membership" && <MembershipPage setModal={setModal} />}
+            {section === "security" && <SecurityPage setModal={setModal} />}
+            {section === "devices" && <DevicesPage />}
+            {section === "profiles" && <ProfilesPage />}
+            {section === "privacy" && <PrivacyPage />}
+          </div>
+        </div>
+      </main>
+
+      {/* Modals */}
+      {modal === "email" && <ChangeEmailModal onClose={() => setModal(null)} />}
+      {modal === "password" && <ChangePasswordModal onClose={() => setModal(null)} />}
+      {modal === "phone" && <AddPhoneModal onClose={() => setModal(null)} />}
+      {modal === "billing" && <BillingDetailsModal onClose={() => setModal(null)} />}
+      {modal === "signout" && <SignOutAllModal onClose={() => setModal(null)} />}
+      {modal === "updatePayment" && <UpdatePaymentModal onClose={() => setModal(null)} />}
+      {modal === "delete1" && (
+        <DeleteAccountModal1
+          onClose={() => setModal(null)}
+          onContinue={() => { setDeleteStep(2); setModal("delete2"); }}
+        />
+      )}
+      {modal === "delete2" && deleteStep === 2 && (
+        <DeleteAccountModal2 onClose={() => { setModal(null); setDeleteStep(1); }} />
+      )}
+    </div>
   );
 }

@@ -1,0 +1,966 @@
+Create a complete “Account” webpage for our existing STREAMFLIX project.
+
+Use the attached Account-page image as the main reference for the page structure, navigation, sidebar, content hierarchy, spacing, account information, membership summary, plan and billing information, quick links, and account actions.
+
+IMPORTANT: Inspect movie(2).zip before creating the page. The Account page must look like it belongs to the existing STREAMFLIX project.
+
+CORE RULES
+
+- Do not redesign the existing STREAMFLIX brand.
+- Do not replace STREAMFLIX branding with Netflix branding.
+- Do not use the Netflix logo, Netflix font, or Netflix color palette.
+- Use the attached Account image only as a layout reference.
+- The entire Account page must use the dark STREAMFLIX appearance.
+- Do not change or remove existing STREAMFLIX features unless specifically instructed in this prompt.
+- Use the exact typography, font families, font sizes, font weights, text casing, line heights, and letter spacing found in movie(2).zip.
+- Keep Barlow Condensed as the primary STREAMFLIX display font wherever it is already used.
+- Use the same body font found in the project for supporting text, values, labels, buttons, and form fields.
+- Reuse the existing button styles, icons, controls, borders, corner radiuses, shadows, overlays, spacing, dropdowns, and interactions from movie(2).zip.
+- Maintain consistency with the existing Profile, Help Center, Home, Movies, TV Shows, New & Popular, My List, preview modal, and viewing pages.
+- Do not introduce a different design system.
+- Do not use glassmorphism.
+- Do not use excessive gradients.
+- Do not add decorative animations.
+- Simple hover, focus, dropdown, modal, confirmation, and interface transitions are allowed.
+- Do not use excessive cards or heavy borders.
+- Do not add movie posters, content carousels, viewing history, or recommendations.
+- Do not add unnecessary account statistics.
+- Do not mention or display an API key.
+- Leave any API or backend configuration blank so I can add it later.
+- Make every visible control interactive in the prototype.
+- The finished page must be responsive on desktop, tablet, and mobile.
+
+COLOR PALETTE
+
+Use only the existing STREAMFLIX color palette:
+
+- Main background / Ink: #0A0908
+- Primary accent / Wine: #49111C
+- Main text / Cream: #F2F4F3
+- Secondary text / Taupe: #A9927D
+- Borders and muted details / Stone: #5E503F
+
+Do not use Netflix red.
+
+The entire Account page must use the black #0A0908 background, including:
+
+- Navigation bar
+- Sidebar
+- Account content
+- Membership summary
+- Information sections
+- Account actions
+- Footer, if included
+
+Use #49111C only for:
+
+- STREAMFLIX logo
+- Primary buttons
+- Active sidebar indicator
+- Selected states
+- Active membership badge outline
+- Profile avatar
+- Hover and focus states
+- Small emphasis details
+
+Use #F2F4F3 for:
+
+- Main headings
+- Important labels
+- Important values
+- Entered form text
+- Primary button text
+
+Use #A9927D for:
+
+- Secondary headings
+- Icons
+- Supporting text
+- Inactive sidebar items
+- Secondary actions
+- Account metadata
+
+Use #5E503F for:
+
+- Dividers
+- Borders
+- Muted icons
+- Inactive controls
+- Secondary button outlines
+
+DESIGN DIRECTION
+
+Create a clean and premium Account page inspired by the organization of a modern streaming-service account interface.
+
+The page should feel:
+
+- Simple
+- Organized
+- Spacious
+- Easy to scan
+- Professional
+- Consistent with STREAMFLIX
+- Less dense than an administrative dashboard
+
+Use:
+
+- A simplified black navigation bar
+- A clear Account heading
+- A narrow sidebar
+- A wider Account Overview panel
+- Open content sections
+- Subtle horizontal dividers
+- Strong alignment
+- Clear button hierarchy
+- Comfortable spacing
+
+Avoid:
+
+- Bright or white backgrounds
+- Heavy card borders
+- Excessive containers
+- Excessive shadows
+- Large decorative images
+- Movie posters
+- Content rows
+- Viewing statistics
+- Charts
+- Glass effects
+- Excessive rounded corners
+- Repeating the same settings in multiple sections
+
+REDUNDANCY RULE
+
+Do not duplicate detailed settings on the Account Overview.
+
+The Account Overview should provide:
+
+- Important account summaries
+- Essential contact information
+- Plan and billing summary
+- Quick navigation to detailed sections
+- Account deletion action
+
+Detailed Membership, Security, Devices, Profiles, and Privacy controls must appear only after selecting their corresponding sidebar pages.
+
+Do not repeat detailed controls on Overview.
+
+NAVIGATION BAR
+
+Use the same simplified black navigation style as the Profile and Help Center pages.
+
+The navigation bar must contain only:
+
+Left:
+
+- STREAMFLIX wordmark
+
+Right:
+
+- KC profile avatar
+- Dropdown arrow
+
+Do not display:
+
+- Home
+- TV Shows
+- Movies
+- New & Popular
+- My List
+- Search icon
+- Notification icon
+- Games
+- Kids
+- Browse by Languages
+- Manage Profiles text
+- Hamburger menu
+- Additional navigation buttons
+
+Keep a large amount of open space between the wordmark and profile control.
+
+NAVIGATION BAR BACKGROUND
+
+Use:
+
+- Solid #0A0908 background
+- Subtle bottom border using #5E503F at low opacity
+- No gradient
+- No image
+- No blur
+- No glass effect
+
+The navbar and Account page must form one continuous dark interface.
+
+Keep the navigation approximately 72–80 pixels tall on desktop.
+
+Use a centered maximum-width navigation container.
+
+Align its contents with the main Account-page container.
+
+Keep the navigation sticky at the top while scrolling.
+
+STREAMFLIX WORDMARK
+
+Use the existing STREAMFLIX wordmark.
+
+Styling:
+
+- Color: #49111C
+- Use the exact existing project styling.
+- Do not use the Netflix logo.
+- Do not place the wordmark inside a box.
+- Do not add glow, shadow, outline, or background.
+
+PROFILE CONTROL
+
+On the right side, display:
+
+- Square KC avatar
+- Small dropdown arrow
+
+Avatar:
+
+- Text: “KC”
+- Background: #49111C
+- Text: #F2F4F3
+- Small corner radius
+- Same appearance used on the Profile and Help Center pages
+
+Arrow:
+
+- Color: #A9927D
+- Small and vertically centered
+
+Make the complete profile control interactive.
+
+PROFILE DROPDOWN
+
+Clicking the avatar or dropdown arrow should open a compact menu.
+
+Include:
+
+- Profile
+- Account
+- Manage Profiles
+- Help Center
+- Back to StreamFlix
+- Sign Out
+
+Mark “Account” as the current selection.
+
+Dropdown styling:
+
+- Background: #0A0908 or a slightly elevated dark surface
+- Primary text: #F2F4F3
+- Secondary text: #A9927D
+- Border: #5E503F at low opacity
+- Selected indicator: #49111C
+- Hover background: subtle #49111C tint
+- Small corner radius
+- Soft shadow
+
+Align the menu underneath the profile control.
+
+Close it when clicking outside or pressing Escape.
+
+MAIN ACCOUNT CONTAINER
+
+Use a centered maximum-width Account container underneath the navbar.
+
+Desktop layout:
+
+- Narrow navigation sidebar on the left
+- Wide Account content area on the right
+- Clear gap between the sidebar and content
+- Consistent alignment
+- Comfortable horizontal padding
+- Major content visible within one desktop viewport when possible
+
+Do not put the sidebar inside a large bordered card.
+
+ACCOUNT HEADING
+
+Place this heading above the right content area:
+
+“Account”
+
+Heading styling:
+
+- Color: #F2F4F3
+- Existing STREAMFLIX display font
+- Strong and readable
+- Left aligned
+- Approximately 44–52 pixels on large desktop screens
+- Responsive on smaller screens
+
+Do not add an unnecessary subtitle.
+
+ACCOUNT SIDEBAR
+
+Create a vertical sidebar containing:
+
+1. Overview
+2. Membership
+3. Security
+4. Devices
+5. Profiles
+6. Privacy
+
+Each sidebar item should include:
+
+- Small outline icon
+- Text label
+- Comfortable clickable area
+
+Use icons that clearly represent:
+
+- Overview: home or dashboard icon
+- Membership: payment card icon
+- Security: shield icon
+- Devices: monitor icon
+- Profiles: multiple-user icon
+- Privacy: lock icon
+
+ACTIVE SIDEBAR ITEM
+
+Set “Overview” as the active item in the main Account screen.
+
+Active styling:
+
+- Thin #49111C vertical indicator on the far left
+- Active icon: #49111C
+- Active text: #F2F4F3
+- Optional subtle dark wine-tinted background
+
+Inactive styling:
+
+- Icon: #A9927D
+- Text: #A9927D
+- Hover text: #F2F4F3
+- Hover icon: #49111C
+
+Do not use large pill-shaped sidebar buttons.
+
+OVERVIEW CONTENT
+
+The Account Overview must contain only:
+
+1. Membership summary
+2. Account Information
+3. Plan & Billing
+4. Quick Links
+5. Account Actions
+
+Do not add other permanent Overview sections.
+
+MEMBERSHIP SUMMARY
+
+Create a compact, wide membership summary surface.
+
+Include:
+
+- Section label: “Membership”
+- Plan name: “StreamFlix Premium”
+- Status: “Active”
+- Supporting text: “Member since 2026”
+- Primary button: “Manage Membership”
+
+Layout:
+
+- Plan information on the left
+- Status and member date near the middle
+- Manage Membership button on the right
+
+Use one horizontal row on desktop.
+
+MEMBERSHIP SURFACE STYLE
+
+Use:
+
+- Slightly elevated dark surface
+- Thin #5E503F border at low opacity
+- Small corner radius
+- Minimal shadow
+- Comfortable internal padding
+
+Do not use:
+
+- Bright gradient
+- Decorative imagery
+- Large membership icon
+- Heavy border
+- Excessive rounded corners
+
+PLAN NAME
+
+“StreamFlix Premium” should be visually prominent.
+
+Use:
+
+- #F2F4F3
+- Existing STREAMFLIX heading typography
+- Smaller than the Account page heading
+
+MEMBERSHIP STATUS
+
+Display:
+
+“Active”
+
+Use:
+
+- Small status indicator dot
+- Small outlined status badge
+- Border: #49111C
+- Text: #F2F4F3
+- Small radius
+
+Do not use bright green as the primary status color.
+
+A very small muted positive indicator may be used if needed, but #49111C must remain the main styling.
+
+MANAGE MEMBERSHIP BUTTON
+
+Use the existing STREAMFLIX primary-button style.
+
+Styling:
+
+- Background: #49111C
+- Text: #F2F4F3
+- Same padding, font, radius, and height as other project buttons
+- Darker wine hover state
+- Clear focus, pressed, and disabled states
+
+Clicking it should navigate to the Membership sidebar page.
+
+Do not place a separate Change Plan button on Overview.
+
+ACCOUNT INFORMATION
+
+Add a section heading:
+
+“Account Information”
+
+Display three clean information rows:
+
+1. Email
+2. Password
+3. Phone
+
+Do not surround the entire section with a heavy card.
+
+Use subtle horizontal dividers between rows.
+
+EMAIL ROW
+
+Label:
+
+“Email”
+
+Current value:
+
+“kevin@example.com”
+
+Action:
+
+“Change”
+
+Clicking Change should open a compact Change Email modal.
+
+Modal fields:
+
+- New email address
+- Current password
+- Save
+- Cancel
+
+Validate the email format.
+
+PASSWORD ROW
+
+Label:
+
+“Password”
+
+Current value:
+
+“••••••••••”
+
+Action:
+
+“Change”
+
+Clicking Change should open a compact Change Password modal.
+
+Modal fields:
+
+- Current password
+- New password
+- Confirm new password
+- Save
+- Cancel
+
+Do not show passwords as plain text by default.
+
+Include optional show/hide controls with accessible labels.
+
+PHONE ROW
+
+Label:
+
+“Phone”
+
+Current value:
+
+“Not added”
+
+Action:
+
+“Add”
+
+Clicking Add should open a compact Add Phone Number modal.
+
+Fields:
+
+- Country or region
+- Phone number
+- Save
+- Cancel
+
+Do not display a real phone number.
+
+ACCOUNT INFORMATION ROW STYLE
+
+Each row should use:
+
+- Label aligned left
+- Value positioned in the center or middle-left
+- Action aligned right
+- #F2F4F3 for labels and important values
+- #A9927D for secondary values and actions
+- #49111C hover and focus state
+- #5E503F divider at low opacity
+
+PLAN & BILLING
+
+Create one combined section titled:
+
+“Plan & Billing”
+
+Do not create separate Plan Details and Payment Details sections.
+
+Display:
+
+- Plan: “Premium”
+- Quality: “4K + HDR”
+- Masked payment method: “•••• 4242”
+- Next billing date: “September 27, 2026”
+- Action: “View billing details”
+
+Include a small outline payment-card icon beside the masked payment information.
+
+Do not display:
+
+- Full payment-card number
+- CVV
+- Complete expiry date
+- Billing address
+- Sensitive payment information
+
+PLAN & BILLING LAYOUT
+
+Desktop:
+
+- Place plan, quality, payment method, and billing date in one clean horizontal row.
+- Separate information groups using subtle vertical dividers.
+- Align View billing details on the right.
+
+Tablet and mobile:
+
+- Stack the information into readable groups.
+- Keep the action clearly accessible.
+
+VIEW BILLING DETAILS
+
+Use a secondary outlined-button style.
+
+Styling:
+
+- Transparent background
+- Border: #A9927D or #5E503F
+- Text: #A9927D or #F2F4F3
+- Wine hover or focus state
+- Existing project button radius and typography
+
+Clicking it should navigate to Membership or open a billing-details panel.
+
+Do not add a separate Change Plan button on Overview.
+
+QUICK LINKS
+
+Add a section titled:
+
+“Quick Links”
+
+Include exactly three rows:
+
+1. Security Settings
+2. Manage Devices
+3. Manage Profiles
+
+Each row must include:
+
+- Small outline icon
+- Label
+- Right-facing arrow
+- Subtle divider
+
+SECURITY SETTINGS
+
+Icon:
+
+Shield
+
+Clicking it should open the Security sidebar page.
+
+MANAGE DEVICES
+
+Icon:
+
+Monitor or device
+
+Clicking it should open the Devices sidebar page.
+
+MANAGE PROFILES
+
+Icon:
+
+Multiple users
+
+Clicking it should open the Profiles sidebar page.
+
+QUICK-LINK STYLING
+
+Use:
+
+- Icon: #A9927D
+- Text: #F2F4F3
+- Arrow: #A9927D
+- Divider: #5E503F at low opacity
+- Hover text or arrow: #49111C
+- Visible keyboard focus indicator
+
+Do not create a separate large card for each quick link.
+
+Do not include:
+
+- Communication Settings
+- Parental Controls
+- Download Devices
+- Sign Out of All Devices
+
+Those controls belong inside their relevant detailed sidebar sections.
+
+ACCOUNT ACTIONS
+
+Create a small section at the bottom titled:
+
+“Account Actions”
+
+Include only:
+
+“Delete Account”
+
+Keep this area visually separated from the regular account settings with additional spacing or a subtle divider.
+
+Do not make Delete Account visually dominant.
+
+Style:
+
+- Text action, not a large primary button
+- Color: #A9927D
+- Hover: #F2F4F3 or #49111C
+- Visible focus state
+
+DELETE ACCOUNT INTERACTION
+
+Clicking Delete Account should open a confirmation modal.
+
+Modal heading:
+
+“Delete Account?”
+
+Supporting text:
+
+“This action will permanently delete your account, profiles, saved titles, and viewing information.”
+
+Include:
+
+- Cancel
+- Continue
+
+Do not delete the account immediately.
+
+After Continue, require another confirmation step.
+
+Second confirmation may require the user to enter:
+
+“DELETE”
+
+Do not use the user’s password unless required by the final system.
+
+Use the existing STREAMFLIX modal and overlay styling.
+
+DETAILED SIDEBAR PAGES
+
+Each sidebar item must navigate to a dedicated account section.
+
+Keep the sidebar visible on desktop while switching the right content area.
+
+MEMBERSHIP PAGE
+
+The Membership page may include:
+
+- Current plan
+- Plan features
+- Billing date
+- Payment method
+- Billing history
+- Change Plan
+- Update Payment Method
+- Cancel Membership
+
+These controls must appear only on the Membership page, not duplicated on Overview.
+
+SECURITY PAGE
+
+The Security page may include:
+
+- Change Password
+- Phone Number
+- Two-Step Verification
+- Recent Account Access
+- Sign Out of All Devices
+
+Do not repeat these detailed controls on Overview.
+
+SIGN OUT OF ALL DEVICES
+
+Place this action under Security.
+
+Require a confirmation modal before signing out all devices.
+
+DEVICES PAGE
+
+The Devices page may include:
+
+- Devices currently signed in
+- Device name
+- Device type
+- Approximate location
+- Last active time
+- Sign Out action
+- Download-enabled devices
+
+Combine general device management and download-device management under this page.
+
+Do not create a duplicate Download Devices row on Overview.
+
+PROFILES PAGE
+
+The Profiles page may include:
+
+- Existing profiles
+- Add Profile
+- Edit Profile
+- Profile avatar
+- Profile name
+- Default language
+- Maturity rating
+- Parental controls
+- Profile lock status
+
+Keep parental controls inside Profiles.
+
+Do not duplicate Parental Controls on Overview.
+
+PRIVACY PAGE
+
+The Privacy page may include:
+
+- Viewing-data preferences
+- Personalization preferences
+- Communication preferences
+- Download account data
+- Privacy information
+
+Do not place Delete Account inside Privacy if it is already available under Account Actions.
+
+MODALS AND FORM CONTROLS
+
+All Account modals must reuse the appearance from movie(2).zip.
+
+Use:
+
+- Dark overlay
+- #0A0908 or slightly elevated dark modal surface
+- #F2F4F3 headings and entered text
+- #A9927D supporting text and placeholders
+- #5E503F borders
+- #49111C focus states and primary actions
+- Existing button radius and typography
+
+Include:
+
+- Visible labels
+- Clear validation messages
+- Save and Cancel controls
+- Close button
+- Escape-key support
+- Click-outside behavior when safe
+
+Never display sensitive information unnecessarily.
+
+LOADING, SUCCESS, AND ERROR STATES
+
+Provide subtle states for account actions.
+
+Loading:
+
+- Disable the submitted button.
+- Show a small loading indicator.
+- Keep the page layout stable.
+
+Success examples:
+
+- “Email updated.”
+- “Password changed.”
+- “Phone number added.”
+- “Billing information updated.”
+
+Error examples:
+
+- “Enter a valid email address.”
+- “Your current password is incorrect.”
+- “The passwords do not match.”
+- “We could not save your changes.”
+
+Keep messages concise and consistent with the project palette.
+
+Do not introduce unrelated bright colors unless they already exist in the project.
+
+RESPONSIVE DESIGN
+
+DESKTOP
+
+- Keep the black navbar.
+- Display the sidebar on the left.
+- Display the Account content on the right.
+- Keep the Account Overview within one viewport when possible.
+- Use horizontal layouts for Membership and Plan & Billing.
+- Keep the layout centered with a maximum width.
+
+TABLET
+
+- Reduce content padding and gaps.
+- Keep the sidebar visible if space allows.
+- Convert the sidebar into a compact horizontal account-navigation row if necessary.
+- Stack Membership information when it becomes crowded.
+- Keep action buttons accessible.
+- Stack Plan & Billing details into two lines when necessary.
+
+MOBILE
+
+- Keep the black navigation bar.
+- Reduce the STREAMFLIX logo size slightly.
+- Keep the KC avatar and dropdown accessible.
+- Do not add browsing navigation links.
+- Convert the sidebar into a compact dropdown labeled “Account Section” or a horizontally scrollable tab row.
+- Stack the Membership summary vertically.
+- Place Manage Membership beneath the membership information.
+- Stack Account Information labels, values, and actions cleanly.
+- Stack Plan & Billing information.
+- Display quick links as full-width rows.
+- Keep every action easy to tap.
+- Make modals nearly full width.
+- Prevent text, controls, and fields from being cut off.
+
+ACCESSIBILITY AND USABILITY
+
+- Maintain strong text contrast.
+- Provide clear hover, focus, pressed, selected, active, and disabled states.
+- Ensure every control has a comfortable clickable area.
+- Add accessible labels to icon-only buttons.
+- Keep keyboard focus indicators visible.
+- Allow sidebar navigation to be used with a keyboard.
+- Use proper heading hierarchy.
+- Do not rely only on color to identify the active section.
+- Combine the wine indicator with active text and icon styling.
+- Close dropdowns and modals when pressing Escape.
+- Keep text readable on smaller screens.
+- Ensure form fields have visible labels.
+- Connect validation messages to their fields.
+- Mask sensitive account and payment information.
+
+FINAL RESULT
+
+The completed Account page must include:
+
+- Continuous black #0A0908 background
+- Simplified black navigation bar
+- STREAMFLIX wordmark
+- KC profile avatar and dropdown
+- Account heading
+- Account sidebar
+- Overview
+- Membership
+- Security
+- Devices
+- Profiles
+- Privacy
+- Membership summary
+- StreamFlix Premium
+- Active membership status
+- Member since 2026
+- Manage Membership
+- Account Information
+- Email
+- Password
+- Phone
+- Plan & Billing
+- Premium
+- 4K + HDR
+- Masked payment information
+- Next billing date
+- View billing details
+- Quick Links
+- Security Settings
+- Manage Devices
+- Manage Profiles
+- Account Actions
+- Delete Account
+- Functional modals and confirmation states
+- Responsive desktop, tablet, and mobile layouts
+
+Do not include these redundant items on Overview:
+
+- Separate Change Plan button
+- Separate Payment Details section
+- Communication Settings
+- Parental Controls
+- Download Devices
+- Sign Out of All Devices
+- Duplicate membership actions
+- Detailed profile controls
+- Detailed device controls
+- Detailed privacy controls
+
+Place those detailed controls only inside the correct sidebar pages.
+
+The Account Overview must remain a clean summary and navigation page.
+
+Use open sections, subtle dividers, strong alignment, comfortable spacing, and restrained account actions instead of surrounding everything with heavy cards.
+
+Every visual detail must remain consistent with movie(2).zip, including its exact color palette, typography, font sizing, icons, buttons, dropdowns, modal styling, spacing system, and interaction behavior.
+
+Do not change anything outside the requirements above.
