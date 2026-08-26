@@ -1,0 +1,740 @@
+Create a complete “Help Center” webpage for our existing STREAMFLIX project.
+
+Use the attached Netflix Help Center screenshot only as a reference for the navigation structure, central search area, recommended links, spacing, and overall content organization.
+
+IMPORTANT: Inspect movie(2).zip before creating the page. The Help Center must look like it belongs to the existing STREAMFLIX project.
+
+CORE RULES
+
+- Do not redesign the existing STREAMFLIX brand.
+- Do not replace STREAMFLIX branding with Netflix branding.
+- Do not use the Netflix logo, Netflix font, or Netflix color palette.
+- Use the attached screenshot only as a layout reference.
+- Do not copy the light background from the reference.
+- The entire Help Center must use the dark STREAMFLIX appearance.
+- Do not change or remove existing STREAMFLIX features unless specifically instructed in this prompt.
+- Use the exact typography, font families, font sizes, font weights, text casing, line heights, and letter spacing found in movie(2).zip.
+- Keep Barlow Condensed as the primary STREAMFLIX display font wherever it is already used.
+- Use the same body font found in the project for supporting text, descriptions, form fields, and search results.
+- Reuse the existing button styles, icons, controls, borders, corner radiuses, shadows, overlays, spacing, dropdowns, and interactions from movie(2).zip.
+- Maintain consistency with the existing Profile, Home, Movies, TV Shows, New & Popular, My List, preview modal, and viewing pages.
+- Do not introduce a different design system.
+- Do not use glassmorphism.
+- Do not use excessive gradients.
+- Do not add decorative animations.
+- Simple hover, focus, dropdown, modal, and interface transitions are allowed.
+- Do not add excessive cards or heavy borders.
+- Do not mention or display an API key.
+- Leave any API configuration blank so I can add it later.
+- Make every visible control interactive in the prototype.
+- The finished page must be responsive on desktop, tablet, and mobile.
+
+COLOR PALETTE
+
+Use only the existing STREAMFLIX color palette:
+
+- Main background / Ink: #0A0908
+- Primary accent / Wine: #49111C
+- Main text / Cream: #F2F4F3
+- Secondary text / Taupe: #A9927D
+- Borders and muted details / Stone: #5E503F
+
+Do not use Netflix red.
+
+The entire Help Center must use the black #0A0908 background, including:
+
+- Navigation bar
+- Search area
+- Recommended links area
+- Contact Support area
+- Footer, if included
+
+Use #49111C only for:
+
+- STREAMFLIX logo
+- Primary buttons
+- Search focus state
+- Selected search result
+- Active controls
+- Links on hover
+- Profile avatar
+- Small emphasis details
+- Focus indicators
+
+Use #F2F4F3 for headings and important text.
+
+Use #A9927D for descriptions, recommended links, and supporting information.
+
+Use #5E503F for borders, dividers, inactive icons, and muted details.
+
+DESIGN DIRECTION
+
+Create a clean and minimal Help Center inspired by the attached reference.
+
+The page should feel:
+
+- Helpful
+- Simple
+- Spacious
+- Easy to search
+- Premium
+- Consistent with STREAMFLIX
+- Less visually dense than the browsing pages
+
+The search experience must be the main focus.
+
+Use:
+
+- Strong content hierarchy
+- Balanced vertical spacing
+- Clear headings
+- Subtle dividers
+- Consistent icons
+- Restrained use of accent colors
+- Open black surfaces
+
+Avoid:
+
+- Bright or white backgrounds
+- Excessive cards
+- Heavy shadows
+- Decorative images
+- Movie posters
+- Hero artwork
+- Streaming-content carousels
+- Statistics
+- Charts or graphs
+- Excessively large empty areas
+- Excessive rounded containers
+
+DO NOT INCLUDE THESE SECTIONS
+
+Do not include:
+
+- Explore Topics text
+- Explore Topics arrow
+- Explore Topics section
+- Topic-category cards
+- Help-category grid
+- Getting Started category
+- Account & Profiles category
+- Watching StreamFlix category
+- My List & History category
+- Troubleshooting category
+- Privacy & Security category
+- Popular Articles heading
+- Popular Articles supporting text
+- Popular Articles list
+- Article columns
+- Article cards
+- Article rows underneath the search area
+
+After the recommended links, continue directly to the “Still need help?” support section.
+
+Do not leave a large empty gap where the removed sections would have appeared.
+
+HELP CENTER NAVIGATION BAR
+
+Use a simplified black navigation bar similar to the Profile page.
+
+The navigation bar must contain:
+
+Left side:
+
+- STREAMFLIX wordmark
+- Thin vertical divider
+- Help Center label
+
+Right side:
+
+- Current KC profile avatar
+- Dropdown arrow
+
+Do not display the main browsing navigation links.
+
+Remove:
+
+- Home
+- TV Shows
+- Movies
+- New & Popular
+- My List
+
+Also do not display:
+
+- Search icon
+- Notification icon
+- Games
+- Kids
+- Browse by Languages
+- Manage Profiles text
+- Hamburger menu
+- Additional navigation buttons
+
+Keep the Help Center navigation simple and focused.
+
+NAVIGATION BAR BACKGROUND
+
+Use:
+
+- Solid #0A0908 background
+- Subtle bottom border using #5E503F at low opacity
+- No gradient
+- No image
+- No blur
+- No glass effect
+
+The navigation bar and Help Center content must appear as one continuous dark interface.
+
+Use a centered maximum-width navigation container.
+
+Keep the navigation bar approximately 72–80 pixels tall on desktop.
+
+Keep it sticky at the top while scrolling.
+
+LEFT NAVIGATION IDENTITY
+
+Display the existing STREAMFLIX wordmark on the left.
+
+STREAMFLIX styling:
+
+- Color: #49111C
+- Use the exact wordmark style from the project.
+- Do not use the Netflix logo.
+- Do not place the wordmark inside a box.
+- Do not add a glow, shadow, or outline.
+
+Place a thin vertical divider beside the wordmark.
+
+Divider styling:
+
+- Color: #5E503F
+- Low opacity
+- Approximately 28–32 pixels tall
+
+Place this label beside the divider:
+
+“Help Center”
+
+Help Center label styling:
+
+- Color: #F2F4F3
+- Use the existing project typography.
+- Smaller than the STREAMFLIX wordmark.
+- Do not style it as a button.
+
+RIGHT PROFILE CONTROL
+
+On the right side, display:
+
+- Small square KC avatar
+- Dropdown arrow
+
+Avatar content:
+
+“KC”
+
+Avatar styling:
+
+- Background: #49111C
+- Initials: #F2F4F3
+- Square shape
+- Small corner radius
+- Same style as the Profile page avatar
+
+Dropdown arrow styling:
+
+- Color: #A9927D
+- Small and vertically centered
+
+Make the complete avatar-and-arrow area interactive.
+
+PROFILE DROPDOWN
+
+Clicking the avatar or arrow should open a compact dropdown underneath it.
+
+Include:
+
+- Profile
+- Manage Profiles
+- Back to StreamFlix
+- Sign Out
+
+Dropdown styling:
+
+- Background: #0A0908 or a slightly elevated dark surface
+- Primary text: #F2F4F3
+- Secondary text: #A9927D
+- Border: #5E503F at low opacity
+- Hover background: subtle #49111C tint
+- Active indicator: #49111C
+- Small corner radius
+- Soft shadow
+
+Align the dropdown to the right edge of the profile control.
+
+Clicking “Back to StreamFlix” should return the user to the main browsing page.
+
+Do not use a light dropdown.
+
+Do not open a full-page menu.
+
+MAIN HELP CENTER CONTAINER
+
+Use a centered maximum-width content container beneath the navigation bar.
+
+Desktop requirements:
+
+- Keep all content centered.
+- Align the content with the navbar’s inner container.
+- Use generous left and right margins.
+- Keep the search area within a readable width.
+- Use balanced vertical spacing.
+- Do not create a large empty space.
+- Keep the complete primary Help Center content visible within one desktop viewport when possible.
+
+Use #0A0908 for the entire page background.
+
+HELP CENTER INTRODUCTION
+
+Create a centered introduction beneath the navigation bar.
+
+Do not add:
+
+- Background photograph
+- Illustration
+- Movie artwork
+- Gradient hero banner
+- Decorative texture
+
+Display this main heading:
+
+“How can we help?”
+
+Heading styling:
+
+- Color: #F2F4F3
+- Use the existing STREAMFLIX display font.
+- Large and clearly readable.
+- Center aligned.
+- Strong but not excessively oversized.
+- Use the same heading hierarchy found throughout the project.
+
+Keep enough space between the navigation bar and heading, but do not create the very large empty area shown in the Netflix reference.
+
+HELP SEARCH FIELD
+
+Place a large search field directly underneath “How can we help?”
+
+Placeholder text:
+
+“Type a question, topic, or issue”
+
+The search field must include:
+
+- Search icon on the left
+- Placeholder or entered text
+- Clear-search button when text is entered
+- Search suggestions when typing
+
+Search field styling:
+
+- Background: slightly elevated dark surface
+- Entered text: #F2F4F3
+- Placeholder: #A9927D
+- Search icon: #A9927D
+- Clear icon: #A9927D
+- Default border: #5E503F
+- Focused border: #49111C
+- Visible keyboard focus state
+- Small corner radius
+- Comfortable height and padding
+- Maximum width of approximately 800–900 pixels on desktop
+
+Do not use the multicolor border shown in the reference screenshot.
+
+Do not use a white search field.
+
+SEARCH INTERACTION
+
+The Help Center search must be functional.
+
+As the user types:
+
+- Display matching Help Center articles.
+- Open a compact suggestions panel underneath the search field.
+- Highlight the matching portion of each article title.
+- Allow keyboard navigation through suggestions.
+- Allow Enter to open the selected result.
+- Allow Escape to close the suggestions.
+- Close suggestions when clicking outside.
+- Keep the field active after clearing the query.
+
+Example search suggestions:
+
+- How to reset your password
+- How to edit your profile
+- How to change subtitle appearance
+- How to manage profile settings
+- How to remove a title from My List
+- How to remove a title from Continue Watching
+- Why a video is not playing
+- How to change your default language
+- How to set a profile PIN
+- How to manage autoplay settings
+- How to view your watch history
+
+If there are no matches, display:
+
+“No help articles match your search.”
+
+Supporting text:
+
+“Try using fewer or different keywords.”
+
+Do not display unrelated movies or TV shows.
+
+SEARCH SUGGESTIONS PANEL
+
+Style the suggestions panel using:
+
+- Dark elevated background
+- Thin #5E503F border at low opacity
+- #F2F4F3 article titles
+- #A9927D supporting labels
+- #49111C selected or focused state
+- Small corner radius
+- Soft shadow
+- Clear spacing between results
+
+Each result may contain:
+
+- Small help icon
+- Article title
+- Article category
+- Right-facing arrow
+
+Do not show movie posters or content artwork in the results.
+
+SEARCH RESULT INTERACTION
+
+Selecting a search result should open a detailed Help Center article page or panel.
+
+The article layout should include:
+
+- Breadcrumb navigation
+- Article title
+- Last updated information
+- Clear article content
+- Numbered instructions when appropriate
+- Related article links
+- Back to Help Center action
+- Contact Support action
+
+Example breadcrumb:
+
+“Help Center / Profiles / How to edit your StreamFlix profile”
+
+ARTICLE PAGE DESIGN
+
+Use:
+
+- Background: #0A0908
+- Article headings: #F2F4F3
+- Body and supporting text: #A9927D
+- Dividers: #5E503F
+- Links and important actions: #49111C
+- Same typography used throughout STREAMFLIX
+
+Keep the article content inside a readable maximum width.
+
+Do not stretch paragraphs across the full viewport.
+
+Use comfortable line height and paragraph spacing.
+
+ARTICLE EXAMPLE
+
+For “How to edit your StreamFlix profile,” include:
+
+1. Open the profile menu.
+2. Select Profile or Manage Profiles.
+3. Choose the profile you want to update.
+4. Change the profile name, avatar, language, or maturity rating.
+5. Select Save.
+
+Keep the wording simple and direct.
+
+BACK TO HELP CENTER
+
+Include a “Back to Help Center” action on article pages.
+
+Clicking it should return to the main Help Center without losing the previous search query when possible.
+
+RECOMMENDED LINKS
+
+Under the search field, display:
+
+“Recommended for you:”
+
+Follow it with these three links:
+
+- How to keep your account secure
+- How to manage parental controls
+- How to change profile settings
+
+Styling:
+
+- “Recommended for you:” uses #F2F4F3 or #A9927D.
+- Article links use #A9927D.
+- Links change to #F2F4F3 or #49111C on hover.
+- Use an underline or another visible link indicator.
+- Keep the links centered.
+- Allow them to wrap cleanly on smaller screens.
+- Separate links using subtle vertical separators or commas.
+
+Do not use Netflix-specific wording.
+
+Do not display anything labeled Explore Topics or Popular Articles underneath.
+
+After the recommended links, continue directly to the support section.
+
+CONTACT SUPPORT SECTION
+
+Place the support section directly underneath the recommended links with moderate, balanced spacing.
+
+Do not leave a large empty area between the two sections.
+
+Heading:
+
+“Still need help?”
+
+Supporting text:
+
+“Our support team is here for you.”
+
+Include two buttons:
+
+- Contact Us
+- Back to StreamFlix
+
+Keep the complete section centered.
+
+Do not place it inside a large card.
+
+Do not add a decorative image.
+
+CONTACT US BUTTON
+
+Use the existing STREAMFLIX primary-button style.
+
+Styling:
+
+- Background: #49111C
+- Text: #F2F4F3
+- Same typography, height, padding, and corner radius as existing primary buttons
+- Darker wine hover state
+- Clear focus, pressed, and disabled states
+
+BACK TO STREAMFLIX BUTTON
+
+Use the existing secondary outlined-button style.
+
+Styling:
+
+- Transparent background
+- Border: #A9927D or #5E503F
+- Text: #A9927D or #F2F4F3
+- Wine border or subtle background tint on hover
+- Clear keyboard focus state
+
+Clicking Back to StreamFlix should return the user to the main browsing page.
+
+CONTACT US INTERACTION
+
+Clicking Contact Us should open a compact support form or modal.
+
+Include:
+
+- Help topic dropdown
+- Subject field
+- Description field
+- Optional attachment control
+- Submit Request button
+- Cancel button
+
+Help topic options:
+
+- Account & Profiles
+- Playback
+- My List
+- Continue Watching
+- Subtitles & Language
+- Privacy & Security
+- Other
+
+SUPPORT FORM STYLING
+
+Use:
+
+- Dark input backgrounds
+- #F2F4F3 entered text
+- #A9927D placeholder text
+- #5E503F default borders
+- #49111C focus borders
+- Existing STREAMFLIX button styles
+- Same modal overlay used in movie(2).zip
+- Clear labels above all fields
+
+Do not include:
+
+- Phone numbers
+- External live chat
+- Unrelated external services
+- Payment information
+- Subscription information
+
+After submission, display:
+
+“Your support request has been submitted.”
+
+Do not send an actual external message in the prototype.
+
+FORM VALIDATION
+
+Require:
+
+- Help topic
+- Subject
+- Description
+
+Display short inline validation messages.
+
+Example:
+
+“Please describe the issue.”
+
+Keep validation text readable and consistent with the project palette.
+
+HELP CENTER FOOTER
+
+If a footer is included, keep it minimal and position it at the bottom of the page.
+
+Include:
+
+- STREAMFLIX
+- Terms of Use
+- Privacy
+- Help Center
+- Back to StreamFlix
+
+Footer styling:
+
+- Background: #0A0908
+- Subtle top border: #5E503F at low opacity
+- STREAMFLIX wordmark: #49111C
+- Primary text: #F2F4F3
+- Secondary links: #A9927D
+- Hover links: #49111C or #F2F4F3
+- Comfortable vertical padding
+
+Do not add social-media icons unless they already exist in the project.
+
+RESPONSIVE DESIGN
+
+DESKTOP
+
+- Use the simplified Help Center navigation.
+- Place STREAMFLIX, the divider, and Help Center on the left.
+- Place the KC avatar and arrow on the right.
+- Center the heading, search field, recommended links, and support section.
+- Keep the search field approximately 800–900 pixels wide.
+- Keep the main content visible within one viewport when possible.
+- Do not add Popular Articles or Explore Topics sections.
+
+TABLET
+
+- Reduce navigation and content padding.
+- Keep STREAMFLIX, Help Center, avatar, and arrow visible.
+- Keep the search field nearly full width.
+- Allow recommended links to wrap.
+- Keep the support section centered.
+- Maintain balanced spacing.
+
+MOBILE
+
+- Keep the navigation bar black.
+- Reduce the STREAMFLIX logo size slightly.
+- Keep the Help Center label readable.
+- Keep the KC avatar and dropdown accessible.
+- Do not add a hamburger menu.
+- Make the search field full width.
+- Stack recommended links vertically if necessary.
+- Make search suggestions accessible through tapping.
+- Stack Contact Us and Back to StreamFlix buttons.
+- Make the support form full width.
+- Prevent text, fields, buttons, and dropdowns from being cut off.
+
+ACCESSIBILITY AND USABILITY
+
+- Maintain strong text contrast.
+- Provide clear hover, focused, pressed, selected, active, and disabled states.
+- Ensure every control has a comfortable clickable area.
+- Add accessible labels to icon-only buttons.
+- Keep keyboard focus indicators visible.
+- Allow search suggestions to be navigated using a keyboard.
+- Allow dropdowns and modals to be used with a keyboard.
+- Use proper heading hierarchy.
+- Keep article paragraphs within a readable line length.
+- Do not rely only on color to identify links or active states.
+- Close dropdowns and modals when clicking outside or pressing Escape.
+- Keep text readable on smaller screens.
+- Ensure form fields have visible labels.
+- Ensure validation messages are connected to their relevant fields.
+
+FINAL RESULT
+
+The completed Help Center must include:
+
+- Continuous black #0A0908 background
+- Black simplified navigation bar
+- STREAMFLIX wordmark
+- Thin vertical divider
+- Help Center label
+- KC profile avatar and dropdown
+- “How can we help?” heading
+- Functional Help Center search field
+- Search suggestions
+- Search-result article pages or panels
+- Recommended article links
+- “Still need help?” support section
+- Contact Us button
+- Back to StreamFlix button
+- Support request modal
+- Minimal footer, if needed
+
+Do not include:
+
+- Explore Topics text
+- Explore Topics arrow
+- Explore Topics section
+- Help-category grid
+- Topic-category cards
+- Popular Articles heading
+- Popular Articles section
+- Popular Articles list
+- Permanent article rows beneath the search
+- Movie posters
+- Movie recommendations
+- Content carousels
+
+After the recommended links, continue directly to “Still need help?”
+
+Do not leave a large empty space between the recommended links and the support section.
+
+The Help Center should follow the search-focused structure of the attached reference while remaining completely consistent with the existing STREAMFLIX design system.
+
+Use open sections, a central search experience, restrained spacing, and clear support actions instead of surrounding the content with heavy cards.
+
+Every visual detail must remain consistent with movie(2).zip, including its exact color palette, typography, font sizing, icons, buttons, dropdowns, modal styling, spacing system, and interaction behavior.
+
+Do not change anything outside the requirements above.

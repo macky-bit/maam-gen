@@ -1,940 +1,1084 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
-// ── Icons ──────────────────────────────────────────────────────────────────
+// ─── Color tokens ────────────────────────────────────────────────
+const C = {
+  ink: "#0A0908",
+  wine: "#49111C",
+  wineDark: "#370D16",
+  cream: "#F2F4F3",
+  taupe: "#A9927D",
+  stone: "#5E503F",
+  surfaceElevated: "#110F0E",
+};
 
-function ChevronDownIcon({ size = 16, className = "" }: { size?: number; className?: string }) {
+// ─── Help articles data ──────────────────────────────────────────
+const ARTICLES = [
+  {
+    id: "reset-password",
+    title: "How to reset your password",
+    category: "Account & Profiles",
+    content: [
+      "Go to the StreamFlix sign-in page.",
+      "Click \"Forgot password?\" below the password field.",
+      "Enter the email address linked to your account.",
+      "Check your inbox for a reset link and click it.",
+      "Enter and confirm your new password.",
+      "Select Save. You can now sign in with the new password.",
+    ],
+  },
+  {
+    id: "edit-profile",
+    title: "How to edit your profile",
+    category: "Account & Profiles",
+    content: [
+      "Open the profile menu from any page.",
+      "Select Profile or Manage Profiles.",
+      "Choose the profile you want to update.",
+      "Change the profile name, avatar, language, or maturity rating.",
+      "Select Save.",
+    ],
+  },
+  {
+    id: "subtitle-appearance",
+    title: "How to change subtitle appearance",
+    category: "Subtitles & Language",
+    content: [
+      "While watching a title, open the audio and subtitles menu.",
+      "Select Subtitle Appearance.",
+      "Adjust font size, style, color, and background.",
+      "Changes apply immediately during playback.",
+    ],
+  },
+  {
+    id: "manage-profile-settings",
+    title: "How to manage profile settings",
+    category: "Account & Profiles",
+    content: [
+      "Select your profile icon in the top-right corner.",
+      "Choose Manage Profiles.",
+      "Select the profile you want to configure.",
+      "Update name, avatar, language, maturity rating, and autoplay preferences.",
+      "Select Save when done.",
+    ],
+  },
+  {
+    id: "remove-from-mylist",
+    title: "How to remove a title from My List",
+    category: "My List",
+    content: [
+      "Navigate to My List from the main menu.",
+      "Hover over the title you want to remove.",
+      "Click the checkmark icon to toggle it off your list.",
+      "The title is immediately removed from My List.",
+    ],
+  },
+  {
+    id: "remove-continue-watching",
+    title: "How to remove a title from Continue Watching",
+    category: "Continue Watching",
+    content: [
+      "Find the title in the Continue Watching row on the Home page.",
+      "Hover over the title thumbnail.",
+      "Click the three-dot menu icon.",
+      "Select Remove from Row.",
+      "The title is removed from Continue Watching.",
+    ],
+  },
+  {
+    id: "video-not-playing",
+    title: "Why a video is not playing",
+    category: "Playback",
+    content: [
+      "Check your internet connection — StreamFlix requires a stable connection.",
+      "Restart the StreamFlix app or refresh the browser page.",
+      "Clear your browser cache if using the web app.",
+      "Check for app updates and install any available updates.",
+      "Try a different device or browser.",
+      "If the issue persists, contact our support team.",
+    ],
+  },
+  {
+    id: "change-language",
+    title: "How to change your default language",
+    category: "Subtitles & Language",
+    content: [
+      "Select your profile icon and choose Account.",
+      "Under Profile & Parental Controls, select your profile.",
+      "Next to Language, select Change.",
+      "Choose your preferred language from the list.",
+      "Select Save. The change applies immediately.",
+    ],
+  },
+  {
+    id: "set-profile-pin",
+    title: "How to set a profile PIN",
+    category: "Privacy & Security",
+    content: [
+      "Select your profile icon and choose Account.",
+      "Under Profile & Parental Controls, select your profile.",
+      "Next to Profile Lock, select Change.",
+      "Enter your account password to confirm.",
+      "Toggle on Require a PIN to access the selected profile.",
+      "Enter and confirm your 4-digit PIN.",
+      "Select Save.",
+    ],
+  },
+  {
+    id: "autoplay-settings",
+    title: "How to manage autoplay settings",
+    category: "Account & Profiles",
+    content: [
+      "Select your profile icon and choose Account.",
+      "Under Profile & Parental Controls, select your profile.",
+      "Under Playback Settings, select Change.",
+      "Toggle Autoplay next episode in a series on or off.",
+      "Toggle Autoplay previews while browsing on or off.",
+      "Select Save.",
+    ],
+  },
+  {
+    id: "watch-history",
+    title: "How to view your watch history",
+    category: "My List",
+    content: [
+      "Select your profile icon and choose Account.",
+      "Under Profile & Parental Controls, select your profile.",
+      "Click Viewing Activity.",
+      "Browse your complete watch history.",
+      "To hide a title, click the hide icon next to it.",
+    ],
+  },
+  {
+    id: "account-secure",
+    title: "How to keep your account secure",
+    category: "Privacy & Security",
+    content: [
+      "Use a unique, strong password that you do not use elsewhere.",
+      "Enable two-step verification in Account settings.",
+      "Review the devices signed in to your account regularly.",
+      "Sign out of devices you no longer use.",
+      "Never share your account password.",
+    ],
+  },
+  {
+    id: "parental-controls",
+    title: "How to manage parental controls",
+    category: "Privacy & Security",
+    content: [
+      "Select your profile icon and choose Account.",
+      "Under Profile & Parental Controls, select the profile to restrict.",
+      "Next to Viewing Restrictions, select Change.",
+      "Set the maturity rating appropriate for the profile.",
+      "Optionally enable a Profile Lock PIN so the settings cannot be changed without it.",
+      "Select Save.",
+    ],
+  },
+  {
+    id: "change-profile-settings",
+    title: "How to change profile settings",
+    category: "Account & Profiles",
+    content: [
+      "Select your profile icon in the top-right corner.",
+      "Choose Manage Profiles.",
+      "Select the profile you want to update.",
+      "Modify name, avatar, language, maturity rating, or autoplay behavior.",
+      "Select Save when finished.",
+    ],
+  },
+];
+
+// ─── Icons ───────────────────────────────────────────────────────
+function SearchIcon({ size = 20, color = C.taupe }: { size?: number; color?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <polyline points="6 9 12 15 18 9" />
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <circle cx="8.5" cy="8.5" r="5.75" stroke={color} strokeWidth="1.5" />
+      <path d="M13.5 13.5L17 17" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }
 
-function ChevronRightIcon({ size = 16 }: { size?: number }) {
+function ChevronDownIcon({ size = 12, color = C.taupe }: { size?: number; color?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="9 18 15 12 9 6" />
+    <svg width={size} height={size} viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <path d="M2 4L6 8L10 4" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
-function PlayIcon({ size = 18 }: { size?: number }) {
+function ChevronRightIcon({ size = 14, color = C.taupe }: { size?: number; color?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <polygon points="5 3 19 12 5 21 5 3" />
+    <svg width={size} height={size} viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path d="M5 3L9 7L5 11" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
-function InfoIcon({ size = 18 }: { size?: number }) {
+function XIcon({ size = 16, color = C.taupe }: { size?: number; color?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <line x1="12" y1="16" x2="12" y2="12" />
-      <line x1="12" y1="8" x2="12.01" y2="8" />
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M3 3L13 13M13 3L3 13" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }
 
-function MoreVertIcon({ size = 16 }: { size?: number }) {
+function ArticleIcon({ size = 16, color = C.taupe }: { size?: number; color?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <circle cx="12" cy="5" r="1.5" />
-      <circle cx="12" cy="12" r="1.5" />
-      <circle cx="12" cy="19" r="1.5" />
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <rect x="2" y="2" width="12" height="12" rx="1.5" stroke={color} strokeWidth="1.25" />
+      <path d="M5 6H11M5 8.5H11M5 11H8.5" stroke={color} strokeWidth="1.25" strokeLinecap="round" />
     </svg>
   );
 }
 
-function PlayCircleIcon({ size = 20 }: { size?: number }) {
+function ArrowLeftIcon({ size = 16, color = C.taupe }: { size?: number; color?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <circle cx="12" cy="12" r="10" />
-      <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none" />
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M10 3L5 8L10 13" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
-function FilmIcon({ size = 20 }: { size?: number }) {
+// ─── Highlight matching text ─────────────────────────────────────
+function Highlighted({ text, query }: { text: string; query: string }) {
+  if (!query.trim()) return <>{text}</>;
+  const idx = text.toLowerCase().indexOf(query.toLowerCase());
+  if (idx === -1) return <>{text}</>;
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <rect x="2" y="2" width="20" height="20" rx="2" />
-      <line x1="7" y1="2" x2="7" y2="22" />
-      <line x1="17" y1="2" x2="17" y2="22" />
-      <line x1="2" y1="12" x2="22" y2="12" />
-      <line x1="2" y1="7" x2="7" y2="7" />
-      <line x1="2" y1="17" x2="7" y2="17" />
-      <line x1="17" y1="17" x2="22" y2="17" />
-      <line x1="17" y1="7" x2="22" y2="7" />
-    </svg>
+    <>
+      {text.slice(0, idx)}
+      <mark style={{ background: C.wine, color: C.cream, borderRadius: 2, padding: "0 2px" }}>
+        {text.slice(idx, idx + query.length)}
+      </mark>
+      {text.slice(idx + query.length)}
+    </>
   );
 }
 
-function SubtitleIcon({ size = 20 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <rect x="2" y="5" width="20" height="14" rx="2" />
-      <line x1="6" y1="13" x2="14" y2="13" />
-      <line x1="6" y1="17" x2="10" y2="17" />
-      <line x1="12" y1="17" x2="18" y2="17" />
-      <line x1="16" y1="13" x2="18" y2="13" />
-    </svg>
-  );
-}
+// ─── Support Modal ───────────────────────────────────────────────
+function SupportModal({ onClose }: { onClose: () => void }) {
+  const [topic, setTopic] = useState("");
+  const [subject, setSubject] = useState("");
+  const [description, setDescription] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitted, setSubmitted] = useState(false);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
-function ShieldIcon({ size = 20 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-    </svg>
-  );
-}
+  const topics = [
+    "Account & Profiles",
+    "Playback",
+    "My List",
+    "Continue Watching",
+    "Subtitles & Language",
+    "Privacy & Security",
+    "Other",
+  ];
 
-function GlobeIcon({ size = 20 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <circle cx="12" cy="12" r="10" />
-      <line x1="2" y1="12" x2="22" y2="12" />
-      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-    </svg>
-  );
-}
+  const validate = () => {
+    const e: Record<string, string> = {};
+    if (!topic) e.topic = "Please select a help topic.";
+    if (!subject.trim()) e.subject = "Please enter a subject.";
+    if (!description.trim()) e.description = "Please describe the issue.";
+    return e;
+  };
 
-function ClockIcon({ size = 20 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 6 12 12 16 14" />
-    </svg>
-  );
-}
+  const handleSubmit = (ev: React.FormEvent) => {
+    ev.preventDefault();
+    const e = validate();
+    if (Object.keys(e).length > 0) { setErrors(e); return; }
+    setSubmitted(true);
+  };
 
-function LockIcon({ size = 20 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-    </svg>
-  );
-}
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onClose]);
 
-function XIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <line x1="18" y1="6" x2="6" y2="18" />
-      <line x1="6" y1="6" x2="18" y2="18" />
-    </svg>
-  );
-}
+  const fieldStyle: React.CSSProperties = {
+    width: "100%",
+    background: "#1A1714",
+    border: `1px solid ${C.stone}`,
+    borderRadius: 6,
+    color: C.cream,
+    fontFamily: "'Barlow', sans-serif",
+    fontSize: 14,
+    padding: "10px 14px",
+    outline: "none",
+    transition: "border-color 0.15s",
+  };
 
-function TrashIcon({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <polyline points="3 6 5 6 21 6" />
-      <path d="M19 6l-1 14H6L5 6" />
-      <path d="M10 11v6M14 11v6" />
-      <path d="M9 6V4h6v2" />
-    </svg>
-  );
-}
+  const labelStyle: React.CSSProperties = {
+    display: "block",
+    color: C.cream,
+    fontSize: 13,
+    fontWeight: 500,
+    marginBottom: 6,
+  };
 
-function EditIcon({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-    </svg>
-  );
-}
-
-function PlusIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <line x1="12" y1="5" x2="12" y2="19" />
-      <line x1="5" y1="12" x2="19" y2="12" />
-    </svg>
-  );
-}
-
-// ── Toggle ─────────────────────────────────────────────────────────────────
-
-function Toggle({ on, onChange }: { on: boolean; onChange: () => void }) {
-  return (
-    <button
-      role="switch"
-      aria-checked={on}
-      onClick={onChange}
-      className={`toggle-track ${on ? "on" : "off"} focus:outline-none focus:ring-2 focus:ring-[#49111C] focus:ring-offset-2 focus:ring-offset-[#0A0908]`}
-    >
-      <div className="toggle-handle" />
-      <span className="sr-only">{on ? "On" : "Off"}</span>
-    </button>
-  );
-}
-
-// ── SelectDropdown ─────────────────────────────────────────────────────────
-
-function SelectDropdown({ value, options, onChange }: { value: string; options: string[]; onChange: (v: string) => void }) {
-  return (
-    <div className="relative flex items-center gap-1">
-      <span className="text-[#A9927D] text-sm">{value}</span>
-      <div className="relative">
-        <select
-          value={value}
-          onChange={e => onChange(e.target.value)}
-          className="absolute inset-0 opacity-0 cursor-pointer w-full"
-          aria-label="Select option"
-        >
-          {options.map(o => <option key={o} value={o}>{o}</option>)}
-        </select>
-        <ChevronDownIcon size={14} className="text-[#A9927D]" />
-      </div>
-    </div>
-  );
-}
-
-// ── Avatar ─────────────────────────────────────────────────────────────────
-
-function Avatar({ initials, size = "sm" }: { initials: string; size?: "sm" | "lg" }) {
-  const sizeClass = size === "lg" ? "w-20 h-20 text-2xl" : "w-9 h-9 text-sm";
   return (
     <div
-      className={`${sizeClass} bg-[#49111C] text-[#F2F4F3] font-display font-bold flex items-center justify-center rounded-sm flex-shrink-0`}
-      style={{ fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: "0.05em" }}
+      ref={overlayRef}
+      onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}
+      style={{
+        position: "fixed", inset: 0, zIndex: 200,
+        background: "rgba(10,9,8,0.85)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "16px",
+      }}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Contact Support"
     >
-      {initials}
-    </div>
-  );
-}
-
-// ── Navbar ─────────────────────────────────────────────────────────────────
-
-function Navbar({ onManageProfiles }: { onManageProfiles: () => void }) {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setDropdownOpen(false);
-      }
-    }
-    if (dropdownOpen) document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [dropdownOpen]);
-
-  useEffect(() => {
-    function handleKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setDropdownOpen(false);
-    }
-    document.addEventListener("keydown", handleKey);
-    return () => document.removeEventListener("keydown", handleKey);
-  }, []);
-
-  const items = ["Profile", "Manage Profiles", "Help", "Sign Out"];
-
-  return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0A0908]" style={{ borderBottom: "1px solid rgba(94,80,63,0.3)" }}>
-      <div className="max-w-7xl mx-auto px-6 md:px-10 h-[72px] flex items-center justify-between">
-        <span
-          className="text-[#49111C] font-display font-extrabold text-2xl tracking-widest uppercase select-none"
-          style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
-        >
-          STREAMFLIX
-        </span>
-
-        <div className="relative" ref={dropdownRef}>
-          <button
-            className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#49111C] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0908] rounded-sm"
-            onClick={() => setDropdownOpen(v => !v)}
-            aria-label="Profile menu"
-            aria-expanded={dropdownOpen}
-          >
-            <Avatar initials="KC" size="sm" />
-            <ChevronDownIcon size={14} className="text-[#A9927D]" />
-          </button>
-
-          {dropdownOpen && (
-            <div
-              className="absolute right-0 top-[calc(100%+8px)] w-44 rounded-sm shadow-xl py-1 z-50"
-              style={{ background: "#111110", border: "1px solid rgba(94,80,63,0.35)" }}
-            >
-              {items.map(item => (
-                <button
-                  key={item}
-                  className="w-full text-left px-4 py-2.5 text-sm transition-colors focus:outline-none"
-                  style={{
-                    color: item === "Profile" ? "#F2F4F3" : "#A9927D",
-                    fontFamily: "'Barlow', sans-serif",
-                  }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(73,17,28,0.25)"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
-                  onClick={() => {
-                    setDropdownOpen(false);
-                    if (item === "Manage Profiles") onManageProfiles();
-                  }}
-                >
-                  {item === "Profile" && <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#49111C] mr-2 align-middle" />}
-                  {item}
-                </button>
-              ))}
+      <div style={{
+        background: C.surfaceElevated,
+        border: `1px solid rgba(94,80,63,0.4)`,
+        borderRadius: 10,
+        width: "100%",
+        maxWidth: 520,
+        maxHeight: "90vh",
+        overflowY: "auto",
+        padding: "32px 28px",
+        boxShadow: "0 20px 60px rgba(0,0,0,0.6)",
+      }}>
+        {submitted ? (
+          <div style={{ textAlign: "center", padding: "32px 0" }}>
+            <div style={{
+              width: 56, height: 56, borderRadius: "50%",
+              background: C.wine, margin: "0 auto 20px",
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M5 12L10 17L19 8" stroke={C.cream} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </div>
-          )}
-        </div>
-      </div>
-    </nav>
-  );
-}
-
-// ── EditProfileModal ───────────────────────────────────────────────────────
-
-function EditProfileModal({ onClose }: { onClose: () => void }) {
-  const [name, setName] = useState("Kevin Chan");
-  const [lang, setLang] = useState("English");
-  const [maturity, setMaturity] = useState("All Maturity Ratings");
-
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" style={{ background: "rgba(10,9,8,0.85)" }}>
-      <div className="w-full max-w-md rounded-sm p-7 relative" style={{ background: "#111110", border: "1px solid rgba(94,80,63,0.35)" }}>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-[#F2F4F3] font-display font-bold text-xl tracking-wide uppercase" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
-            Edit Profile
-          </h2>
-          <button onClick={onClose} className="text-[#A9927D] hover:text-[#F2F4F3] transition-colors p-1">
-            <XIcon />
-          </button>
-        </div>
-
-        <div className="flex items-center gap-4 mb-6">
-          <Avatar initials="KC" size="lg" />
-          <button className="text-sm text-[#A9927D] hover:text-[#F2F4F3] border border-[#5E503F] hover:border-[#A9927D] px-3 py-1.5 rounded-sm transition-colors" style={{ fontFamily: "'Barlow', sans-serif" }}>
-            Change Avatar
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          <div>
-            <label className="block text-xs text-[#A9927D] mb-1.5 uppercase tracking-wider" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Profile Name</label>
-            <input
-              value={name}
-              onChange={e => setName(e.target.value)}
-              className="w-full bg-transparent border border-[#5E503F] text-[#F2F4F3] px-3 py-2 rounded-sm text-sm focus:outline-none focus:border-[#49111C]"
-              style={{ fontFamily: "'Barlow', sans-serif" }}
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs text-[#A9927D] mb-1.5 uppercase tracking-wider" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Default Language</label>
-            <select
-              value={lang}
-              onChange={e => setLang(e.target.value)}
-              className="w-full bg-[#0A0908] border border-[#5E503F] text-[#F2F4F3] px-3 py-2 rounded-sm text-sm focus:outline-none focus:border-[#49111C]"
-              style={{ fontFamily: "'Barlow', sans-serif" }}
+            <p style={{ color: C.cream, fontSize: 18, fontWeight: 600, margin: "0 0 12px" }}>
+              Your support request has been submitted.
+            </p>
+            <p style={{ color: C.taupe, fontSize: 14, margin: "0 0 28px" }}>
+              Our team will get back to you shortly.
+            </p>
+            <button
+              onClick={onClose}
+              style={{
+                background: C.wine, color: C.cream, border: "none",
+                borderRadius: 6, padding: "10px 28px", fontFamily: "'Barlow', sans-serif",
+                fontSize: 14, fontWeight: 600, cursor: "pointer",
+              }}
             >
-              {["English", "Spanish", "French", "Japanese", "Korean", "Portuguese"].map(l => <option key={l} value={l}>{l}</option>)}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-xs text-[#A9927D] mb-1.5 uppercase tracking-wider" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Maturity Rating</label>
-            <select
-              value={maturity}
-              onChange={e => setMaturity(e.target.value)}
-              className="w-full bg-[#0A0908] border border-[#5E503F] text-[#F2F4F3] px-3 py-2 rounded-sm text-sm focus:outline-none focus:border-[#49111C]"
-              style={{ fontFamily: "'Barlow', sans-serif" }}
-            >
-              {["All Maturity Ratings", "18+", "16+", "13+", "7+", "All Ages"].map(r => <option key={r} value={r}>{r}</option>)}
-            </select>
-          </div>
-        </div>
-
-        <div className="flex gap-3 mt-7">
-          <button
-            onClick={onClose}
-            className="flex-1 py-2.5 border border-[#5E503F] text-[#F2F4F3] text-sm rounded-sm hover:border-[#A9927D] transition-colors"
-            style={{ fontFamily: "'Barlow', sans-serif" }}
-          >
-            Cancel
-          </button>
-          <button
-            onClick={onClose}
-            className="flex-1 py-2.5 bg-[#49111C] text-[#F2F4F3] text-sm rounded-sm hover:bg-[#3a0d16] transition-colors"
-            style={{ fontFamily: "'Barlow', sans-serif" }}
-          >
-            Save
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── PINModal ───────────────────────────────────────────────────────────────
-
-function PINModal({ hasPin, onClose }: { hasPin: boolean; onClose: () => void }) {
-  const [pin, setPin] = useState("");
-  const [confirm, setConfirm] = useState("");
-  const [saved, setSaved] = useState(false);
-
-  function handleSave() {
-    if (pin.length === 4 && pin === confirm) {
-      setSaved(true);
-      setTimeout(onClose, 1000);
-    }
-  }
-
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" style={{ background: "rgba(10,9,8,0.85)" }}>
-      <div className="w-full max-w-sm rounded-sm p-7 relative" style={{ background: "#111110", border: "1px solid rgba(94,80,63,0.35)" }}>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-[#F2F4F3] font-display font-bold text-xl tracking-wide uppercase" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
-            {hasPin ? "Change PIN" : "Set PIN"}
-          </h2>
-          <button onClick={onClose} className="text-[#A9927D] hover:text-[#F2F4F3] transition-colors p-1">
-            <XIcon />
-          </button>
-        </div>
-        <p className="text-[#A9927D] text-sm mb-5" style={{ fontFamily: "'Barlow', sans-serif" }}>Require a PIN to access this profile.</p>
-
-        <div className="space-y-4">
-          <div>
-            <label className="block text-xs text-[#A9927D] mb-1.5 uppercase tracking-wider" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>4-Digit PIN</label>
-            <input
-              type="password"
-              maxLength={4}
-              value={pin}
-              onChange={e => setPin(e.target.value.replace(/\D/g, "").slice(0, 4))}
-              placeholder="••••"
-              className="w-full bg-transparent border border-[#5E503F] text-[#F2F4F3] px-3 py-2 rounded-sm text-sm focus:outline-none focus:border-[#49111C] tracking-[0.4em]"
-              style={{ fontFamily: "'Barlow', sans-serif" }}
-            />
-          </div>
-          <div>
-            <label className="block text-xs text-[#A9927D] mb-1.5 uppercase tracking-wider" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>Confirm PIN</label>
-            <input
-              type="password"
-              maxLength={4}
-              value={confirm}
-              onChange={e => setConfirm(e.target.value.replace(/\D/g, "").slice(0, 4))}
-              placeholder="••••"
-              className="w-full bg-transparent border border-[#5E503F] text-[#F2F4F3] px-3 py-2 rounded-sm text-sm focus:outline-none focus:border-[#49111C] tracking-[0.4em]"
-              style={{ fontFamily: "'Barlow', sans-serif" }}
-            />
-          </div>
-        </div>
-
-        {saved && <p className="text-[#49111C] text-sm mt-3" style={{ fontFamily: "'Barlow', sans-serif" }}>PIN saved successfully.</p>}
-        {pin.length === 4 && confirm.length === 4 && pin !== confirm && (
-          <p className="text-red-400 text-sm mt-3" style={{ fontFamily: "'Barlow', sans-serif" }}>PINs do not match.</p>
-        )}
-
-        <div className="flex gap-3 mt-7">
-          <button onClick={onClose} className="flex-1 py-2.5 border border-[#5E503F] text-[#F2F4F3] text-sm rounded-sm hover:border-[#A9927D] transition-colors" style={{ fontFamily: "'Barlow', sans-serif" }}>
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={pin.length !== 4 || confirm.length !== 4}
-            className="flex-1 py-2.5 bg-[#49111C] text-[#F2F4F3] text-sm rounded-sm hover:bg-[#3a0d16] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{ fontFamily: "'Barlow', sans-serif" }}
-          >
-            Save PIN
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── WatchHistoryPanel ──────────────────────────────────────────────────────
-
-const HISTORY_ITEMS = [
-  { id: 1, title: "Outer Banks", subtitle: "Season 3, Episode 5", date: "Aug 20, 2026", img: "https://images.unsplash.com/photo-1622862817210-1dffe88af5ad?w=400&q=80" },
-  { id: 2, title: "Mickey 17", subtitle: "Full Movie", date: "Aug 18, 2026", img: "https://images.unsplash.com/flagged/photo-1560177776-295b9cd779de?w=400&q=80" },
-  { id: 3, title: "Insidious: The Red Door", subtitle: "Full Movie", date: "Aug 14, 2026", img: "https://images.unsplash.com/photo-1783109112049-4bf8c5ca96f1?w=400&q=80" },
-  { id: 4, title: "Classroom of the Elite", subtitle: "Season 2, Episode 8", date: "Aug 10, 2026", img: "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=400&q=80" },
-];
-
-function WatchHistoryPanel({ onClose }: { onClose: () => void }) {
-  const [items, setItems] = useState(HISTORY_ITEMS);
-
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" style={{ background: "rgba(10,9,8,0.85)" }}>
-      <div className="w-full max-w-lg rounded-sm p-7 relative" style={{ background: "#111110", border: "1px solid rgba(94,80,63,0.35)" }}>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-[#F2F4F3] font-display font-bold text-xl tracking-wide uppercase" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
-            Watch History
-          </h2>
-          <button onClick={onClose} className="text-[#A9927D] hover:text-[#F2F4F3] transition-colors p-1">
-            <XIcon />
-          </button>
-        </div>
-
-        <div className="space-y-1 max-h-80 overflow-y-auto">
-          {items.length === 0 && (
-            <p className="text-[#A9927D] text-sm py-4 text-center" style={{ fontFamily: "'Barlow', sans-serif" }}>No watch history.</p>
-          )}
-          {items.map(item => (
-            <div key={item.id} className="flex items-center gap-3 py-3 group" style={{ borderBottom: "1px solid rgba(94,80,63,0.2)" }}>
-              <img src={item.img} alt={item.title} className="w-20 h-12 object-cover rounded-sm flex-shrink-0" />
-              <div className="flex-1 min-w-0">
-                <p className="text-[#F2F4F3] text-sm font-medium truncate" style={{ fontFamily: "'Barlow', sans-serif" }}>{item.title}</p>
-                <p className="text-[#A9927D] text-xs" style={{ fontFamily: "'Barlow', sans-serif" }}>{item.subtitle}</p>
-                <p className="text-[#5E503F] text-xs mt-0.5" style={{ fontFamily: "'Barlow', sans-serif" }}>{item.date}</p>
-              </div>
-              <button
-                onClick={() => setItems(prev => prev.filter(i => i.id !== item.id))}
-                className="text-[#5E503F] hover:text-[#A9927D] transition-colors p-1.5 opacity-0 group-hover:opacity-100 focus:opacity-100"
-                aria-label={`Remove ${item.title} from history`}
-              >
-                <TrashIcon />
-              </button>
-            </div>
-          ))}
-        </div>
-
-        <button
-          onClick={onClose}
-          className="mt-6 w-full py-2.5 border border-[#5E503F] text-[#F2F4F3] text-sm rounded-sm hover:border-[#A9927D] transition-colors"
-          style={{ fontFamily: "'Barlow', sans-serif" }}
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// ── ManageProfilesModal ────────────────────────────────────────────────────
-
-const PROFILES = [
-  { id: 1, initials: "KC", name: "Kevin Chan", primary: true },
-  { id: 2, initials: "JC", name: "Jane Chan", primary: false },
-  { id: 3, initials: "K", name: "Kids", primary: false },
-];
-
-function ManageProfilesModal({ onClose }: { onClose: () => void }) {
-  const [profiles, setProfiles] = useState(PROFILES);
-  const [adding, setAdding] = useState(false);
-  const [newName, setNewName] = useState("");
-
-  function addProfile() {
-    if (!newName.trim()) return;
-    const initials = newName.trim().split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2);
-    setProfiles(prev => [...prev, { id: Date.now(), initials, name: newName.trim(), primary: false }]);
-    setNewName("");
-    setAdding(false);
-  }
-
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" style={{ background: "rgba(10,9,8,0.85)" }}>
-      <div className="w-full max-w-md rounded-sm p-7 relative" style={{ background: "#111110", border: "1px solid rgba(94,80,63,0.35)" }}>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-[#F2F4F3] font-display font-bold text-xl tracking-wide uppercase" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
-            Manage Profiles
-          </h2>
-          <button onClick={onClose} className="text-[#A9927D] hover:text-[#F2F4F3] transition-colors p-1"><XIcon /></button>
-        </div>
-
-        <div className="space-y-1 mb-4">
-          {profiles.map(p => (
-            <div key={p.id} className="flex items-center gap-3 py-2.5 rounded-sm px-2 hover:bg-[rgba(73,17,28,0.12)] transition-colors cursor-pointer" style={{ borderBottom: "1px solid rgba(94,80,63,0.15)" }}>
-              <div className="w-9 h-9 bg-[#49111C] text-[#F2F4F3] font-bold flex items-center justify-center rounded-sm text-sm flex-shrink-0" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
-                {p.initials}
-              </div>
-              <div className="flex-1">
-                <p className="text-[#F2F4F3] text-sm" style={{ fontFamily: "'Barlow', sans-serif" }}>{p.name}</p>
-                {p.primary && <p className="text-[#A9927D] text-xs" style={{ fontFamily: "'Barlow', sans-serif" }}>Primary Profile</p>}
-              </div>
-              <button className="text-[#5E503F] hover:text-[#A9927D] transition-colors p-1" aria-label={`Edit ${p.name}`}>
-                <EditIcon />
-              </button>
-            </div>
-          ))}
-        </div>
-
-        {adding ? (
-          <div className="flex gap-2 mb-4">
-            <input
-              autoFocus
-              value={newName}
-              onChange={e => setNewName(e.target.value)}
-              onKeyDown={e => { if (e.key === "Enter") addProfile(); if (e.key === "Escape") setAdding(false); }}
-              placeholder="Profile name"
-              className="flex-1 bg-transparent border border-[#5E503F] text-[#F2F4F3] px-3 py-2 rounded-sm text-sm focus:outline-none focus:border-[#49111C]"
-              style={{ fontFamily: "'Barlow', sans-serif" }}
-            />
-            <button onClick={addProfile} className="px-4 py-2 bg-[#49111C] text-[#F2F4F3] text-sm rounded-sm hover:bg-[#3a0d16] transition-colors" style={{ fontFamily: "'Barlow', sans-serif" }}>Add</button>
-            <button onClick={() => setAdding(false)} className="px-4 py-2 border border-[#5E503F] text-[#F2F4F3] text-sm rounded-sm hover:border-[#A9927D] transition-colors" style={{ fontFamily: "'Barlow', sans-serif" }}>Cancel</button>
+              Close
+            </button>
           </div>
         ) : (
-          <button
-            onClick={() => setAdding(true)}
-            className="flex items-center gap-2 text-[#A9927D] hover:text-[#F2F4F3] text-sm transition-colors mb-4"
-            style={{ fontFamily: "'Barlow', sans-serif" }}
-          >
-            <PlusIcon size={16} /> Add Profile
-          </button>
+          <>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+              <h2 style={{ margin: 0, color: C.cream, fontSize: 20, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700 }}>
+                Contact Support
+              </h2>
+              <button
+                onClick={onClose}
+                style={{ background: "none", border: "none", cursor: "pointer", padding: 4, display: "flex", alignItems: "center" }}
+                aria-label="Close"
+              >
+                <XIcon color={C.taupe} size={18} />
+              </button>
+            </div>
+            <form onSubmit={handleSubmit} noValidate style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+              <div>
+                <label style={labelStyle} htmlFor="support-topic">Help Topic</label>
+                <select
+                  id="support-topic"
+                  value={topic}
+                  onChange={(e) => { setTopic(e.target.value); setErrors((p) => ({ ...p, topic: "" })); }}
+                  style={{ ...fieldStyle, appearance: "none", cursor: "pointer" }}
+                  onFocus={(e) => (e.target.style.borderColor = C.wine)}
+                  onBlur={(e) => (e.target.style.borderColor = errors.topic ? "#7a2030" : C.stone)}
+                >
+                  <option value="" disabled style={{ background: C.ink }}>Select a topic</option>
+                  {topics.map((t) => (
+                    <option key={t} value={t} style={{ background: C.ink }}>{t}</option>
+                  ))}
+                </select>
+                {errors.topic && <p style={{ color: "#c9596a", fontSize: 12, margin: "6px 0 0" }}>{errors.topic}</p>}
+              </div>
+              <div>
+                <label style={labelStyle} htmlFor="support-subject">Subject</label>
+                <input
+                  id="support-subject"
+                  type="text"
+                  value={subject}
+                  onChange={(e) => { setSubject(e.target.value); setErrors((p) => ({ ...p, subject: "" })); }}
+                  placeholder="Brief description of your issue"
+                  style={{ ...fieldStyle, ...(errors.subject ? { borderColor: "#7a2030" } : {}) }}
+                  onFocus={(e) => (e.target.style.borderColor = C.wine)}
+                  onBlur={(e) => (e.target.style.borderColor = errors.subject ? "#7a2030" : C.stone)}
+                />
+                {errors.subject && <p style={{ color: "#c9596a", fontSize: 12, margin: "6px 0 0" }}>{errors.subject}</p>}
+              </div>
+              <div>
+                <label style={labelStyle} htmlFor="support-description">Description</label>
+                <textarea
+                  id="support-description"
+                  value={description}
+                  onChange={(e) => { setDescription(e.target.value); setErrors((p) => ({ ...p, description: "" })); }}
+                  placeholder="Please describe the issue in detail"
+                  rows={5}
+                  style={{ ...fieldStyle, resize: "vertical", ...(errors.description ? { borderColor: "#7a2030" } : {}) }}
+                  onFocus={(e) => (e.target.style.borderColor = C.wine)}
+                  onBlur={(e) => (e.target.style.borderColor = errors.description ? "#7a2030" : C.stone)}
+                />
+                {errors.description && <p style={{ color: "#c9596a", fontSize: 12, margin: "6px 0 0" }}>{errors.description}</p>}
+              </div>
+              <div>
+                <label style={labelStyle} htmlFor="support-attachment">Attachment (optional)</label>
+                <input
+                  id="support-attachment"
+                  type="file"
+                  style={{
+                    ...fieldStyle,
+                    color: C.taupe,
+                    cursor: "pointer",
+                    padding: "8px 14px",
+                  }}
+                />
+              </div>
+              <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
+                <button
+                  type="submit"
+                  style={{
+                    flex: 1, background: C.wine, color: C.cream, border: "none",
+                    borderRadius: 6, padding: "12px", fontFamily: "'Barlow', sans-serif",
+                    fontSize: 14, fontWeight: 600, cursor: "pointer",
+                    transition: "background 0.15s",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = C.wineDark)}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = C.wine)}
+                >
+                  Submit Request
+                </button>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  style={{
+                    flex: 1, background: "transparent", color: C.taupe,
+                    border: `1px solid ${C.stone}`, borderRadius: 6, padding: "12px",
+                    fontFamily: "'Barlow', sans-serif", fontSize: 14, fontWeight: 600, cursor: "pointer",
+                    transition: "border-color 0.15s, color 0.15s",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = C.wine; e.currentTarget.style.color = C.cream; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = C.stone; e.currentTarget.style.color = C.taupe; }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </>
         )}
-
-        <button onClick={onClose} className="w-full py-2.5 border border-[#5E503F] text-[#F2F4F3] text-sm rounded-sm hover:border-[#A9927D] transition-colors" style={{ fontFamily: "'Barlow', sans-serif" }}>
-          Done
-        </button>
       </div>
     </div>
   );
 }
 
-// ── ContinueWatchingCard ───────────────────────────────────────────────────
+// ─── Article Page ────────────────────────────────────────────────
+function ArticlePage({
+  article,
+  onBack,
+  onContactUs,
+}: {
+  article: typeof ARTICLES[0];
+  onBack: () => void;
+  onContactUs: () => void;
+}) {
+  return (
+    <main style={{ maxWidth: 720, margin: "0 auto", padding: "48px 24px 80px" }}>
+      {/* Breadcrumb */}
+      <nav aria-label="Breadcrumb" style={{ marginBottom: 28 }}>
+        <button
+          onClick={onBack}
+          style={{
+            background: "none", border: "none", cursor: "pointer",
+            display: "inline-flex", alignItems: "center", gap: 6,
+            color: C.taupe, fontFamily: "'Barlow', sans-serif", fontSize: 13,
+            padding: 0,
+            transition: "color 0.15s",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = C.cream)}
+          onMouseLeave={(e) => (e.currentTarget.style.color = C.taupe)}
+        >
+          <ArrowLeftIcon size={14} color="currentColor" />
+          Help Center
+        </button>
+        <span style={{ color: C.stone, margin: "0 8px", fontSize: 13 }}>/</span>
+        <span style={{ color: C.stone, fontSize: 13 }}>{article.category}</span>
+        <span style={{ color: C.stone, margin: "0 8px", fontSize: 13 }}>/</span>
+        <span style={{ color: C.taupe, fontSize: 13 }}>{article.title}</span>
+      </nav>
 
-interface CardData {
-  id: number;
-  title: string;
-  img: string;
-  progress: number;
+      {/* Header */}
+      <h1 style={{
+        fontFamily: "'Barlow Condensed', sans-serif",
+        fontSize: "clamp(28px, 5vw, 40px)",
+        fontWeight: 700,
+        color: C.cream,
+        margin: "0 0 12px",
+        lineHeight: 1.15,
+      }}>
+        {article.title}
+      </h1>
+      <p style={{ color: C.stone, fontSize: 13, margin: "0 0 32px" }}>
+        Last updated: August 2026 · {article.category}
+      </p>
+
+      <div style={{ borderTop: `1px solid rgba(94,80,63,0.3)`, marginBottom: 32 }} />
+
+      {/* Steps */}
+      <ol style={{ padding: 0, margin: "0 0 40px", listStyle: "none", display: "flex", flexDirection: "column", gap: 16 }}>
+        {article.content.map((step, i) => (
+          <li key={i} style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
+            <span style={{
+              flexShrink: 0, width: 28, height: 28, borderRadius: "50%",
+              background: C.wine, color: C.cream, fontFamily: "'Barlow Condensed', sans-serif",
+              fontSize: 14, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center",
+            }}>
+              {i + 1}
+            </span>
+            <p style={{ color: C.taupe, fontSize: 15, lineHeight: 1.6, margin: 0, paddingTop: 4 }}>{step}</p>
+          </li>
+        ))}
+      </ol>
+
+      <div style={{ borderTop: `1px solid rgba(94,80,63,0.3)`, marginBottom: 32 }} />
+
+      {/* Related articles */}
+      <h3 style={{ color: C.cream, fontSize: 16, fontWeight: 600, margin: "0 0 16px" }}>Related Articles</h3>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 40 }}>
+        {ARTICLES.filter((a) => a.category === article.category && a.id !== article.id).slice(0, 3).map((a) => (
+          <a
+            key={a.id}
+            href="#"
+            onClick={(e) => e.preventDefault()}
+            style={{
+              color: C.taupe, fontSize: 14, textDecoration: "underline",
+              textDecorationColor: "rgba(169,146,125,0.4)",
+              transition: "color 0.15s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = C.cream)}
+            onMouseLeave={(e) => (e.currentTarget.style.color = C.taupe)}
+          >
+            {a.title}
+          </a>
+        ))}
+      </div>
+
+      {/* Actions */}
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+        <button
+          onClick={onBack}
+          style={{
+            background: "transparent", color: C.taupe,
+            border: `1px solid ${C.stone}`, borderRadius: 6, padding: "10px 22px",
+            fontFamily: "'Barlow', sans-serif", fontSize: 14, fontWeight: 600, cursor: "pointer",
+            transition: "border-color 0.15s, color 0.15s",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.borderColor = C.wine; e.currentTarget.style.color = C.cream; }}
+          onMouseLeave={(e) => { e.currentTarget.style.borderColor = C.stone; e.currentTarget.style.color = C.taupe; }}
+        >
+          ← Back to Help Center
+        </button>
+        <button
+          onClick={onContactUs}
+          style={{
+            background: C.wine, color: C.cream, border: "none",
+            borderRadius: 6, padding: "10px 22px",
+            fontFamily: "'Barlow', sans-serif", fontSize: 14, fontWeight: 600, cursor: "pointer",
+            transition: "background 0.15s",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = C.wineDark)}
+          onMouseLeave={(e) => (e.currentTarget.style.background = C.wine)}
+        >
+          Contact Support
+        </button>
+      </div>
+    </main>
+  );
 }
 
-function ContinueWatchingCard({ card, onRemove }: { card: CardData; onRemove: () => void }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+// ─── Profile Dropdown ────────────────────────────────────────────
+function ProfileDropdown({ onClose, onBackToStreamflix }: { onClose: () => void; onBackToStreamflix: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false);
-    }
-    if (menuOpen) document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [menuOpen]);
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
+    };
+    const keyHandler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("mousedown", handler);
+    document.addEventListener("keydown", keyHandler);
+    return () => { document.removeEventListener("mousedown", handler); document.removeEventListener("keydown", keyHandler); };
+  }, [onClose]);
+
+  const itemStyle: React.CSSProperties = {
+    display: "block", width: "100%", padding: "10px 16px",
+    background: "none", border: "none", textAlign: "left",
+    color: C.cream, fontSize: 14, fontFamily: "'Barlow', sans-serif",
+    cursor: "pointer", transition: "background 0.12s",
+  };
 
   return (
-    <div className="card-hover relative rounded-sm overflow-hidden flex-shrink-0 transition-transform duration-200 cursor-pointer"
-      style={{ width: "clamp(200px, 22vw, 320px)", aspectRatio: "16/9" }}>
-      <img src={card.img} alt={card.title} className="w-full h-full object-cover" />
-
-      {/* Dark gradient overlay at bottom */}
-      <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(10,9,8,0.95) 0%, rgba(10,9,8,0.3) 50%, transparent 100%)" }} />
-
-      {/* Hover overlay */}
-      <div className="card-overlay absolute inset-0 flex items-center justify-center gap-2 opacity-0 transition-opacity duration-200" style={{ background: "rgba(10,9,8,0.5)" }}>
-        <button className="bg-[#F2F4F3] text-[#0A0908] rounded-full p-2 hover:bg-[#A9927D] transition-colors" aria-label={`Play ${card.title}`}>
-          <PlayIcon size={16} />
-        </button>
-        <button className="border border-[rgba(242,244,243,0.6)] text-[#F2F4F3] rounded-full p-2 hover:border-[#F2F4F3] transition-colors" aria-label={`More info about ${card.title}`}>
-          <InfoIcon size={16} />
-        </button>
-      </div>
-
-      {/* Title + progress */}
-      <div className="absolute bottom-0 left-0 right-0 px-3 pb-2 pt-6">
-        <p className="text-[#F2F4F3] text-sm font-medium mb-2 truncate" style={{ fontFamily: "'Barlow', sans-serif" }}>{card.title}</p>
-        <div className="w-full h-0.5 rounded-full" style={{ background: "#5E503F" }}>
-          <div className="h-full rounded-full bg-[#49111C]" style={{ width: `${card.progress}%` }} />
-        </div>
-      </div>
-
-      {/* Three-dot menu */}
-      <div className="absolute top-2 right-2" ref={menuRef}>
-        <button
-          onClick={e => { e.stopPropagation(); setMenuOpen(v => !v); }}
-          className="text-[#A9927D] hover:text-[#F2F4F3] p-1 rounded-sm opacity-0 group-hover:opacity-100 transition-all"
-          style={{ background: "rgba(10,9,8,0.6)" }}
-          aria-label="More options"
-        >
-          <MoreVertIcon />
-        </button>
-        {menuOpen && (
-          <div className="absolute right-0 top-7 w-48 rounded-sm shadow-xl py-1 z-20"
-            style={{ background: "#111110", border: "1px solid rgba(94,80,63,0.35)" }}>
-            <button
-              onClick={() => { setMenuOpen(false); onRemove(); }}
-              className="w-full text-left px-4 py-2.5 text-sm text-[#A9927D] hover:text-[#F2F4F3] hover:bg-[rgba(73,17,28,0.25)] transition-colors"
-              style={{ fontFamily: "'Barlow', sans-serif" }}
-            >
-              Remove from Continue Watching
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// ── SettingRow ─────────────────────────────────────────────────────────────
-
-function SettingRow({ icon, label, description, control, last = false }: {
-  icon: React.ReactNode;
-  label: string;
-  description: string;
-  control: React.ReactNode;
-  last?: boolean;
-}) {
-  return (
-    <div className={`flex items-center gap-4 py-4 ${!last ? "border-b border-[rgba(94,80,63,0.2)]" : ""}`}>
-      <div className="text-[#A9927D] flex-shrink-0">{icon}</div>
-      <div className="flex-1 min-w-0">
-        <p className="text-[#F2F4F3] text-sm font-medium" style={{ fontFamily: "'Barlow', sans-serif" }}>{label}</p>
-        <p className="text-[#A9927D] text-xs mt-0.5 leading-relaxed" style={{ fontFamily: "'Barlow', sans-serif" }}>{description}</p>
-      </div>
-      <div className="flex-shrink-0">{control}</div>
-    </div>
-  );
-}
-
-// ── RightPanelRow ──────────────────────────────────────────────────────────
-
-function RightPanelRow({ icon, label, description, onClick, last = false }: {
-  icon: React.ReactNode;
-  label: string;
-  description: string;
-  onClick: () => void;
-  last?: boolean;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`w-full flex items-center gap-3 py-3.5 text-left hover:bg-[rgba(73,17,28,0.1)] rounded-sm transition-colors group ${!last ? "border-b border-[rgba(94,80,63,0.2)]" : ""}`}
+    <div
+      ref={ref}
+      style={{
+        position: "absolute", top: "calc(100% + 8px)", right: 0,
+        background: "#12100F",
+        border: `1px solid rgba(94,80,63,0.5)`,
+        borderRadius: 8,
+        minWidth: 200,
+        zIndex: 100,
+        boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+        overflow: "hidden",
+      }}
+      role="menu"
     >
-      <div className="text-[#A9927D] flex-shrink-0">{icon}</div>
-      <div className="flex-1 min-w-0">
-        <p className="text-[#F2F4F3] text-sm font-medium" style={{ fontFamily: "'Barlow', sans-serif" }}>{label}</p>
-        <p className="text-[#A9927D] text-xs mt-0.5 leading-relaxed" style={{ fontFamily: "'Barlow', sans-serif" }}>{description}</p>
-      </div>
-      <ChevronRightIcon size={16} />
-    </button>
+      {["Profile", "Manage Profiles"].map((label) => (
+        <button
+          key={label}
+          style={itemStyle}
+          role="menuitem"
+          onMouseEnter={(e) => (e.currentTarget.style.background = `rgba(73,17,28,0.4)`)}
+          onMouseLeave={(e) => (e.currentTarget.style.background = "none")}
+          onClick={onClose}
+        >
+          {label}
+        </button>
+      ))}
+      <div style={{ borderTop: `1px solid rgba(94,80,63,0.3)`, margin: "4px 0" }} />
+      <button
+        style={{ ...itemStyle }}
+        role="menuitem"
+        onMouseEnter={(e) => (e.currentTarget.style.background = `rgba(73,17,28,0.4)`)}
+        onMouseLeave={(e) => (e.currentTarget.style.background = "none")}
+        onClick={() => { onClose(); onBackToStreamflix(); }}
+      >
+        Back to StreamFlix
+      </button>
+      <button
+        style={{ ...itemStyle, color: C.taupe }}
+        role="menuitem"
+        onMouseEnter={(e) => (e.currentTarget.style.background = `rgba(73,17,28,0.4)`)}
+        onMouseLeave={(e) => (e.currentTarget.style.background = "none")}
+        onClick={onClose}
+      >
+        Sign Out
+      </button>
+    </div>
   );
 }
 
-// ── Main App ───────────────────────────────────────────────────────────────
-
-const INITIAL_CARDS: CardData[] = [
-  { id: 1, title: "Outer Banks", img: "https://images.unsplash.com/photo-1622862817210-1dffe88af5ad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80", progress: 62 },
-  { id: 2, title: "Classroom of the Elite", img: "https://images.unsplash.com/photo-1577896851231-70ef18881754?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80", progress: 35 },
-  { id: 3, title: "Mickey 17", img: "https://images.unsplash.com/flagged/photo-1560177776-295b9cd779de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80", progress: 80 },
-  { id: 4, title: "Insidious: The Red Door", img: "https://images.unsplash.com/photo-1783109112049-4bf8c5ca96f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80", progress: 18 },
-];
-
+// ─── Main App ────────────────────────────────────────────────────
 export default function App() {
-  // Settings state
-  const [autoplayNext, setAutoplayNext] = useState(true);
-  const [autoplayPreviews, setAutoplayPreviews] = useState(false);
-  const [subtitle, setSubtitle] = useState("Medium");
-  const [maturity, setMaturity] = useState("All Maturity Ratings");
-  const [language, setLanguage] = useState("English");
-  const [dirty, setDirty] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [query, setQuery] = useState("");
+  const [focused, setFocused] = useState(false);
+  const [suggestions, setSuggestions] = useState<typeof ARTICLES>([]);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const [selectedArticle, setSelectedArticle] = useState<typeof ARTICLES[0] | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  // Modals
-  const [editOpen, setEditOpen] = useState(false);
-  const [pinOpen, setPinOpen] = useState(false);
-  const [historyOpen, setHistoryOpen] = useState(false);
-  const [manageOpen, setManageOpen] = useState(false);
-  const [hasPin, setHasPin] = useState(false);
+  const filtered = query.trim().length > 0
+    ? ARTICLES.filter((a) => a.title.toLowerCase().includes(query.toLowerCase()))
+    : [];
 
-  // Cards
-  const [cards, setCards] = useState(INITIAL_CARDS);
+  useEffect(() => {
+    setSuggestions(filtered);
+    setActiveIndex(-1);
+  }, [query]);
 
-  function markDirty() {
-    setDirty(true);
-    setSaved(false);
-  }
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!focused || suggestions.length === 0) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((i) => Math.min(i + 1, suggestions.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((i) => Math.max(i - 1, -1));
+    } else if (e.key === "Enter") {
+      if (activeIndex >= 0) { setSelectedArticle(suggestions[activeIndex]); setFocused(false); }
+    } else if (e.key === "Escape") {
+      setFocused(false);
+    }
+  };
 
-  function handleSave() {
-    setDirty(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+  const handleClickOutside = useCallback((e: MouseEvent) => {
+    if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
+      setFocused(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [handleClickOutside]);
+
+  const showSuggestions = focused && query.trim().length > 0;
+
+  if (selectedArticle) {
+    return (
+      <div style={{ minHeight: "100vh", background: C.ink }}>
+        <Navbar
+          showDropdown={showDropdown}
+          setShowDropdown={setShowDropdown}
+          onBackToStreamflix={() => setSelectedArticle(null)}
+        />
+        <ArticlePage
+          article={selectedArticle}
+          onBack={() => setSelectedArticle(null)}
+          onContactUs={() => setShowModal(true)}
+        />
+        {showModal && <SupportModal onClose={() => setShowModal(false)} />}
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0908]">
-      <Navbar onManageProfiles={() => setManageOpen(true)} />
+    <div style={{ minHeight: "100vh", background: C.ink, display: "flex", flexDirection: "column" }}>
+      <Navbar
+        showDropdown={showDropdown}
+        setShowDropdown={setShowDropdown}
+        onBackToStreamflix={() => {}}
+      />
 
-      {/* Modals */}
-      {editOpen && <EditProfileModal onClose={() => setEditOpen(false)} />}
-      {pinOpen && <PINModal hasPin={hasPin} onClose={() => { setPinOpen(false); setHasPin(true); }} />}
-      {historyOpen && <WatchHistoryPanel onClose={() => setHistoryOpen(false)} />}
-      {manageOpen && <ManageProfilesModal onClose={() => setManageOpen(false)} />}
+      {/* Main content */}
+      <main style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 24px 80px" }}>
+        {/* Heading */}
+        <h1 style={{
+          fontFamily: "'Barlow Condensed', sans-serif",
+          fontSize: "clamp(36px, 6vw, 56px)",
+          fontWeight: 700,
+          color: C.cream,
+          textAlign: "center",
+          margin: "0 0 32px",
+          letterSpacing: "-0.5px",
+        }}>
+          How can we help?
+        </h1>
 
-      {/* Page content */}
-      <div className="max-w-7xl mx-auto px-6 md:px-10 pt-[72px]">
-        <div className="py-10">
+        {/* Search */}
+        <div ref={searchContainerRef} style={{ width: "100%", maxWidth: 860, position: "relative" }}>
+          <div style={{
+            display: "flex", alignItems: "center",
+            background: "#151311",
+            border: `1.5px solid ${focused ? C.wine : C.stone}`,
+            borderRadius: 8,
+            padding: "0 16px",
+            height: 56,
+            transition: "border-color 0.2s",
+            gap: 12,
+          }}>
+            <SearchIcon color={focused ? C.cream : C.taupe} size={20} />
+            <input
+              ref={inputRef}
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => setFocused(true)}
+              onKeyDown={handleKeyDown}
+              placeholder="Type a question, topic, or issue"
+              aria-label="Search Help Center"
+              aria-autocomplete="list"
+              aria-expanded={showSuggestions}
+              style={{
+                flex: 1, background: "none", border: "none", outline: "none",
+                color: C.cream, fontFamily: "'Barlow', sans-serif", fontSize: 16,
+                caretColor: C.wine,
+              }}
+            />
+            {query && (
+              <button
+                onClick={() => { setQuery(""); inputRef.current?.focus(); }}
+                style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", padding: 4 }}
+                aria-label="Clear search"
+              >
+                <XIcon color={C.taupe} />
+              </button>
+            )}
+          </div>
 
-          {/* Page heading */}
-          <h1
-            className="text-[#F2F4F3] font-display font-bold text-4xl tracking-wide uppercase mb-8"
-            style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
-          >
-            Profile
-          </h1>
-
-          {/* Profile identity */}
-          <div className="flex flex-wrap items-center gap-5 mb-10">
-            <Avatar initials="KC" size="lg" />
-            <div className="flex-1 min-w-0">
-              <h2 className="text-[#F2F4F3] font-display font-bold text-2xl tracking-wide" style={{ fontFamily: "'Barlow Condensed', sans-serif" }}>
-                Kevin Chan
-              </h2>
-              <p className="text-[#A9927D] text-sm mt-0.5" style={{ fontFamily: "'Barlow', sans-serif" }}>Primary Profile</p>
-              <p className="text-[#5E503F] text-xs mt-0.5" style={{ fontFamily: "'Barlow', sans-serif" }}>Member since 2026</p>
-            </div>
-            <button
-              onClick={() => setEditOpen(true)}
-              className="px-5 py-2 border border-[#5E503F] text-[#F2F4F3] text-sm rounded-sm hover:border-[#A9927D] hover:bg-[rgba(73,17,28,0.12)] transition-all"
-              style={{ fontFamily: "'Barlow', sans-serif" }}
+          {/* Suggestions panel */}
+          {showSuggestions && (
+            <div
+              ref={suggestionsRef}
+              role="listbox"
+              aria-label="Search suggestions"
+              style={{
+                position: "absolute", top: "calc(100% + 6px)", left: 0, right: 0,
+                background: "#151311",
+                border: `1px solid rgba(94,80,63,0.5)`,
+                borderRadius: 8,
+                zIndex: 50,
+                boxShadow: "0 12px 40px rgba(0,0,0,0.5)",
+                overflow: "hidden",
+              }}
             >
-              Edit Profile
-            </button>
-          </div>
-
-          {/* Divider */}
-          <div className="w-full h-px bg-[rgba(94,80,63,0.25)] mb-8" />
-
-          {/* Two-column settings layout */}
-          <div className="flex flex-col lg:flex-row gap-0">
-
-            {/* LEFT: Playback & Display (~2/3) */}
-            <div className="flex-1 lg:flex-[2] pr-0 lg:pr-10">
-              <h3
-                className="text-[#F2F4F3] font-display font-semibold text-xl tracking-wide uppercase mb-2"
-                style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
-              >
-                Playback &amp; Display
-              </h3>
-
-              <SettingRow
-                icon={<PlayCircleIcon />}
-                label="Autoplay Next Episode"
-                description="Automatically play the next episode of a series."
-                control={<Toggle on={autoplayNext} onChange={() => { setAutoplayNext(v => !v); markDirty(); }} />}
-              />
-              <SettingRow
-                icon={<FilmIcon />}
-                label="Autoplay Previews"
-                description="Automatically play previews while browsing."
-                control={<Toggle on={autoplayPreviews} onChange={() => { setAutoplayPreviews(v => !v); markDirty(); }} />}
-              />
-              <SettingRow
-                icon={<SubtitleIcon />}
-                label="Subtitle Appearance"
-                description="Customize the appearance of subtitles."
-                control={
-                  <SelectDropdown
-                    value={subtitle}
-                    options={["Small", "Medium", "Large"]}
-                    onChange={v => { setSubtitle(v); markDirty(); }}
-                  />
-                }
-              />
-              <SettingRow
-                icon={<ShieldIcon />}
-                label="Maturity Rating"
-                description="Show titles of all maturity ratings for this profile."
-                control={
-                  <SelectDropdown
-                    value={maturity}
-                    options={["All Maturity Ratings", "18+", "16+", "13+", "7+", "All Ages"]}
-                    onChange={v => { setMaturity(v); markDirty(); }}
-                  />
-                }
-              />
-              <SettingRow
-                icon={<GlobeIcon />}
-                label="Default Language"
-                description="Select the default language for audio and subtitles."
-                control={
-                  <SelectDropdown
-                    value={language}
-                    options={["English", "Spanish", "French", "Japanese", "Korean", "Portuguese"]}
-                    onChange={v => { setLanguage(v); markDirty(); }}
-                  />
-                }
-                last
-              />
-
-              {/* Save Changes */}
-              <div className="mt-6 flex items-center gap-4">
-                <button
-                  onClick={handleSave}
-                  disabled={!dirty}
-                  className="px-6 py-2.5 bg-[#49111C] text-[#F2F4F3] text-sm rounded-sm hover:bg-[#3a0d16] transition-colors disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-[#49111C] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0908]"
-                  style={{ fontFamily: "'Barlow', sans-serif" }}
-                >
-                  Save Changes
-                </button>
-                {saved && (
-                  <p className="text-[#A9927D] text-sm" style={{ fontFamily: "'Barlow', sans-serif" }}>
-                    Profile settings saved.
+              {suggestions.length > 0 ? (
+                suggestions.map((article, i) => (
+                  <button
+                    key={article.id}
+                    role="option"
+                    aria-selected={i === activeIndex}
+                    onClick={() => { setSelectedArticle(article); setFocused(false); }}
+                    style={{
+                      display: "flex", alignItems: "center", gap: 12,
+                      width: "100%", padding: "12px 16px", background: i === activeIndex ? `rgba(73,17,28,0.5)` : "none",
+                      border: "none", cursor: "pointer",
+                      borderBottom: i < suggestions.length - 1 ? `1px solid rgba(94,80,63,0.2)` : "none",
+                      textAlign: "left",
+                      transition: "background 0.12s",
+                    }}
+                    onMouseEnter={(e) => { setActiveIndex(i); e.currentTarget.style.background = `rgba(73,17,28,0.4)`; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = i === activeIndex ? `rgba(73,17,28,0.5)` : "none"; }}
+                  >
+                    <ArticleIcon color={C.taupe} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ margin: 0, color: C.cream, fontSize: 14, fontWeight: 500 }}>
+                        <Highlighted text={article.title} query={query} />
+                      </p>
+                      <p style={{ margin: 0, color: C.taupe, fontSize: 12 }}>{article.category}</p>
+                    </div>
+                    <ChevronRightIcon color={C.stone} />
+                  </button>
+                ))
+              ) : (
+                <div style={{ padding: "20px 16px", textAlign: "center" }}>
+                  <p style={{ color: C.cream, fontSize: 14, margin: "0 0 6px", fontWeight: 500 }}>
+                    No help articles match your search.
                   </p>
-                )}
-              </div>
-            </div>
-
-            {/* Vertical divider */}
-            <div className="hidden lg:block w-px bg-[rgba(94,80,63,0.25)] mx-2 self-stretch" />
-            <div className="block lg:hidden h-px bg-[rgba(94,80,63,0.25)] my-8" />
-
-            {/* RIGHT: Viewing Activity + Profile Lock (~1/3) */}
-            <div className="lg:flex-[1] lg:pl-10">
-              {/* Viewing Activity */}
-              <div className="mb-8">
-                <h3
-                  className="text-[#F2F4F3] font-display font-semibold text-xl tracking-wide uppercase mb-2"
-                  style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
-                >
-                  Viewing Activity
-                </h3>
-                <RightPanelRow
-                  icon={<ClockIcon />}
-                  label="Watch History"
-                  description="Review the movies and episodes you have watched."
-                  onClick={() => setHistoryOpen(true)}
-                  last
-                />
-              </div>
-
-              {/* Profile Lock */}
-              <div>
-                <h3
-                  className="text-[#F2F4F3] font-display font-semibold text-xl tracking-wide uppercase mb-2"
-                  style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
-                >
-                  Profile Lock
-                </h3>
-                <RightPanelRow
-                  icon={<LockIcon />}
-                  label={hasPin ? "Change PIN" : "Set PIN"}
-                  description="Require a PIN to access this profile."
-                  onClick={() => setPinOpen(true)}
-                  last
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Divider */}
-          <div className="w-full h-px bg-[rgba(94,80,63,0.25)] mt-10 mb-8" />
-
-          {/* Continue Watching */}
-          {cards.length > 0 && (
-            <div className="pb-12">
-              <h3
-                className="text-[#F2F4F3] font-display font-bold text-2xl tracking-wide uppercase mb-5"
-                style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
-              >
-                Continue Watching
-              </h3>
-              <div className="flex gap-4 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
-                {cards.map(card => (
-                  <ContinueWatchingCard
-                    key={card.id}
-                    card={card}
-                    onRemove={() => setCards(prev => prev.filter(c => c.id !== card.id))}
-                  />
-                ))}
-              </div>
+                  <p style={{ color: C.taupe, fontSize: 13, margin: 0 }}>
+                    Try using fewer or different keywords.
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </div>
-      </div>
+
+        {/* Recommended links */}
+        <div style={{ marginTop: 28, textAlign: "center", maxWidth: 860, width: "100%" }}>
+          <p style={{
+            color: C.cream, fontSize: 14, display: "inline",
+            fontWeight: 500, marginRight: 8,
+          }}>
+            Recommended for you:
+          </p>
+          <span style={{ display: "inline", flexWrap: "wrap", gap: "8px 0" }}>
+            {[
+              { id: "account-secure", label: "How to keep your account secure" },
+              { id: "parental-controls", label: "How to manage parental controls" },
+              { id: "change-profile-settings", label: "How to change profile settings" },
+            ].map((link, i, arr) => {
+              const article = ARTICLES.find((a) => a.id === link.id)!;
+              return (
+                <span key={link.id}>
+                  <button
+                    onClick={() => setSelectedArticle(article)}
+                    style={{
+                      background: "none", border: "none", cursor: "pointer",
+                      color: C.taupe, fontSize: 14, fontFamily: "'Barlow', sans-serif",
+                      textDecoration: "underline",
+                      textDecorationColor: "rgba(169,146,125,0.5)",
+                      padding: "0 2px",
+                      transition: "color 0.15s",
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = C.cream; e.currentTarget.style.textDecorationColor = C.cream; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = C.taupe; e.currentTarget.style.textDecorationColor = "rgba(169,146,125,0.5)"; }}
+                  >
+                    {link.label}
+                  </button>
+                  {i < arr.length - 1 && (
+                    <span style={{ color: C.stone, margin: "0 8px", fontSize: 14, opacity: 0.6 }}>|</span>
+                  )}
+                </span>
+              );
+            })}
+          </span>
+        </div>
+
+        {/* Divider */}
+        <div style={{ width: "100%", maxWidth: 860, borderTop: `1px solid rgba(94,80,63,0.25)`, margin: "40px 0" }} />
+
+        {/* Still need help */}
+        <div style={{ textAlign: "center" }}>
+          <h2 style={{
+            fontFamily: "'Barlow Condensed', sans-serif",
+            fontSize: "clamp(28px, 4vw, 40px)",
+            fontWeight: 700,
+            color: C.cream,
+            margin: "0 0 10px",
+          }}>
+            Still need help?
+          </h2>
+          <p style={{ color: C.taupe, fontSize: 15, margin: "0 0 28px" }}>
+            Our support team is here for you.
+          </p>
+          <div style={{
+            display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap",
+          }}>
+            <button
+              onClick={() => setShowModal(true)}
+              style={{
+                background: C.wine, color: C.cream, border: "none",
+                borderRadius: 6, padding: "12px 32px",
+                fontFamily: "'Barlow', sans-serif", fontSize: 15, fontWeight: 600,
+                cursor: "pointer", transition: "background 0.15s",
+                minWidth: 140,
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = C.wineDark)}
+              onMouseLeave={(e) => (e.currentTarget.style.background = C.wine)}
+            >
+              Contact Us
+            </button>
+            <button
+              style={{
+                background: "transparent", color: C.taupe,
+                border: `1px solid ${C.stone}`, borderRadius: 6, padding: "12px 32px",
+                fontFamily: "'Barlow', sans-serif", fontSize: 15, fontWeight: 600,
+                cursor: "pointer", transition: "border-color 0.15s, color 0.15s",
+                minWidth: 140,
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = C.wine; e.currentTarget.style.color = C.cream; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = C.stone; e.currentTarget.style.color = C.taupe; }}
+            >
+              Back to StreamFlix
+            </button>
+          </div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer style={{
+        borderTop: `1px solid rgba(94,80,63,0.25)`,
+        background: C.ink,
+        padding: "24px",
+      }}>
+        <div style={{
+          maxWidth: 1200, margin: "0 auto",
+          display: "flex", flexWrap: "wrap", alignItems: "center",
+          gap: "12px 24px", justifyContent: "space-between",
+        }}>
+          <span style={{
+            fontFamily: "'Barlow Condensed', sans-serif",
+            fontWeight: 800, fontSize: 18,
+            color: C.wine, letterSpacing: "0.04em",
+          }}>
+            STREAMFLIX
+          </span>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px 20px" }}>
+            {["Terms of Use", "Privacy", "Help Center", "Back to StreamFlix"].map((item) => (
+              <a
+                key={item}
+                href="#"
+                onClick={(e) => e.preventDefault()}
+                style={{
+                  color: C.taupe, fontSize: 13, textDecoration: "none",
+                  transition: "color 0.15s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = C.cream)}
+                onMouseLeave={(e) => (e.currentTarget.style.color = C.taupe)}
+              >
+                {item}
+              </a>
+            ))}
+          </div>
+        </div>
+      </footer>
+
+      {showModal && <SupportModal onClose={() => setShowModal(false)} />}
     </div>
+  );
+}
+
+// ─── Navbar ──────────────────────────────────────────────────────
+function Navbar({
+  showDropdown,
+  setShowDropdown,
+  onBackToStreamflix,
+}: {
+  showDropdown: boolean;
+  setShowDropdown: (v: boolean) => void;
+  onBackToStreamflix: () => void;
+}) {
+  return (
+    <header style={{
+      position: "sticky", top: 0, zIndex: 80,
+      background: C.ink,
+      borderBottom: `1px solid rgba(94,80,63,0.25)`,
+      height: 72,
+      display: "flex", alignItems: "center",
+    }}>
+      <div style={{
+        maxWidth: 1200, width: "100%", margin: "0 auto",
+        padding: "0 24px",
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+      }}>
+        {/* Left */}
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <span style={{
+            fontFamily: "'Barlow Condensed', sans-serif",
+            fontWeight: 800, fontSize: 24,
+            color: C.wine, letterSpacing: "0.04em",
+            lineHeight: 1,
+          }}>
+            STREAMFLIX
+          </span>
+          <div style={{
+            width: 1, height: 30,
+            background: `rgba(94,80,63,0.5)`,
+          }} />
+          <span style={{
+            fontFamily: "'Barlow', sans-serif",
+            fontSize: 15, fontWeight: 400,
+            color: C.cream,
+            letterSpacing: "0.01em",
+          }}>
+            Help Center
+          </span>
+        </div>
+
+        {/* Right: Profile */}
+        <div style={{ position: "relative" }}>
+          <button
+            onClick={() => setShowDropdown(!showDropdown)}
+            aria-haspopup="true"
+            aria-expanded={showDropdown}
+            aria-label="Profile menu"
+            style={{
+              background: "none", border: "none", cursor: "pointer",
+              display: "flex", alignItems: "center", gap: 8,
+              padding: "4px",
+            }}
+          >
+            <div style={{
+              width: 34, height: 34,
+              background: C.wine, borderRadius: 4,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontFamily: "'Barlow Condensed', sans-serif",
+              fontWeight: 700, fontSize: 14,
+              color: C.cream,
+              letterSpacing: "0.05em",
+            }}>
+              KC
+            </div>
+            <ChevronDownIcon color={C.taupe} size={12} />
+          </button>
+          {showDropdown && (
+            <ProfileDropdown
+              onClose={() => setShowDropdown(false)}
+              onBackToStreamflix={onBackToStreamflix}
+            />
+          )}
+        </div>
+      </div>
+    </header>
   );
 }

@@ -1,90 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Barlow:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap');
 @import 'tailwindcss';
 
-@theme {
-  --color-ink: #0A0908;
-  --color-wine: #49111C;
-  --color-cream: #F2F4F3;
-  --color-taupe: #A9927D;
-  --color-stone: #5E503F;
-  --font-display: 'Barlow Condensed', sans-serif;
-  --font-body: 'Barlow', sans-serif;
+:root {
+  --ink: #0A0908;
+  --wine: #49111C;
+  --cream: #F2F4F3;
+  --taupe: #A9927D;
+  --stone: #5E503F;
 }
 
 * {
   box-sizing: border-box;
 }
 
-html, body, #root {
-  height: 100%;
+body {
+  background-color: var(--ink);
+  color: var(--cream);
+  font-family: 'Barlow', sans-serif;
   margin: 0;
   padding: 0;
-}
-
-body {
-  background-color: #0A0908;
-  color: #F2F4F3;
-  font-family: 'Barlow', sans-serif;
-}
-
-.toggle-track {
-  width: 44px;
-  height: 24px;
-  border-radius: 12px;
-  position: relative;
-  transition: background-color 0.2s;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.toggle-track.on {
-  background-color: #49111C;
-}
-
-.toggle-track.off {
-  background-color: #5E503F;
-}
-
-.toggle-handle {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background-color: #F2F4F3;
-  position: absolute;
-  top: 3px;
-  transition: left 0.2s;
-}
-
-.toggle-track.on .toggle-handle {
-  left: 23px;
-}
-
-.toggle-track.off .toggle-handle {
-  left: 3px;
-}
-
-.dropdown-select {
-  background: transparent;
-  border: none;
-  color: #A9927D;
-  font-family: 'Barlow', sans-serif;
-  font-size: 0.875rem;
-  cursor: pointer;
-  outline: none;
-  appearance: none;
-  padding-right: 20px;
-}
-
-.dropdown-select option {
-  background: #0A0908;
-  color: #F2F4F3;
-}
-
-.card-hover:hover .card-overlay {
-  opacity: 1;
-}
-
-.card-hover:hover {
-  transform: scale(1.03);
-  z-index: 10;
 }
