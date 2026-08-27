@@ -1,27 +1,57 @@
 .moduleShell,
 .page {
-  background: var(--color-ink);
-  color: var(--color-cream);
-  font-family: var(--font-body);
+	background: var(--color-ink);
+	color: var(--color-cream);
+	font-family: var(--font-body);
 }
 
 .backButton {
-  background: var(--color-wine);
-  border-color: var(--color-stone);
-  color: var(--color-cream);
-  font-family: var(--font-body);
-  border-radius: 0.5rem;
+	background: var(--color-wine);
+	border-color: var(--color-stone);
+	color: var(--color-cream);
+	font-family: var(--font-body);
+	border-radius: 0.5rem;
 }
 
-.backButton:hover { background: var(--color-wine-hover); }
+.backButton:hover {
+	background: var(--color-wine-hover);
+}
 
-.toggleTrack { position: relative; transition: background-color 0.2s; cursor: pointer; }
-.toggleOn { background: var(--color-wine); }
-.toggleOff { background: var(--color-stone); }
-.toggleHandle { position: absolute; background: var(--color-cream); transition: left 0.2s; }
-.toggleHandleOn { left: 23px; }
-.toggleHandleOff { left: 3px; }
-.select { background: transparent; border-color: transparent; color: var(--color-taupe); font-family: var(--font-body); }
-.select option { background: var(--color-ink); color: var(--color-cream); }
-.cardOverlay { opacity: 0; }
-.cardHover:hover .cardOverlay { opacity: 1; }
+.toggleTrack {
+	position: relative;
+	transition: background-color 0.2s;
+	cursor: pointer;
+}
+.toggleOn {
+	background: var(--color-wine);
+}
+.toggleOff {
+	background: var(--color-stone);
+}
+.toggleHandle {
+	position: absolute;
+	background: var(--color-cream);
+	transition: left 0.2s;
+}
+.toggleHandleOn {
+	left: 23px;
+}
+.toggleHandleOff {
+	left: 3px;
+}
+.select {
+	background: transparent;
+	border-color: transparent;
+	color: var(--color-taupe);
+	font-family: var(--font-body);
+}
+.select option {
+	background: var(--color-ink);
+	color: var(--color-cream);
+}
+.cardOverlay {
+	opacity: 0;
+}
+.cardHover:hover .cardOverlay {
+	opacity: 1;
+}

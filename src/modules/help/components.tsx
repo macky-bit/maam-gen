@@ -1552,4 +1552,3 @@ export function HelpView() {
 		</div>
 	);
 }
-

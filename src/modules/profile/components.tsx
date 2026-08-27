@@ -282,7 +282,9 @@ function Toggle({ on, onChange }: { on: boolean; onChange: () => void }) {
 			onClick={onChange}
 			className={`${styles.toggleTrack} ${on ? styles.toggleOn : styles.toggleOff} w-11 h-6 rounded-full shrink-0 focus:outline-none focus:ring-2 focus:ring-[var(--color-wine)] focus:ring-offset-2 focus:ring-offset-[var(--color-ink)]`}
 		>
-			<div className={`${styles.toggleHandle} ${on ? styles.toggleHandleOn : styles.toggleHandleOff} w-[18px] h-[18px] rounded-full top-[3px]`} />
+			<div
+				className={`${styles.toggleHandle} ${on ? styles.toggleHandleOn : styles.toggleHandleOff} w-[18px] h-[18px] rounded-full top-[3px]`}
+			/>
 			<span className="sr-only">{on ? "On" : "Off"}</span>
 		</button>
 	);
@@ -619,7 +621,13 @@ function PINModal({
 
 // ── WatchHistoryPanel ──────────────────────────────────────────────────────
 
-const HISTORY_ITEMS: { id: number; title: string; subtitle: string; date: string; img: string }[] = [];
+const HISTORY_ITEMS: {
+	id: number;
+	title: string;
+	subtitle: string;
+	date: string;
+	img: string;
+}[] = [];
 
 function WatchHistoryPanel({ onClose }: { onClose: () => void }) {
 	const [items, setItems] = useState(HISTORY_ITEMS);
@@ -720,7 +728,12 @@ function WatchHistoryPanel({ onClose }: { onClose: () => void }) {
 
 // ── ManageProfilesModal ────────────────────────────────────────────────────
 
-const PROFILES: { id: number; initials: string; name: string; primary: boolean }[] = [];
+const PROFILES: {
+	id: number;
+	initials: string;
+	name: string;
+	primary: boolean;
+}[] = [];
 
 function ManageProfilesModal({ onClose }: { onClose: () => void }) {
 	const [profiles, setProfiles] = useState(PROFILES);

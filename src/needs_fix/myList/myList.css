@@ -1,0 +1,143 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Barlow:wght@300;400;500;600&display=swap");
+@import "tailwindcss";
+
+html,
+body,
+#root {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+:root {
+	--sf-bg: #0a0908;
+	--sf-wine: #49111c;
+	--sf-cream: #f2f4f3;
+	--sf-taupe: #a9927d;
+	--sf-border: #5e503f;
+}
+
+body {
+	background-color: var(--sf-bg);
+	color: var(--sf-cream);
+	font-family: "Barlow", sans-serif;
+}
+
+/* Hide scrollbar until hovering */
+::-webkit-scrollbar {
+	width: 6px;
+}
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+::-webkit-scrollbar-thumb {
+	background: var(--sf-border);
+	border-radius: 3px;
+}
+
+.sf-wordmark {
+	font-family: "Barlow Condensed", sans-serif;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	color: var(--sf-wine);
+	font-size: 1.6rem;
+	line-height: 1;
+	text-transform: uppercase;
+}
+
+.sf-display {
+	font-family: "Barlow Condensed", sans-serif;
+}
+
+/* Card grid */
+.sf-card-grid {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: 12px;
+}
+
+@media (max-width: 1200px) {
+	.sf-card-grid {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}
+@media (max-width: 900px) {
+	.sf-card-grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+@media (max-width: 600px) {
+	.sf-card-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+@media (max-width: 380px) {
+	.sf-card-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+	0% {
+		background-position: -400px 0;
+	}
+	100% {
+		background-position: 400px 0;
+	}
+}
+
+.sf-skeleton {
+	background: linear-gradient(90deg, #1a1816 25%, #2a2420 50%, #1a1816 75%);
+	background-size: 800px 100%;
+	animation: shimmer 1.4s infinite;
+}
+
+/* Transition helpers */
+.sf-card-wrap {
+	position: relative;
+	transition:
+		transform 0.2s ease,
+		z-index 0s;
+	z-index: 1;
+}
+
+.sf-card-wrap:hover,
+.sf-card-wrap:focus-within {
+	transform: scale(1.05);
+	z-index: 10;
+}
+
+/* Toast slide-in */
+@keyframes slideUp {
+	from {
+		transform: translateY(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+.sf-toast {
+	animation: slideUp 0.25s ease forwards;
+}
+
+/* Focus ring */
+*:focus-visible {
+	outline: 2px solid var(--sf-wine);
+	outline-offset: 2px;
+}
+
+/* Dropdown */
+.sf-dropdown {
+	background: var(--sf-bg);
+	border: 1px solid var(--sf-border);
+	border-radius: 4px;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+}

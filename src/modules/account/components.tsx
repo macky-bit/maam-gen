@@ -310,8 +310,12 @@ function ModalBox({
 					onClick={onClose}
 					className="p-1 rounded transition-colors"
 					style={{ color: "var(--color-taupe)" }}
-					onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-cream)")}
-					onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-taupe)")}
+					onMouseEnter={(e) =>
+						(e.currentTarget.style.color = "var(--color-cream)")
+					}
+					onMouseLeave={(e) =>
+						(e.currentTarget.style.color = "var(--color-taupe)")
+					}
 					aria-label="Close modal"
 				>
 					<IconX />
@@ -431,14 +435,19 @@ function ModalActions({
 				disabled={loading}
 				className="flex-1 py-2.5 rounded text-sm font-semibold transition-colors"
 				style={{
-					backgroundColor: loading ? "var(--color-wine)" : "var(--color-wine)",
+					backgroundColor: loading
+						? "var(--color-wine)"
+						: "var(--color-wine)",
 					color: "var(--color-cream)",
 				}}
 				onMouseEnter={(e) => {
-					if (!loading) e.currentTarget.style.backgroundColor = "var(--color-ink-soft)";
+					if (!loading)
+						e.currentTarget.style.backgroundColor =
+							"var(--color-ink-soft)";
 				}}
 				onMouseLeave={(e) => {
-					if (!loading) e.currentTarget.style.backgroundColor = "var(--color-wine)";
+					if (!loading)
+						e.currentTarget.style.backgroundColor = "var(--color-wine)";
 				}}
 			>
 				{loading ? "Saving…" : saveLabel}
@@ -758,12 +767,17 @@ function DeleteAccountModal1({
 					<button
 						onClick={onContinue}
 						className="flex-1 py-2.5 rounded text-sm font-semibold transition-colors"
-						style={{ backgroundColor: "var(--color-wine)", color: "var(--color-cream)" }}
+						style={{
+							backgroundColor: "var(--color-wine)",
+							color: "var(--color-cream)",
+						}}
 						onMouseEnter={(e) => {
-							e.currentTarget.style.backgroundColor = "var(--color-ink-soft)";
+							e.currentTarget.style.backgroundColor =
+								"var(--color-ink-soft)";
 						}}
 						onMouseLeave={(e) => {
-							e.currentTarget.style.backgroundColor = "var(--color-wine)";
+							e.currentTarget.style.backgroundColor =
+								"var(--color-wine)";
 						}}
 					>
 						Continue
@@ -782,7 +796,12 @@ function DeleteAccountModal2({ onClose }: { onClose: () => void }) {
 			<ModalBox title="Confirm Deletion" onClose={onClose}>
 				<p className="text-sm mb-4" style={{ color: "var(--color-taupe)" }}>
 					Type{" "}
-					<span style={{ color: "var(--color-cream)", fontFamily: "monospace" }}>
+					<span
+						style={{
+							color: "var(--color-cream)",
+							fontFamily: "monospace",
+						}}
+					>
 						DELETE
 					</span>{" "}
 					to permanently remove your account.
@@ -831,7 +850,9 @@ function DeleteAccountModal2({ onClose }: { onClose: () => void }) {
 						disabled={!valid}
 						className="flex-1 py-2.5 rounded text-sm font-semibold transition-colors"
 						style={{
-							backgroundColor: valid ? "var(--color-wine)" : "var(--color-wine)",
+							backgroundColor: valid
+								? "var(--color-wine)"
+								: "var(--color-wine)",
 							color: "var(--color-cream)",
 							cursor: valid ? "pointer" : "not-allowed",
 						}}
@@ -860,7 +881,10 @@ function SignOutAllModal({ onClose }: { onClose: () => void }) {
 					</p>
 				) : (
 					<>
-						<p className="text-sm mb-6" style={{ color: "var(--color-taupe)" }}>
+						<p
+							className="text-sm mb-6"
+							style={{ color: "var(--color-taupe)" }}
+						>
 							You will be signed out of all devices except this one. You
 							will need to sign in again on those devices.
 						</p>
@@ -874,7 +898,8 @@ function SignOutAllModal({ onClose }: { onClose: () => void }) {
 									backgroundColor: "transparent",
 								}}
 								onMouseEnter={(e) => {
-									e.currentTarget.style.borderColor = "var(--color-taupe)";
+									e.currentTarget.style.borderColor =
+										"var(--color-taupe)";
 									e.currentTarget.style.color = "var(--color-cream)";
 								}}
 								onMouseLeave={(e) => {
@@ -891,12 +916,17 @@ function SignOutAllModal({ onClose }: { onClose: () => void }) {
 									setTimeout(onClose, 1200);
 								}}
 								className="flex-1 py-2.5 rounded text-sm font-semibold transition-colors"
-								style={{ backgroundColor: "var(--color-wine)", color: "var(--color-cream)" }}
+								style={{
+									backgroundColor: "var(--color-wine)",
+									color: "var(--color-cream)",
+								}}
 								onMouseEnter={(e) => {
-									e.currentTarget.style.backgroundColor = "var(--color-ink-soft)";
+									e.currentTarget.style.backgroundColor =
+										"var(--color-ink-soft)";
 								}}
 								onMouseLeave={(e) => {
-									e.currentTarget.style.backgroundColor = "var(--color-wine)";
+									e.currentTarget.style.backgroundColor =
+										"var(--color-wine)";
 								}}
 							>
 								Sign Out All
@@ -927,7 +957,10 @@ function BillingDetailsModal({ onClose }: { onClose: () => void }) {
 							className="flex justify-between py-2"
 							style={{ borderBottom: "1px solid var(--color-stone)" }}
 						>
-							<span className="text-sm" style={{ color: "var(--color-taupe)" }}>
+							<span
+								className="text-sm"
+								style={{ color: "var(--color-taupe)" }}
+							>
 								{row.label}
 							</span>
 							<span
@@ -952,10 +985,16 @@ function BillingDetailsModal({ onClose }: { onClose: () => void }) {
 							className="flex justify-between py-2"
 							style={{ borderBottom: "1px solid var(--color-stone)" }}
 						>
-							<span className="text-sm" style={{ color: "var(--color-taupe)" }}>
+							<span
+								className="text-sm"
+								style={{ color: "var(--color-taupe)" }}
+							>
 								{date}
 							</span>
-							<span className="text-sm" style={{ color: "var(--color-cream)" }}>
+							<span
+								className="text-sm"
+								style={{ color: "var(--color-cream)" }}
+							>
 								$17.99
 							</span>
 						</div>
@@ -1039,7 +1078,10 @@ function OverviewContent({
 					<div className="flex flex-col gap-1.5 items-start">
 						<span
 							className="flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium"
-							style={{ border: "1px solid var(--color-wine)", color: "var(--color-cream)" }}
+							style={{
+								border: "1px solid var(--color-wine)",
+								color: "var(--color-cream)",
+							}}
 						>
 							<span
 								className="w-1.5 h-1.5 rounded-full"
@@ -1047,19 +1089,27 @@ function OverviewContent({
 							/>
 							Active
 						</span>
-						<span className="text-xs" style={{ color: "var(--color-taupe)" }}>
+						<span
+							className="text-xs"
+							style={{ color: "var(--color-taupe)" }}
+						>
 							Member since 2026
 						</span>
 					</div>
 					<button
 						onClick={() => setSection("membership")}
 						className="px-5 py-2.5 rounded text-sm font-semibold transition-colors whitespace-nowrap"
-						style={{ backgroundColor: "var(--color-wine)", color: "var(--color-cream)" }}
+						style={{
+							backgroundColor: "var(--color-wine)",
+							color: "var(--color-cream)",
+						}}
 						onMouseEnter={(e) => {
-							e.currentTarget.style.backgroundColor = "var(--color-ink-soft)";
+							e.currentTarget.style.backgroundColor =
+								"var(--color-ink-soft)";
 						}}
 						onMouseLeave={(e) => {
-							e.currentTarget.style.backgroundColor = "var(--color-wine)";
+							e.currentTarget.style.backgroundColor =
+								"var(--color-wine)";
 						}}
 					>
 						Manage Membership
@@ -1102,7 +1152,11 @@ function OverviewContent({
 								</span>
 								<span
 									className="flex-1 text-sm"
-									style={{ color: row.muted ? "var(--color-taupe)" : "var(--color-cream)" }}
+									style={{
+										color: row.muted
+											? "var(--color-taupe)"
+											: "var(--color-cream)",
+									}}
 								>
 									{row.value}
 								</span>
@@ -1111,10 +1165,12 @@ function OverviewContent({
 									className="text-sm transition-colors flex-shrink-0"
 									style={{ color: "var(--color-taupe)" }}
 									onMouseEnter={(e) => {
-										e.currentTarget.style.color = "var(--color-cream)";
+										e.currentTarget.style.color =
+											"var(--color-cream)";
 									}}
 									onMouseLeave={(e) => {
-										e.currentTarget.style.color = "var(--color-taupe)";
+										e.currentTarget.style.color =
+											"var(--color-taupe)";
 									}}
 								>
 									{row.action}
@@ -1148,7 +1204,10 @@ function OverviewContent({
 								display: "inline-block",
 							}}
 						/>
-						<span className="text-sm" style={{ color: "var(--color-cream)" }}>
+						<span
+							className="text-sm"
+							style={{ color: "var(--color-cream)" }}
+						>
 							4K + HDR
 						</span>
 						<span
@@ -1178,7 +1237,10 @@ function OverviewContent({
 								display: "inline-block",
 							}}
 						/>
-						<span className="text-sm" style={{ color: "var(--color-taupe)" }}>
+						<span
+							className="text-sm"
+							style={{ color: "var(--color-taupe)" }}
+						>
 							Next billing date:{" "}
 							<span style={{ color: "var(--color-cream)" }}>
 								September 27, 2026
@@ -1334,7 +1396,10 @@ function MembershipPage({ setModal }: { setModal: (m: Modal) => void }) {
 							>
 								$17.99
 							</p>
-							<p className="text-xs" style={{ color: "var(--color-taupe)" }}>
+							<p
+								className="text-xs"
+								style={{ color: "var(--color-taupe)" }}
+							>
 								per month
 							</p>
 						</div>
@@ -1399,10 +1464,12 @@ function MembershipPage({ setModal }: { setModal: (m: Modal) => void }) {
 										className="text-sm transition-colors flex-shrink-0"
 										style={{ color: "var(--color-taupe)" }}
 										onMouseEnter={(e) => {
-											e.currentTarget.style.color = "var(--color-cream)";
+											e.currentTarget.style.color =
+												"var(--color-cream)";
 										}}
 										onMouseLeave={(e) => {
-											e.currentTarget.style.color = "var(--color-taupe)";
+											e.currentTarget.style.color =
+												"var(--color-taupe)";
 										}}
 									>
 										{row.action}
@@ -1433,7 +1500,10 @@ function MembershipPage({ setModal }: { setModal: (m: Modal) => void }) {
 								>
 									{row.date}
 								</span>
-								<span className="text-sm" style={{ color: "var(--color-cream)" }}>
+								<span
+									className="text-sm"
+									style={{ color: "var(--color-cream)" }}
+								>
 									{row.amount}
 								</span>
 								<span
@@ -1483,7 +1553,10 @@ function MembershipPage({ setModal }: { setModal: (m: Modal) => void }) {
 							backgroundColor: "var(--color-wine)",
 						}}
 					>
-						<p className="text-sm mb-4" style={{ color: "var(--color-taupe)" }}>
+						<p
+							className="text-sm mb-4"
+							style={{ color: "var(--color-taupe)" }}
+						>
 							Are you sure you want to cancel? You will lose access at
 							the end of your current billing period.
 						</p>
@@ -1501,7 +1574,10 @@ function MembershipPage({ setModal }: { setModal: (m: Modal) => void }) {
 							</button>
 							<button
 								className="px-4 py-2 rounded text-sm font-semibold transition-colors"
-								style={{ backgroundColor: "var(--color-wine)", color: "var(--color-cream)" }}
+								style={{
+									backgroundColor: "var(--color-wine)",
+									color: "var(--color-cream)",
+								}}
 							>
 								Confirm Cancel
 							</button>
@@ -1547,7 +1623,11 @@ function SecurityPage({ setModal }: { setModal: (m: Modal) => void }) {
 								</span>
 								<span
 									className="flex-1 text-sm"
-									style={{ color: row.muted ? "var(--color-taupe)" : "var(--color-taupe)" }}
+									style={{
+										color: row.muted
+											? "var(--color-taupe)"
+											: "var(--color-taupe)",
+									}}
 								>
 									{row.value}
 								</span>
@@ -1556,10 +1636,12 @@ function SecurityPage({ setModal }: { setModal: (m: Modal) => void }) {
 									className="text-sm transition-colors flex-shrink-0"
 									style={{ color: "var(--color-taupe)" }}
 									onMouseEnter={(e) => {
-										e.currentTarget.style.color = "var(--color-cream)";
+										e.currentTarget.style.color =
+											"var(--color-cream)";
 									}}
 									onMouseLeave={(e) => {
-										e.currentTarget.style.color = "var(--color-taupe)";
+										e.currentTarget.style.color =
+											"var(--color-taupe)";
 									}}
 								>
 									{row.action}
@@ -1583,7 +1665,10 @@ function SecurityPage({ setModal }: { setModal: (m: Modal) => void }) {
 						>
 							Two-Step Verification
 						</p>
-						<p className="text-xs" style={{ color: "var(--color-taupe)" }}>
+						<p
+							className="text-xs"
+							style={{ color: "var(--color-taupe)" }}
+						>
 							{twoStep
 								? "Enabled — your account has extra protection."
 								: "Add an extra layer of security to your account."}
@@ -1639,7 +1724,10 @@ function SecurityPage({ setModal }: { setModal: (m: Modal) => void }) {
 						<div key={row.device}>
 							<div className="flex items-center py-3 gap-4">
 								<div className="flex-1">
-									<p className="text-sm" style={{ color: "var(--color-cream)" }}>
+									<p
+										className="text-sm"
+										style={{ color: "var(--color-cream)" }}
+									>
 										{row.device}
 									</p>
 									<p
@@ -1649,7 +1737,10 @@ function SecurityPage({ setModal }: { setModal: (m: Modal) => void }) {
 										{row.location}
 									</p>
 								</div>
-								<span className="text-xs" style={{ color: "var(--color-taupe)" }}>
+								<span
+									className="text-xs"
+									style={{ color: "var(--color-taupe)" }}
+								>
 									{row.time}
 								</span>
 							</div>
@@ -1767,10 +1858,12 @@ function DevicesPage() {
 									className="text-xs flex-shrink-0 transition-colors"
 									style={{ color: "var(--color-taupe)" }}
 									onMouseEnter={(e) => {
-										e.currentTarget.style.color = "var(--color-cream)";
+										e.currentTarget.style.color =
+											"var(--color-cream)";
 									}}
 									onMouseLeave={(e) => {
-										e.currentTarget.style.color = "var(--color-taupe)";
+										e.currentTarget.style.color =
+											"var(--color-taupe)";
 									}}
 								>
 									Sign Out
@@ -1863,10 +1956,12 @@ function ProfilesPage() {
 									className="text-xs transition-colors"
 									style={{ color: "var(--color-taupe)" }}
 									onMouseEnter={(e) => {
-										e.currentTarget.style.color = "var(--color-cream)";
+										e.currentTarget.style.color =
+											"var(--color-cream)";
 									}}
 									onMouseLeave={(e) => {
-										e.currentTarget.style.color = "var(--color-taupe)";
+										e.currentTarget.style.color =
+											"var(--color-taupe)";
 									}}
 								>
 									Edit
@@ -1887,7 +1982,8 @@ function ProfilesPage() {
 								backgroundColor: "transparent",
 							}}
 							onMouseEnter={(e) => {
-								e.currentTarget.style.borderColor = "var(--color-taupe)";
+								e.currentTarget.style.borderColor =
+									"var(--color-taupe)";
 								e.currentTarget.style.color = "var(--color-cream)";
 							}}
 							onMouseLeave={(e) => {
@@ -2156,19 +2252,23 @@ function Sidebar({
 								onClick={() => setActive(item.key)}
 								className="w-full flex items-center gap-2.5 py-3 px-3 rounded transition-colors relative text-left"
 								style={{
-									color: isActive ? "var(--color-cream)" : "var(--color-taupe)",
+									color: isActive
+										? "var(--color-cream)"
+										: "var(--color-taupe)",
 									backgroundColor: isActive
 										? "var(--color-wine)"
 										: "transparent",
 								}}
 								onMouseEnter={(e) => {
 									if (!isActive) {
-										e.currentTarget.style.color = "var(--color-cream)";
+										e.currentTarget.style.color =
+											"var(--color-cream)";
 									}
 								}}
 								onMouseLeave={(e) => {
 									if (!isActive) {
-										e.currentTarget.style.color = "var(--color-taupe)";
+										e.currentTarget.style.color =
+											"var(--color-taupe)";
 									}
 								}}
 								aria-current={isActive ? "page" : undefined}
@@ -2180,7 +2280,9 @@ function Sidebar({
 									/>
 								)}
 								<span
-									style={{ color: isActive ? "var(--color-wine)" : "inherit" }}
+									style={{
+										color: isActive ? "var(--color-wine)" : "inherit",
+									}}
 								>
 									{item.icon}
 								</span>
@@ -2218,7 +2320,10 @@ export function AccountView() {
 				{/* Page Heading */}
 				<h1
 					className="font-display font-black tracking-wider mb-6 md:mb-8"
-					style={{ color: "var(--color-cream)", fontSize: "clamp(32px, 5vw, 48px)" }}
+					style={{
+						color: "var(--color-cream)",
+						fontSize: "clamp(32px, 5vw, 48px)",
+					}}
 				>
 					{sectionTitles[section]}
 				</h1>

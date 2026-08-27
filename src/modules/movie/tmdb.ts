@@ -79,20 +79,33 @@ export interface TMDBEpisode {
 }
 
 export async function fetchTVEpisodes(id: number): Promise<TMDBEpisode[]> {
-	const details = await tmdbOne<{ seasons?: { season_number: number; episode_count: number }[] }>(`/tv/${id}`);
-	const season = details?.seasons?.find((item) => item.season_number > 0 && item.episode_count > 0);
+	const details = await tmdbOne<{
+		seasons?: { season_number: number; episode_count: number }[];
+	}>(`/tv/${id}`);
+	const season = details?.seasons?.find(
+		(item) => item.season_number > 0 && item.episode_count > 0,
+	);
 	if (!season) return [];
 
 	const seasonData = await tmdbOne<{
-		episodes?: { episode_number: number; name?: string; runtime?: number; still_path?: string | null }[];
+		episodes?: {
+			episode_number: number;
+			name?: string;
+			runtime?: number;
+			still_path?: string | null;
+		}[];
 	}>(`/tv/${id}/season/${season.season_number}`);
 
-	return (seasonData?.episodes ?? []).map((episode) => ({
-		ep: episode.episode_number,
-		title: episode.name ?? "",
-		duration: episode.runtime ? `${episode.runtime}m` : "",
-		thumb: episode.still_path ? `${TMDB_IMG}/w300${episode.still_path}` : "",
-	})).filter((episode) => Boolean(episode.title));
+	return (seasonData?.episodes ?? [])
+		.map((episode) => ({
+			ep: episode.episode_number,
+			title: episode.name ?? "",
+			duration: episode.runtime ? `${episode.runtime}m` : "",
+			thumb: episode.still_path
+				? `${TMDB_IMG}/w300${episode.still_path}`
+				: "",
+		}))
+		.filter((episode) => Boolean(episode.title));
 }
 
 // Convert a raw TMDB movie/TV item into our Show shape

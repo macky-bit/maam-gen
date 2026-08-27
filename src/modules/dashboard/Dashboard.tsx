@@ -7,31 +7,38 @@ import NewAndPopular from "./newAndPopular/NewAndPopular";
 import TvShows from "./tvShows/TvShows";
 
 interface Props {
-  onSignOut: () => void;
-  onWatch: (show: Show) => void;
-  onInfo: (show: Show) => void;
-  onNavigate: (page: "account" | "profile" | "help") => void;
+	onSignOut: () => void;
+	onWatch: (show: Show) => void;
+	onInfo: (show: Show) => void;
+	onNavigate: (page: "account" | "profile" | "help") => void;
 }
 
-export default function Dashboard({ onSignOut, onWatch, onInfo, onNavigate }: Props) {
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [view, setView] = useState<DashboardView>("home");
+export default function Dashboard({
+	onSignOut,
+	onWatch,
+	onInfo,
+	onNavigate,
+}: Props) {
+	const [searchOpen, setSearchOpen] = useState(false);
+	const [view, setView] = useState<DashboardView>("home");
 
-  return (
-    <div className="min-h-screen">
-      <Navbar
-        activeView={view}
-        onSignOut={onSignOut}
-        searchOpen={searchOpen}
-        setSearchOpen={setSearchOpen}
-        onNavigatePage={onNavigate}
-        onNavigateView={setView}
-      />
+	return (
+		<div className="min-h-screen">
+			<Navbar
+				activeView={view}
+				onSignOut={onSignOut}
+				searchOpen={searchOpen}
+				setSearchOpen={setSearchOpen}
+				onNavigatePage={onNavigate}
+				onNavigateView={setView}
+			/>
 
-      {view === "home" && <Home onWatch={onWatch} onInfo={onInfo} />}
-      {view === "tvShows" && <TvShows onWatch={onWatch} onInfo={onInfo} />}
-      {view === "movies" && <Movies onWatch={onWatch} onInfo={onInfo} />}
-      {view === "newAndPopular" && <NewAndPopular onWatch={onWatch} onInfo={onInfo} />}
-    </div>
-  );
+			{view === "home" && <Home onWatch={onWatch} onInfo={onInfo} />}
+			{view === "tvShows" && <TvShows onWatch={onWatch} onInfo={onInfo} />}
+			{view === "movies" && <Movies onWatch={onWatch} onInfo={onInfo} />}
+			{view === "newAndPopular" && (
+				<NewAndPopular onWatch={onWatch} onInfo={onInfo} />
+			)}
+		</div>
+	);
 }
