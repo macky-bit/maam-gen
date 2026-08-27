@@ -2,7 +2,7 @@ import { useState } from "react";
 import LoginPage from "./modules/login/LoginPage";
 import RegisterPage from "./modules/register/RegisterPage";
 import Dashboard from "./modules/dashboard/Dashboard";
-import WatchScreen from "./modules/movie/WatchScreen";
+import WatchScreen from "./modules/movie/fixedscreen/movie";
 import PreviewModal from "./modules/movie/PreviewModal";
 import AccountPage from "./modules/account/AccountPage";
 import ProfilePage from "./modules/profile/ProfilePage";

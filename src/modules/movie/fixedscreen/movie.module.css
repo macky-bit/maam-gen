@@ -1,0 +1,76 @@
+.page { min-height: 100vh; background: var(--color-ink); color: var(--color-cream); font-family: var(--font-body); }
+.nav { position: sticky; top: 0; z-index: 50; background: var(--color-ink); border-bottom: 1px solid color-mix(in srgb, var(--color-stone) 35%, transparent); }
+.navInner { position: relative; display: flex; align-items: center; justify-content: space-between; max-width: 72rem; height: 3.5rem; margin: 0 auto; padding: 0 1.5rem; }
+.backButton, .controls button { border: 0; background: none; color: var(--color-taupe); cursor: pointer; }
+.backButton { display: flex; align-items: center; gap: 0.35rem; font-size: 0.875rem; }
+.backButton:hover { color: var(--color-cream); }
+.logo { position: absolute; left: 50%; transform: translateX(-50%); color: var(--color-red); font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; letter-spacing: 0.22em; }
+.navSpacer { width: 3rem; }
+.main { max-width: 72rem; margin: 0 auto; padding: 1rem 1.5rem 5rem; }
+.player { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 0.65rem; background: #000; }
+.hideCursor { cursor: none; }
+.playerImage { display: block; width: 100%; height: 100%; object-fit: cover; }
+.playerFallback { display: grid; place-items: center; width: 100%; height: 100%; font-size: 5rem; background: linear-gradient(145deg, var(--color-wine), var(--color-ink)); }
+.playerGradient { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to top, rgb(10 9 8 / 96%), rgb(10 9 8 / 18%) 42%, transparent 68%); }
+.continueBadge { position: absolute; top: 0.75rem; left: 0.75rem; padding: 0.3rem 0.7rem; border: 1px solid var(--color-wine); border-radius: 999px; background: rgb(73 17 28 / 92%); font-size: 0.75rem; }
+.controls { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; opacity: 0; transition: opacity 180ms ease; }
+.controlsVisible { opacity: 1; }
+.centerControls { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 2rem; pointer-events: none; }
+.centerControls button { display: grid; place-items: center; width: 2.8rem; height: 2.8rem; border: 1px solid rgb(242 244 243 / 30%); border-radius: 50%; background: rgb(0 0 0 / 65%); color: var(--color-cream); font-weight: 700; pointer-events: auto; }
+.centerControls .playButton { width: 4.25rem; height: 4.25rem; border-width: 2px; font-size: 1.4rem; }
+.bottomControls { padding: 0 1rem 1rem; }
+.scrubber { position: relative; height: 0.25rem; margin-bottom: 0.75rem; border-radius: 999px; background: rgb(242 244 243 / 20%); cursor: pointer; }
+.scrubberFill, .scrubberThumb { position: absolute; background: var(--color-red); }
+.scrubberFill { inset: 0 auto 0 0; border-radius: inherit; }
+.scrubberThumb { top: 50%; width: 0.85rem; height: 0.85rem; border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 0.4rem rgb(229 9 20 / 75%); }
+.controlRow, .controlGroup { display: flex; align-items: center; }
+.controlRow { justify-content: space-between; }
+.controlGroup { gap: 0.85rem; color: var(--color-taupe); font-size: 0.8rem; }
+.controlGroup input { width: 4.5rem; accent-color: var(--color-red); }
+.controlGroup button { padding: 0.2rem; color: var(--color-cream); }
+.controlGroup .activeControl { color: var(--color-red); }
+.contentInfo { margin-top: 1.25rem; }
+.contentInfo h1 { margin: 0; font-size: clamp(2rem, 4vw, 2.6rem); line-height: 1; }
+.contentInfo > p { margin: 0.5rem 0 0; color: var(--color-taupe); }
+.metadata { display: flex; align-items: center; gap: 0.7rem; margin-top: 0.75rem; color: var(--color-stone); font-size: 0.875rem; }
+.metadata strong { color: #46d369; }
+.rating { padding: 0.1rem 0.5rem; border: 1px solid var(--color-stone); border-radius: 0.2rem; }
+.savedProgress { margin-top: 1rem; height: 0.2rem; background: color-mix(in srgb, var(--color-stone) 50%, transparent); }
+.savedProgress > span { display: block; height: 100%; background: var(--color-red); }
+.savedProgress p { margin: 0.35rem 0 0; color: var(--color-stone); font-size: 0.75rem; }
+.episodesSection, .reactions, .comments { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid color-mix(in srgb, var(--color-stone) 35%, transparent); }
+.episodesSection h2, .reactions h2, .comments h2 { margin: 0 0 0.9rem; font-size: 1.1rem; }
+.status { color: var(--color-taupe); }
+.episodeList { display: flex; flex-direction: column; gap: 0.5rem; }
+.episodeRow { display: flex; gap: 0.8rem; width: 100%; padding: 0.65rem 0.75rem; border: 1px solid color-mix(in srgb, var(--color-stone) 35%, transparent); border-radius: 0.65rem; background: var(--color-ink-soft); color: var(--color-cream); text-align: left; cursor: pointer; }
+.episodeRow:hover, .episodeSelected { border-color: var(--color-wine); background: rgb(73 17 28 / 18%); }
+.episodeThumb { position: relative; display: grid; place-items: center; width: 7.5rem; aspect-ratio: 16 / 9; overflow: hidden; flex: 0 0 auto; border-radius: 0.4rem; background: var(--color-wine); }
+.episodeThumb img { width: 100%; height: 100%; object-fit: cover; }
+.episodeThumb > span { font-size: 1.6rem; font-weight: 800; opacity: 0.35; }
+.episodeThumb em { position: absolute; inset: 0; display: grid; place-items: center; background: rgb(73 17 28 / 60%); font-size: 0.7rem; font-style: normal; font-weight: 800; }
+.episodeThumb i { position: absolute; left: 0; bottom: 0; height: 0.2rem; background: var(--color-red); }
+.episodeInfo { min-width: 0; padding-top: 0.15rem; }
+.episodeInfo > div { display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
+.episodeInfo small { padding: 0.15rem 0.5rem; border-radius: 999px; background: var(--color-wine); }
+.episodeInfo p { margin: 0.4rem 0 0; color: var(--color-stone); font-size: 0.8rem; }
+.reactions { text-align: center; }
+.reactions > p { color: var(--color-taupe); font-size: 0.85rem; }
+.reactions > div { display: flex; justify-content: center; gap: clamp(1rem, 4vw, 2rem); flex-wrap: wrap; margin-top: 1.4rem; }
+.reactions button { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; padding: 0; border: 0; background: none; color: var(--color-cream); cursor: pointer; transition: transform 150ms ease; }
+.reactions button:hover, .selectedReaction { transform: scale(1.12); }
+.reactions button > span { font-size: 2rem; }
+.reactions button small { color: var(--color-taupe); }
+.commentComposer { padding: 1rem; border: 1px solid color-mix(in srgb, var(--color-stone) 35%, transparent); border-radius: 0.55rem; background: var(--color-ink-soft); }
+.commentComposer textarea { width: 100%; resize: vertical; border: 0; outline: 0; background: transparent; color: var(--color-cream); font: inherit; }
+.commentComposer button { display: block; margin: 0.75rem 0 0 auto; padding: 0.5rem 0.9rem; border: 0; border-radius: 0.3rem; background: var(--color-wine); color: var(--color-cream); cursor: pointer; }
+.emptyComments { padding: 2.5rem 1rem; color: var(--color-taupe); text-align: center; }
+.emptyComments p { margin: 0.35rem 0 0; color: var(--color-stone); }
+@media (max-width: 640px) {
+	.main, .navInner { padding-left: 1rem; padding-right: 1rem; }
+	.controlGroup input { display: none; }
+	.centerControls { gap: 1rem; }
+	.centerControls button { width: 2.4rem; height: 2.4rem; }
+	.centerControls .playButton { width: 3.5rem; height: 3.5rem; }
+	.episodeThumb { width: 6rem; }
+	.logo { font-size: 1rem; }
+}

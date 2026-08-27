@@ -5,16 +5,24 @@
 	font-family: var(--font-body);
 }
 
+.backRow {
+	max-width: 80rem;
+	margin: 0 auto;
+	padding: 1rem 2rem 0;
+}
+
 .backButton {
-	background: var(--color-wine);
-	border-color: var(--color-stone);
+	padding: 0.625rem 0;
+	background: transparent;
+	border: 0;
 	color: var(--color-cream);
 	font-family: var(--font-body);
-	border-radius: 0.5rem;
+	font-size: 0.875rem;
+	cursor: pointer;
 }
 
 .backButton:hover {
-	background: var(--color-wine-hover);
+	color: var(--color-taupe);
 }
 
 .subscriptionOverlay {

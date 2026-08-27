@@ -1,0 +1,189 @@
+Improve the existing StreamFlix movie and series watch page shown in the reference images. Keep the current visual identity, layout style, and all existing features. Apply only the changes listed below.
+
+IMPORTANT:
+- Do not redesign the entire website.
+- Do not remove, replace, or modify any existing feature.
+- Do not change the current color palette.
+- Preserve the dark cinematic appearance, typography, spacing style, button style, borders, and overall StreamFlix branding.
+- Use the attached screenshots as the main visual reference.
+- Keep the interface clean and consistent with the current design.
+
+COLOR PALETTE — KEEP EXACTLY AS IS:
+- Ink Black: #0A0908
+- Deep Wine: #49111C
+- Off-White: #F2F4F3
+- Warm Taupe: #A9927D
+- Dark Stone Brown: #5E503F
+- StreamFlix logo red: #E50914
+
+WATCH PAGE LAYOUT:
+Create one consistent watch-page layout that works for both movies and TV series.
+
+The video player must have the same width, height, aspect ratio, border radius, margins, and positioning whether the selected content is:
+- A movie
+- A TV series
+- A specific episode of a series
+
+Use a consistent 16:9 video player. Do not make the movie player larger than the series player. Switching between a movie and an episode must not cause the page layout or video player size to shift.
+
+Keep the existing top navigation:
+- Back button on the upper-left
+- Centered StreamFlix logo
+- Dark navigation background with the existing subtle border
+
+VIDEO PLAYER:
+Preserve all current player controls and features:
+- Large center play button
+- Play and pause
+- Skip backward 10 seconds
+- Skip forward 10 seconds
+- Progress scrubber
+- Current time and total duration
+- Volume
+- Closed captions
+- Settings
+- Fullscreen
+
+The controls should remain readable without covering too much of the video. Keep the existing dark bottom gradient overlay.
+
+MOVIE AND SERIES INFORMATION:
+Below the player, retain:
+- Movie or series title
+- Match percentage
+- Release year
+- Age rating
+- Subscribe or Following button
+
+For TV series, also clearly display:
+- Season number
+- Episode number
+- Episode title
+- Episode duration
+
+WATCH PROGRESS:
+Add visible and persistent watch progress for both movies and individual TV episodes.
+
+For movies:
+- Show how much of the movie has already been watched.
+- Preserve the progress when the user leaves and returns.
+- Display a small “Continue Watching” or watched-time indicator when appropriate.
+
+For TV series:
+- Track progress separately for every episode.
+- Each episode card must have its own thin progress bar at the bottom of the thumbnail.
+- Clearly distinguish unwatched, partially watched, and completed episodes.
+- Add a subtle checkmark or “Watched” label to completed episodes.
+- The currently playing episode must remain highlighted using the existing wine-colored accent.
+- Selecting a different episode updates the video and its stored progress without changing the video player’s size.
+
+EPISODE PANEL:
+Keep the existing episode list for TV series.
+
+Each episode row should contain:
+- Episode number
+- Thumbnail
+- Episode title
+- Duration
+- Watch-progress bar
+- “Now Playing” indicator when selected
+- “Watched” indicator when completed
+
+Keep the episode panel visually consistent with the existing dark design. Do not display the episode panel for movies. When the episode panel is absent, the movie player should still use the same video-player dimensions as the series version.
+
+NEW MUSIC BUTTON:
+Add a “Music” button below the movie or episode information, near the other content-related actions.
+
+Use a small music-note icon and the label “Music.”
+
+When selected, open a panel, modal, or expandable section that displays songs used in that specific movie or episode.
+
+Each song entry should show:
+- Song title
+- Artist
+- Album cover or small artwork
+- Scene or approximate timestamp where the song appears, when available
+- A small play-preview button
+- An optional “View Soundtrack” action
+
+For a TV series, the music list must change depending on the selected episode. Do not show the soundtrack for the whole series when the user is viewing one specific episode.
+
+Style the Music panel using only the existing StreamFlix colors. It should feel like a natural part of the current interface and not like a separate music application.
+
+NEW MOVIE REFRESHER BUTTON:
+Add a second action button labeled “Movie Refresher” beside the Music button.
+
+For TV series, the label may change to “Episode Refresher.”
+
+When selected, open a clean refresher panel containing a concise recap of the selected movie or episode.
+
+The refresher should include:
+- Short story summary
+- Important events
+- Important characters involved
+- Key details the viewer should remember
+- Optional spoiler warning before revealing major plot information
+
+For episodes, show only the refresher for the selected episode. Clearly label it with the season and episode number.
+
+The Music and Movie Refresher buttons should:
+- Match each other in size and style
+- Use the existing wine, cream, taupe, and stone colors
+- Include simple recognizable icons
+- Have clear selected, hover, and pressed states
+- Fit neatly below the content information without making the layout crowded
+
+REACTIONS SECTION:
+Keep the current reactions section as it is.
+
+Preserve:
+- “What did you think of this movie?” heading
+- Total reaction count
+- Upvote
+- Funny
+- Love
+- Surprised
+- Angry
+- Sad
+- Individual reaction counts
+- Current spacing, alignment, and visual styling
+
+For TV episodes, change only the wording to:
+“What did you think of this episode?”
+
+Do not redesign or remove any reactions.
+
+COMMENTS SECTION:
+Keep and complete the comment section below the reactions.
+
+Include:
+- Total comment count
+- Best, Newest, and Oldest sorting options
+- Comment input area
+- Basic formatting controls
+- Submit or sign-up-to-comment button
+- Comment rules notice
+- Read Rules button
+- User avatar
+- Username
+- Time posted
+- Comment text
+- Reaction or like counts
+- Reply action
+- Nested replies
+
+Users should be able to comment specifically on the selected movie or individual episode. When the selected episode changes, its comments and reaction counts should update accordingly.
+
+Use the same dark cards, thin warm-brown borders, off-white text, taupe secondary text, and deep-wine buttons seen in the reference.
+
+CONSISTENCY:
+Use a consistent content width throughout the watch page. Align the following sections to the same left and right boundaries:
+- Video player
+- Movie or episode information
+- Music and Refresher actions
+- Reactions
+- Comments
+
+Maintain generous but controlled spacing. Do not leave unusually large empty spaces between sections.
+
+FINAL DESIGN GOAL:
+The result should look like an improved version of the existing StreamFlix output—not a new or unrelated design. Movies and TV episodes must share a consistent player size and page structure, while series retain their episode selection panel and per-episode watch progress. Preserve all current features and add only the requested Music, Movie/Episode Refresher, watch-progress, and comment functionality.
