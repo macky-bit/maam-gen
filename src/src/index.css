@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* ─── Shared design tokens ───────────────────────────────────────────────
+   Used across every module's CSS (auth, dashboard, movie). Keeping the
+   palette here means each module's stylesheet only has to reference a
+   variable name instead of repeating hex values. */
+:root {
+  --color-ink: #0A0908;        /* app background */
+  --color-ink-soft: #0f0d0c;   /* inputs, cards, panels */
+  --color-cream: #F2F4F3;      /* primary text / light surfaces */
+  --color-taupe: #A9927D;      /* secondary / muted text */
+  --color-stone: #5E503F;      /* tertiary text, borders, dividers */
+  --color-wine: #49111C;       /* brand accent, CTAs */
+  --color-wine-hover: #6b1927;
+  --color-red: #e50914;        /* logo red / error state */
+}
