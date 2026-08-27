@@ -11,7 +11,7 @@ import styles from "../auth/auth.module.css";
 export default function LoginPage({
 	onNavigate,
 }: {
-	onNavigate: (p: "register" | "dashboard") => void;
+	onNavigate: (p: "register" | "subscription") => void;
 }) {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -29,7 +29,7 @@ export default function LoginPage({
 	const handleSubmit = (ev: React.FormEvent) => {
 		ev.preventDefault();
 		// No backend yet — any valid-looking credentials sign the user in.
-		if (validate()) onNavigate("dashboard");
+		if (validate()) onNavigate("subscription");
 	};
 
 	return (

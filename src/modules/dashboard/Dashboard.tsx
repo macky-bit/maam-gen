@@ -5,6 +5,7 @@ import Home from "./home/Home";
 import Movies from "./movies/Movies";
 import NewAndPopular from "./newAndPopular/NewAndPopular";
 import TvShows from "./tvShows/TvShows";
+import MyList from "./myList/MyList";
 
 interface Props {
 	onSignOut: () => void;
@@ -39,6 +40,7 @@ export default function Dashboard({
 			{view === "newAndPopular" && (
 				<NewAndPopular onWatch={onWatch} onInfo={onInfo} />
 			)}
+			{view === "myList" && <MyList onBrowse={() => setView("home")} />}
 		</div>
 	);
 }

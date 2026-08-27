@@ -16,3 +16,11 @@
 .backButton:hover {
 	background: var(--color-wine-hover);
 }
+
+.subscriptionOverlay {
+	position: fixed;
+	inset: 0;
+	z-index: 100;
+	overflow-y: auto;
+	background: var(--color-ink);
+}

@@ -1,0 +1,33 @@
+.page {
+  min-height: 100vh;
+  background: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-body);
+}
+.main { padding-top: 72px; }
+.display { font-family: var(--font-display); }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
+
+.cardGrid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 1200px) { .cardGrid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .cardGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .cardGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 380px) { .cardGrid { grid-template-columns: 1fr; } }
+
+@keyframes shimmer { from { background-position: -400px 0; } to { background-position: 400px 0; } }
+.skeleton {
+  background: linear-gradient(90deg, var(--color-ink-soft) 25%, var(--color-stone) 50%, var(--color-ink-soft) 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite;
+}
+.cardWrap { position: relative; z-index: 1; transition: transform 0.2s ease; }
+.cardWrap:hover, .cardWrap:focus-within { transform: scale(1.05); z-index: 10; }
+
+@keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.toast { animation: slideUp 0.25s ease forwards; }
+.dropdown {
+  background: var(--color-ink);
+  border: 1px solid var(--color-stone);
+  border-radius: 4px;
+  box-shadow: 0 8px 32px color-mix(in srgb, var(--color-ink) 70%, transparent);
+}

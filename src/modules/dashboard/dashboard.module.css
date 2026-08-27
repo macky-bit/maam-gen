@@ -167,6 +167,9 @@
 }
 
 .iconBtn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	color: var(--color-taupe);
 }
 
@@ -274,6 +277,10 @@
 	color: var(--color-ink);
 	font-family: var(--font-display);
 	letter-spacing: 0.05em;
+}
+
+.heroPlayBtn:hover {
+	background: var(--color-taupe);
 }
 
 .heroInfoBtn {

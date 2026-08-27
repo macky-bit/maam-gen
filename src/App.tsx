@@ -7,6 +7,7 @@ import PreviewModal from "./modules/movie/PreviewModal";
 import AccountPage from "./modules/account/AccountPage";
 import ProfilePage from "./modules/profile/ProfilePage";
 import HelpPage from "./modules/help/HelpPage";
+import SubscriptionPage from "./modules/subscription/SubscriptionPage";
 import type { Show } from "./modules/movie/types";
 
 type Page =
@@ -16,7 +17,8 @@ type Page =
 	| "watch"
 	| "account"
 	| "profile"
-	| "help";
+	| "help"
+	| "subscription";
 
 export default function App() {
 	const [page, setPage] = useState<Page>("login");
@@ -86,6 +88,15 @@ export default function App() {
 			<HelpPage
 				onBack={() => setPage("dashboard")}
 				onNavigate={(destination) => setPage(destination)}
+			/>
+		);
+	}
+
+	if (page === "subscription") {
+		return (
+			<SubscriptionPage
+				onComplete={() => setPage("dashboard")}
+				onBack={() => setPage("login")}
 			/>
 		);
 	}

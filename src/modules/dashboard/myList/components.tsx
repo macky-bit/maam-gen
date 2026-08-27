@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import heroPhoto from "@/imports/acf838e0-28da-49c6-ac20-b96d4edf6a6e.jpg";
+import styles from "./myList.module.css";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -33,7 +33,7 @@ const INITIAL_TITLES: Title[] = [
 		rating: "PG-13",
 		runtime: "2h 14m",
 		addedAt: 8,
-		gradient: "linear-gradient(135deg,#1a3a5c 0%,#0d1f33 60%,#0A0908 100%)",
+		gradient: "linear-gradient(135deg,var(--color-ink-soft) 0%,var(--color-ink-soft) 60%,var(--color-ink) 100%)",
 	},
 	{
 		id: 2,
@@ -43,7 +43,7 @@ const INITIAL_TITLES: Title[] = [
 		rating: "TV-MA",
 		runtime: "S2 · 10 ep",
 		addedAt: 7,
-		gradient: "linear-gradient(135deg,#2d1b3d 0%,#160d20 60%,#0A0908 100%)",
+		gradient: "linear-gradient(135deg,var(--color-ink-soft) 0%,var(--color-ink-soft) 60%,var(--color-ink) 100%)",
 	},
 	{
 		id: 3,
@@ -53,7 +53,7 @@ const INITIAL_TITLES: Title[] = [
 		rating: "TV-14",
 		runtime: "S1 · 8 ep",
 		addedAt: 6,
-		gradient: "linear-gradient(135deg,#1a2e1a 0%,#0d180d 60%,#0A0908 100%)",
+		gradient: "linear-gradient(135deg,var(--color-ink-soft) 0%,var(--color-ink-soft) 60%,var(--color-ink) 100%)",
 	},
 	{
 		id: 4,
@@ -63,7 +63,7 @@ const INITIAL_TITLES: Title[] = [
 		rating: "PG-13",
 		runtime: "1h 58m",
 		addedAt: 5,
-		gradient: "linear-gradient(135deg,#3d1515 0%,#220c0c 60%,#0A0908 100%)",
+		gradient: "linear-gradient(135deg,var(--color-ink-soft) 0%,var(--color-ink-soft) 60%,var(--color-ink) 100%)",
 	},
 	{
 		id: 5,
@@ -73,7 +73,7 @@ const INITIAL_TITLES: Title[] = [
 		rating: "TV-14",
 		runtime: "S3 · 6 ep",
 		addedAt: 4,
-		gradient: "linear-gradient(135deg,#1a2d3a 0%,#0d1820 60%,#0A0908 100%)",
+		gradient: "linear-gradient(135deg,var(--color-ink-soft) 0%,var(--color-ink-soft) 60%,var(--color-ink) 100%)",
 	},
 	{
 		id: 6,
@@ -83,7 +83,7 @@ const INITIAL_TITLES: Title[] = [
 		rating: "PG",
 		runtime: "1h 45m",
 		addedAt: 3,
-		gradient: "linear-gradient(135deg,#2a2a1a 0%,#17170d 60%,#0A0908 100%)",
+		gradient: "linear-gradient(135deg,var(--color-ink-soft) 0%,var(--color-ink-soft) 60%,var(--color-ink) 100%)",
 	},
 	{
 		id: 7,
@@ -93,7 +93,7 @@ const INITIAL_TITLES: Title[] = [
 		rating: "TV-PG",
 		runtime: "S2 · 12 ep",
 		addedAt: 2,
-		gradient: "linear-gradient(135deg,#1e2d1a 0%,#111a0d 60%,#0A0908 100%)",
+		gradient: "linear-gradient(135deg,var(--color-ink-soft) 0%,var(--color-ink-soft) 60%,var(--color-ink) 100%)",
 	},
 	{
 		id: 8,
@@ -103,7 +103,7 @@ const INITIAL_TITLES: Title[] = [
 		rating: "PG-13",
 		runtime: "2h 02m",
 		addedAt: 1,
-		gradient: "linear-gradient(135deg,#1a1e2d 0%,#0d1120 60%,#0A0908 100%)",
+		gradient: "linear-gradient(135deg,var(--color-ink-soft) 0%,var(--color-ink-soft) 60%,var(--color-ink) 100%)",
 	},
 ];
 
@@ -224,295 +224,6 @@ const XIcon = () => (
 	</svg>
 );
 
-// ── Navbar ───────────────────────────────────────────────────────────────────
-
-function Navbar({
-	activePage,
-	onNavigate,
-}: {
-	activePage: string;
-	onNavigate: (page: string) => void;
-}) {
-	const [searchOpen, setSearchOpen] = useState(false);
-	const [searchQuery, setSearchQuery] = useState("");
-	const [notifOpen, setNotifOpen] = useState(false);
-	const [profileOpen, setProfileOpen] = useState(false);
-	const searchRef = useRef<HTMLDivElement>(null);
-	const notifRef = useRef<HTMLDivElement>(null);
-	const profileRef = useRef<HTMLDivElement>(null);
-	const searchInputRef = useRef<HTMLInputElement>(null);
-
-	const navLinks = ["Home", "TV Shows", "Movies", "New & Popular", "My List"];
-
-	useEffect(() => {
-		function handleClick(e: MouseEvent) {
-			if (searchRef.current && !searchRef.current.contains(e.target as Node))
-				setSearchOpen(false);
-			if (notifRef.current && !notifRef.current.contains(e.target as Node))
-				setNotifOpen(false);
-			if (
-				profileRef.current &&
-				!profileRef.current.contains(e.target as Node)
-			)
-				setProfileOpen(false);
-		}
-		function handleKey(e: KeyboardEvent) {
-			if (e.key === "Escape") {
-				setSearchOpen(false);
-				setNotifOpen(false);
-				setProfileOpen(false);
-			}
-		}
-		document.addEventListener("mousedown", handleClick);
-		document.addEventListener("keydown", handleKey);
-		return () => {
-			document.removeEventListener("mousedown", handleClick);
-			document.removeEventListener("keydown", handleKey);
-		};
-	}, []);
-
-	useEffect(() => {
-		if (searchOpen) searchInputRef.current?.focus();
-	}, [searchOpen]);
-
-	return (
-		<nav
-			style={{
-				background: "#0A0908",
-				borderBottom: "1px solid rgba(94,80,63,0.3)",
-				height: 72,
-			}}
-			className="fixed top-0 left-0 right-0 z-50 flex items-center px-8 gap-8"
-		>
-			{/* Wordmark */}
-			<span className="sf-wordmark select-none mr-2">StreamFlix</span>
-
-			{/* Nav links */}
-			<div className="hidden md:flex items-center gap-1">
-				{navLinks.map((link) => {
-					const active = link === activePage;
-					return (
-						<button
-							key={link}
-							onClick={() => onNavigate(link)}
-							style={{
-								color: active ? "#F2F4F3" : "#A9927D",
-								fontWeight: active ? 600 : 400,
-								borderTop: "none",
-								borderLeft: "none",
-								borderRight: "none",
-								borderBottom: active
-									? "2px solid #49111C"
-									: "2px solid transparent",
-								background: "none",
-								cursor: "pointer",
-								fontSize: "0.85rem",
-								letterSpacing: "0.01em",
-								paddingTop: 6,
-								paddingLeft: 10,
-								paddingRight: 10,
-								paddingBottom: active ? 4 : 6,
-								transition: "color 0.15s",
-							}}
-							className="hover:text-[#F2F4F3] transition-colors"
-							aria-current={active ? "page" : undefined}
-						>
-							{link}
-						</button>
-					);
-				})}
-			</div>
-
-			{/* Spacer */}
-			<div className="flex-1" />
-
-			{/* Right controls */}
-			<div className="flex items-center gap-4">
-				{/* Search */}
-				<div ref={searchRef} className="relative">
-					<button
-						onClick={() => setSearchOpen((v) => !v)}
-						style={{
-							color: "#A9927D",
-							background: "none",
-							border: "none",
-							cursor: "pointer",
-							padding: 4,
-							display: "flex",
-						}}
-						className="hover:text-[#F2F4F3] transition-colors"
-						aria-label="Search"
-					>
-						<SearchIcon />
-					</button>
-					{searchOpen && (
-						<div
-							className="sf-dropdown absolute right-0 top-10 p-3 z-50"
-							style={{ width: 280 }}
-						>
-							<input
-								ref={searchInputRef}
-								type="text"
-								value={searchQuery}
-								onChange={(e) => setSearchQuery(e.target.value)}
-								placeholder="Search titles…"
-								style={{
-									background: "#1a1816",
-									border: "1px solid #5E503F",
-									borderRadius: 3,
-									color: "#F2F4F3",
-									padding: "8px 12px",
-									width: "100%",
-									fontSize: "0.875rem",
-									outline: "none",
-								}}
-								aria-label="Search StreamFlix"
-							/>
-							{searchQuery && (
-								<p
-									style={{
-										color: "#A9927D",
-										fontSize: "0.78rem",
-										marginTop: 8,
-									}}
-								>
-									Searching for "{searchQuery}"…
-								</p>
-							)}
-						</div>
-					)}
-				</div>
-
-				{/* Notifications */}
-				<div ref={notifRef} className="relative">
-					<button
-						onClick={() => setNotifOpen((v) => !v)}
-						style={{
-							color: "#A9927D",
-							background: "none",
-							border: "none",
-							cursor: "pointer",
-							padding: 4,
-							display: "flex",
-						}}
-						className="hover:text-[#F2F4F3] transition-colors"
-						aria-label="Notifications"
-					>
-						<BellIcon />
-					</button>
-					{notifOpen && (
-						<div
-							className="sf-dropdown absolute right-0 top-10 z-50"
-							style={{ width: 300 }}
-						>
-							<div
-								style={{
-									padding: "12px 16px",
-									borderBottom: "1px solid #5E503F",
-								}}
-							>
-								<p
-									style={{
-										color: "#F2F4F3",
-										fontWeight: 600,
-										fontSize: "0.875rem",
-									}}
-								>
-									Notifications
-								</p>
-							</div>
-							<div style={{ padding: "12px 16px" }}>
-								<p style={{ color: "#A9927D", fontSize: "0.82rem" }}>
-									No new notifications.
-								</p>
-							</div>
-						</div>
-					)}
-				</div>
-
-				{/* Profile */}
-				<div ref={profileRef} className="relative">
-					<button
-						onClick={() => setProfileOpen((v) => !v)}
-						style={{
-							display: "flex",
-							alignItems: "center",
-							gap: 6,
-							background: "none",
-							border: "none",
-							cursor: "pointer",
-							padding: 0,
-						}}
-						aria-label="Profile menu"
-						aria-expanded={profileOpen}
-					>
-						<span
-							style={{
-								width: 32,
-								height: 32,
-								background: "#49111C",
-								color: "#F2F4F3",
-								borderRadius: 4,
-								display: "flex",
-								alignItems: "center",
-								justifyContent: "center",
-								fontSize: "0.75rem",
-								fontWeight: 700,
-								fontFamily: "'Barlow Condensed', sans-serif",
-								letterSpacing: "0.05em",
-							}}
-						>
-							KC
-						</span>
-						<span style={{ color: "#A9927D" }}>
-							<ChevronDown />
-						</span>
-					</button>
-					{profileOpen && (
-						<div
-							className="sf-dropdown absolute right-0 top-12 z-50"
-							style={{ width: 180 }}
-						>
-							{[
-								"Profile",
-								"Account",
-								"Manage Profiles",
-								"Help Center",
-								"Sign Out",
-							].map((item) => (
-								<button
-									key={item}
-									onClick={() => setProfileOpen(false)}
-									style={{
-										display: "block",
-										width: "100%",
-										textAlign: "left",
-										padding: "10px 16px",
-										background: "none",
-										borderTop: "none",
-										borderLeft: "none",
-										borderRight: "none",
-										borderBottom:
-											item !== "Sign Out"
-												? "1px solid rgba(94,80,63,0.3)"
-												: "none",
-										color: "#F2F4F3",
-										fontSize: "0.85rem",
-										cursor: "pointer",
-									}}
-									className="hover:bg-[#1a1816] transition-colors"
-								>
-									{item}
-								</button>
-							))}
-						</div>
-					)}
-				</div>
-			</div>
-		</nav>
-	);
-}
-
 // ── Content Card ─────────────────────────────────────────────────────────────
 
 function ContentCard({
@@ -532,7 +243,7 @@ function ContentCard({
 
 	return (
 		<div
-			className="sf-card-wrap"
+			className={styles.cardWrap}
 			onMouseEnter={() => setHovered(true)}
 			onMouseLeave={() => setHovered(false)}
 			onFocus={() => setFocused(true)}
@@ -547,7 +258,7 @@ function ContentCard({
 					aspectRatio: "16/9",
 					background: item.gradient,
 					borderRadius: 4,
-					border: show ? "2px solid #49111C" : "2px solid transparent",
+					border: show ? "2px solid var(--color-wine)" : "2px solid transparent",
 					overflow: "hidden",
 					position: "relative",
 					transition: "border-color 0.2s",
@@ -566,9 +277,9 @@ function ContentCard({
 					}}
 				>
 					<span
-						className="sf-display"
+						className={styles.display}
 						style={{
-							color: "#F2F4F3",
+							color: "var(--color-cream)",
 							fontSize: "clamp(0.7rem, 1.1vw, 1rem)",
 							fontWeight: 700,
 							letterSpacing: "0.04em",
@@ -593,7 +304,7 @@ function ContentCard({
 						style={{
 							width: 22,
 							height: 22,
-							background: "#49111C",
+							background: "var(--color-wine)",
 							borderRadius: "50%",
 							display: "flex",
 							alignItems: "center",
@@ -632,9 +343,9 @@ function ContentCard({
 										width: 38,
 										height: 38,
 										borderRadius: "50%",
-										background: "#49111C",
+										background: "var(--color-wine)",
 										border: "none",
-										color: "#F2F4F3",
+										color: "var(--color-cream)",
 										cursor: "pointer",
 										display: "flex",
 										alignItems: "center",
@@ -657,13 +368,13 @@ function ContentCard({
 										borderRadius: "50%",
 										background: "none",
 										border: "2px solid rgba(242,244,243,0.7)",
-										color: "#F2F4F3",
+										color: "var(--color-cream)",
 										cursor: "pointer",
 										display: "flex",
 										alignItems: "center",
 										justifyContent: "center",
 									}}
-									className="hover:border-[#F2F4F3] hover:bg-white/10 transition-all"
+									className="hover:border-[var(--color-cream)] hover:bg-white/10 transition-all"
 								>
 									<InfoIcon />
 								</button>
@@ -680,13 +391,13 @@ function ContentCard({
 										borderRadius: "50%",
 										background: "none",
 										border: "2px solid rgba(242,244,243,0.5)",
-										color: "#A9927D",
+										color: "var(--color-taupe)",
 										cursor: "pointer",
 										display: "flex",
 										alignItems: "center",
 										justifyContent: "center",
 									}}
-									className="hover:border-[#A9927D] hover:bg-white/10 transition-all"
+									className="hover:border-[var(--color-taupe)] hover:bg-white/10 transition-all"
 								>
 									<XIcon />
 								</button>
@@ -700,7 +411,7 @@ function ContentCard({
 			<div style={{ padding: "8px 2px 4px" }}>
 				<p
 					style={{
-						color: "#F2F4F3",
+						color: "var(--color-cream)",
 						fontWeight: 600,
 						fontSize: "0.82rem",
 						marginBottom: 3,
@@ -713,7 +424,7 @@ function ContentCard({
 				</p>
 				<p
 					style={{
-						color: "#A9927D",
+						color: "var(--color-taupe)",
 						fontSize: "0.75rem",
 						display: "flex",
 						gap: 6,
@@ -721,10 +432,10 @@ function ContentCard({
 					}}
 				>
 					<span>{item.year}</span>
-					<span style={{ color: "#5E503F" }}>·</span>
+					<span style={{ color: "var(--color-stone)" }}>·</span>
 					<span
 						style={{
-							border: "1px solid #5E503F",
+							border: "1px solid var(--color-stone)",
 							borderRadius: 2,
 							padding: "0 3px",
 							fontSize: "0.68rem",
@@ -735,7 +446,7 @@ function ContentCard({
 					</span>
 					{item.runtime && (
 						<>
-							<span style={{ color: "#5E503F" }}>·</span>
+							<span style={{ color: "var(--color-stone)" }}>·</span>
 							<span>{item.runtime}</span>
 						</>
 					)}
@@ -769,9 +480,9 @@ function Tooltip({
 						bottom: "calc(100% + 6px)",
 						left: "50%",
 						transform: "translateX(-50%)",
-						background: "#1a1816",
-						border: "1px solid #5E503F",
-						color: "#F2F4F3",
+						background: "var(--color-ink-soft)",
+						border: "1px solid var(--color-stone)",
+						color: "var(--color-cream)",
 						fontSize: "0.72rem",
 						padding: "3px 8px",
 						borderRadius: 3,
@@ -793,12 +504,12 @@ function SkeletonCard() {
 	return (
 		<div>
 			<div
-				className="sf-skeleton"
+				className={styles.skeleton}
 				style={{ aspectRatio: "16/9", borderRadius: 4 }}
 			/>
 			<div style={{ padding: "8px 2px" }}>
 				<div
-					className="sf-skeleton"
+					className={styles.skeleton}
 					style={{
 						height: 12,
 						borderRadius: 2,
@@ -807,7 +518,7 @@ function SkeletonCard() {
 					}}
 				/>
 				<div
-					className="sf-skeleton"
+					className={styles.skeleton}
 					style={{ height: 10, borderRadius: 2, width: "50%" }}
 				/>
 			</div>
@@ -852,8 +563,8 @@ function PreviewModal({ item, onClose }: { item: Title; onClose: () => void }) {
 				ref={modalRef}
 				tabIndex={-1}
 				style={{
-					background: "#111",
-					border: "1px solid #5E503F",
+					background: "var(--color-ink-soft)",
+					border: "1px solid var(--color-stone)",
 					borderRadius: 6,
 					width: "100%",
 					maxWidth: 680,
@@ -874,7 +585,7 @@ function PreviewModal({ item, onClose }: { item: Title; onClose: () => void }) {
 							position: "absolute",
 							inset: 0,
 							background:
-								"linear-gradient(to top, #111 0%, transparent 60%)",
+								"linear-gradient(to top, var(--color-ink-soft) 0%, transparent 60%)",
 						}}
 					/>
 					<button
@@ -887,9 +598,9 @@ function PreviewModal({ item, onClose }: { item: Title; onClose: () => void }) {
 							width: 32,
 							height: 32,
 							background: "rgba(10,9,8,0.7)",
-							border: "1px solid #5E503F",
+							border: "1px solid var(--color-stone)",
 							borderRadius: "50%",
-							color: "#F2F4F3",
+							color: "var(--color-cream)",
 							cursor: "pointer",
 							display: "flex",
 							alignItems: "center",
@@ -900,9 +611,9 @@ function PreviewModal({ item, onClose }: { item: Title; onClose: () => void }) {
 					</button>
 					<div style={{ position: "absolute", bottom: 24, left: 24 }}>
 						<h2
-							className="sf-display"
+							className={styles.display}
 							style={{
-								color: "#F2F4F3",
+								color: "var(--color-cream)",
 								fontSize: "2rem",
 								fontWeight: 800,
 								letterSpacing: "0.04em",
@@ -925,15 +636,15 @@ function PreviewModal({ item, onClose }: { item: Title; onClose: () => void }) {
 							flexWrap: "wrap",
 						}}
 					>
-						<span style={{ color: "#A9927D", fontSize: "0.85rem" }}>
+						<span style={{ color: "var(--color-taupe)", fontSize: "0.85rem" }}>
 							{item.year}
 						</span>
-						<span style={{ color: "#5E503F" }}>·</span>
+						<span style={{ color: "var(--color-stone)" }}>·</span>
 						<span
 							style={{
-								color: "#A9927D",
+								color: "var(--color-taupe)",
 								fontSize: "0.85rem",
-								border: "1px solid #5E503F",
+								border: "1px solid var(--color-stone)",
 								borderRadius: 2,
 								padding: "0 6px",
 							}}
@@ -942,21 +653,21 @@ function PreviewModal({ item, onClose }: { item: Title; onClose: () => void }) {
 						</span>
 						{item.runtime && (
 							<>
-								<span style={{ color: "#5E503F" }}>·</span>
-								<span style={{ color: "#A9927D", fontSize: "0.85rem" }}>
+								<span style={{ color: "var(--color-stone)" }}>·</span>
+								<span style={{ color: "var(--color-taupe)", fontSize: "0.85rem" }}>
 									{item.runtime}
 								</span>
 							</>
 						)}
-						<span style={{ color: "#5E503F" }}>·</span>
-						<span style={{ color: "#A9927D", fontSize: "0.85rem" }}>
+						<span style={{ color: "var(--color-stone)" }}>·</span>
+						<span style={{ color: "var(--color-taupe)", fontSize: "0.85rem" }}>
 							{item.type}
 						</span>
 					</div>
 
 					<p
 						style={{
-							color: "#A9927D",
+							color: "var(--color-taupe)",
 							fontSize: "0.875rem",
 							lineHeight: 1.6,
 							marginBottom: 20,
@@ -970,8 +681,8 @@ function PreviewModal({ item, onClose }: { item: Title; onClose: () => void }) {
 					<div style={{ display: "flex", gap: 10 }}>
 						<button
 							style={{
-								background: "#49111C",
-								color: "#F2F4F3",
+								background: "var(--color-wine)",
+								color: "var(--color-cream)",
 								border: "none",
 								borderRadius: 4,
 								padding: "10px 22px",
@@ -990,15 +701,15 @@ function PreviewModal({ item, onClose }: { item: Title; onClose: () => void }) {
 							onClick={onClose}
 							style={{
 								background: "none",
-								color: "#F2F4F3",
-								border: "1px solid #5E503F",
+								color: "var(--color-cream)",
+								border: "1px solid var(--color-stone)",
 								borderRadius: 4,
 								padding: "10px 22px",
 								fontSize: "0.875rem",
 								fontWeight: 500,
 								cursor: "pointer",
 							}}
-							className="hover:border-[#A9927D] transition-all"
+							className="hover:border-[var(--color-taupe)] transition-all"
 						>
 							Close
 						</button>
@@ -1029,7 +740,7 @@ function Toast({
 
 	return (
 		<div
-			className="sf-toast"
+			className={styles.toast}
 			role="status"
 			aria-live="polite"
 			style={{
@@ -1037,8 +748,8 @@ function Toast({
 				bottom: 32,
 				left: "50%",
 				transform: "translateX(-50%)",
-				background: "#1a1816",
-				border: "1px solid #5E503F",
+				background: "var(--color-ink-soft)",
+				border: "1px solid var(--color-stone)",
 				borderRadius: 4,
 				padding: "12px 20px",
 				display: "flex",
@@ -1049,13 +760,13 @@ function Toast({
 				boxShadow: "0 8px 32px rgba(0,0,0,0.6)",
 			}}
 		>
-			<span style={{ color: "#F2F4F3", fontSize: "0.875rem" }}>
+			<span style={{ color: "var(--color-cream)", fontSize: "0.875rem" }}>
 				{message}
 			</span>
 			<button
 				onClick={onAction}
 				style={{
-					color: "#49111C",
+					color: "var(--color-wine)",
 					fontSize: "0.875rem",
 					fontWeight: 700,
 					background: "none",
@@ -1071,7 +782,7 @@ function Toast({
 				onClick={onDismiss}
 				aria-label="Dismiss"
 				style={{
-					color: "#A9927D",
+					color: "var(--color-taupe)",
 					background: "none",
 					border: "none",
 					cursor: "pointer",
@@ -1129,9 +840,9 @@ function SortDropdown({
 				aria-haspopup="listbox"
 				style={{
 					background: "none",
-					border: "1px solid #5E503F",
+					border: "1px solid var(--color-stone)",
 					borderRadius: 4,
-					color: "#A9927D",
+					color: "var(--color-taupe)",
 					fontSize: "0.82rem",
 					padding: "7px 12px",
 					cursor: "pointer",
@@ -1139,16 +850,16 @@ function SortDropdown({
 					alignItems: "center",
 					gap: 8,
 				}}
-				className="hover:border-[#A9927D] transition-colors"
+				className="hover:border-[var(--color-taupe)] transition-colors"
 			>
-				<span style={{ color: "#5E503F", fontSize: "0.75rem" }}>Sort:</span>
+				<span style={{ color: "var(--color-stone)", fontSize: "0.75rem" }}>Sort:</span>
 				{value}
 				<ChevronDown />
 			</button>
 
 			{open && (
 				<div
-					className="sf-dropdown"
+					className={styles.dropdown}
 					style={{
 						position: "absolute",
 						right: 0,
@@ -1177,14 +888,14 @@ function SortDropdown({
 								border: "none",
 								fontSize: "0.83rem",
 								cursor: "pointer",
-								color: opt === value ? "#F2F4F3" : "#A9927D",
+								color: opt === value ? "var(--color-cream)" : "var(--color-taupe)",
 								fontWeight: opt === value ? 600 : 400,
 								borderLeft:
 									opt === value
-										? "2px solid #49111C"
+										? "2px solid var(--color-wine)"
 										: "2px solid transparent",
 							}}
-							className="hover:bg-[#1a1816] transition-colors"
+							className="hover:bg-[var(--color-ink-soft)] transition-colors"
 						>
 							{opt}
 						</button>
@@ -1219,13 +930,12 @@ function sortTitles(titles: Title[], sort: SortOption): Title[] {
 
 type AppState = "loading" | "loaded" | "error";
 
-export default function App() {
+export function MyListView({ onBrowse }: { onBrowse: () => void }) {
 	const [appState, setAppState] = useState<AppState>("loading");
 	const [titles, setTitles] = useState<Title[]>([]);
 	const [sortOption, setSortOption] = useState<SortOption>("Recently Added");
 	const [toast, setToast] = useState<{ item: Title } | null>(null);
 	const [modal, setModal] = useState<Title | null>(null);
-	const [activePage, setActivePage] = useState("My List");
 
 	// Simulate loading
 	useEffect(() => {
@@ -1267,32 +977,18 @@ export default function App() {
 		console.info("Play:", item.title);
 	}, []);
 
-	const handleNavigate = useCallback((page: string) => {
-		setActivePage(page);
-	}, []);
-
 	return (
-		<div
-			style={{ background: "#0A0908", minHeight: "100vh", color: "#F2F4F3" }}
-		>
+		<div className={styles.page}>
 			{/* Visually hidden SR announcer */}
 			<div
 				id="sr-announce"
 				aria-live="assertive"
 				aria-atomic="true"
-				style={{
-					position: "absolute",
-					width: 1,
-					height: 1,
-					overflow: "hidden",
-					clip: "rect(0,0,0,0)",
-				}}
+				className={styles.srOnly}
 			/>
 
-			<Navbar activePage={activePage} onNavigate={handleNavigate} />
-
 			{/* Page content */}
-			<main style={{ paddingTop: 72 }}>
+			<main className={styles.main}>
 				<div
 					style={{
 						maxWidth: 1400,
@@ -1304,7 +1000,7 @@ export default function App() {
 					{appState === "loading" && (
 						<>
 							<div
-								className="sf-skeleton"
+								className={styles.skeleton}
 								style={{
 									height: 52,
 									width: 180,
@@ -1313,7 +1009,7 @@ export default function App() {
 								}}
 							/>
 							<div
-								className="sf-skeleton"
+								className={styles.skeleton}
 								style={{
 									height: 18,
 									width: 320,
@@ -1321,7 +1017,7 @@ export default function App() {
 									marginBottom: 40,
 								}}
 							/>
-							<div className="sf-card-grid">
+							<div className={styles.cardGrid}>
 								{Array.from({ length: 8 }).map((_, i) => (
 									<SkeletonCard key={i} />
 								))}
@@ -1333,9 +1029,9 @@ export default function App() {
 					{appState === "error" && (
 						<div style={{ textAlign: "center", paddingTop: 80 }}>
 							<h1
-								className="sf-display"
+								className={styles.display}
 								style={{
-									color: "#F2F4F3",
+									color: "var(--color-cream)",
 									fontSize: "2rem",
 									fontWeight: 700,
 									marginBottom: 12,
@@ -1343,14 +1039,14 @@ export default function App() {
 							>
 								We couldn't load My List.
 							</h1>
-							<p style={{ color: "#A9927D", marginBottom: 24 }}>
+							<p style={{ color: "var(--color-taupe)", marginBottom: 24 }}>
 								Please try again.
 							</p>
 							<button
 								onClick={() => setAppState("loading")}
 								style={{
-									background: "#49111C",
-									color: "#F2F4F3",
+									background: "var(--color-wine)",
+									color: "var(--color-cream)",
 									border: "none",
 									borderRadius: 4,
 									padding: "10px 24px",
@@ -1379,9 +1075,9 @@ export default function App() {
 							>
 								<div>
 									<h1
-										className="sf-display"
+										className={styles.display}
 										style={{
-											color: "#F2F4F3",
+											color: "var(--color-cream)",
 											fontSize: "clamp(2.5rem, 4vw, 3.5rem)",
 											fontWeight: 800,
 											letterSpacing: "0.04em",
@@ -1394,7 +1090,7 @@ export default function App() {
 									</h1>
 									<p
 										style={{
-											color: "#A9927D",
+											color: "var(--color-taupe)",
 											fontSize: "0.9rem",
 											margin: 0,
 										}}
@@ -1429,13 +1125,13 @@ export default function App() {
 										paddingBottom: 64,
 									}}
 								>
-									<div style={{ color: "#A9927D", marginBottom: 20 }}>
+									<div style={{ color: "var(--color-taupe)", marginBottom: 20 }}>
 										<BookmarkIcon />
 									</div>
 									<h2
-										className="sf-display"
+										className={styles.display}
 										style={{
-											color: "#F2F4F3",
+											color: "var(--color-cream)",
 											fontSize: "1.5rem",
 											fontWeight: 700,
 											marginBottom: 10,
@@ -1445,7 +1141,7 @@ export default function App() {
 									</h2>
 									<p
 										style={{
-											color: "#A9927D",
+											color: "var(--color-taupe)",
 											fontSize: "0.875rem",
 											marginBottom: 24,
 										}}
@@ -1453,10 +1149,10 @@ export default function App() {
 										Add movies and TV shows to find them here.
 									</p>
 									<button
-										onClick={() => setActivePage("Home")}
+										onClick={onBrowse}
 										style={{
-											background: "#49111C",
-											color: "#F2F4F3",
+											background: "var(--color-wine)",
+											color: "var(--color-cream)",
 											border: "none",
 											borderRadius: 4,
 											padding: "10px 24px",
@@ -1470,7 +1166,7 @@ export default function App() {
 								</div>
 							) : (
 								<div
-									className="sf-card-grid"
+									className={styles.cardGrid}
 									role="list"
 									aria-label="My List"
 								>
@@ -1492,7 +1188,7 @@ export default function App() {
 								aria-live="polite"
 								aria-atomic="true"
 								style={{
-									color: "#A9927D",
+									color: "var(--color-taupe)",
 									fontSize: "0.8rem",
 									marginTop: 24,
 								}}

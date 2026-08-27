@@ -11,7 +11,7 @@ import styles from "../auth/auth.module.css";
 export default function RegisterPage({
 	onNavigate,
 }: {
-	onNavigate: (p: "login" | "dashboard") => void;
+	onNavigate: (p: "login" | "subscription") => void;
 }) {
 	const [form, setForm] = useState({
 		firstName: "",
@@ -46,7 +46,7 @@ export default function RegisterPage({
 	const handleSubmit = (ev: React.FormEvent) => {
 		ev.preventDefault();
 		// No backend yet — a valid form just creates an account and logs the user in.
-		if (validate()) onNavigate("dashboard");
+		if (validate()) onNavigate("subscription");
 	};
 
 	return (

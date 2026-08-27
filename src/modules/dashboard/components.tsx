@@ -375,14 +375,14 @@ export function CarouselRow({
 
 const NAV_LINKS = ["Home", "TV Shows", "Movies", "New & Popular", "My List"];
 
-export type DashboardView = "home" | "tvShows" | "movies" | "newAndPopular";
+export type DashboardView = "home" | "tvShows" | "movies" | "newAndPopular" | "myList";
 
 const VIEW_BY_LINK: Record<string, DashboardView | null> = {
 	Home: "home",
 	"TV Shows": "tvShows",
 	Movies: "movies",
 	"New & Popular": "newAndPopular",
-	"My List": null,
+	"My List": "myList",
 };
 
 export function Navbar({
@@ -429,9 +429,8 @@ export function Navbar({
 				{NAV_LINKS.map((link) => (
 					<button
 						key={link}
-						className={`text-sm transition-colors whitespace-nowrap ${styles.navLink} ${VIEW_BY_LINK[link] === activeView && link !== "My List" ? styles.navLinkActive : styles.navLinkInactive}`}
+						className={`text-sm transition-colors whitespace-nowrap ${styles.navLink} ${VIEW_BY_LINK[link] === activeView ? styles.navLinkActive : styles.navLinkInactive}`}
 						onClick={() => navigateLink(link)}
-						aria-disabled={VIEW_BY_LINK[link] === null}
 					>
 						{link}
 					</button>
@@ -445,7 +444,7 @@ export function Navbar({
 					{NAV_LINKS.map((link) => (
 						<button
 							key={link}
-							className={`text-left px-4 py-2.5 text-sm ${VIEW_BY_LINK[link] === activeView && link !== "My List" ? styles.mobileNavLinkActive : styles.mobileNavLinkInactive}`}
+							className={`text-left px-4 py-2.5 text-sm ${VIEW_BY_LINK[link] === activeView ? styles.mobileNavLinkActive : styles.mobileNavLinkInactive}`}
 							onClick={() => {
 								setMobileNavOpen(false);
 								navigateLink(link);
@@ -618,7 +617,7 @@ export function Hero({
 				</p>
 				<div className="flex gap-3">
 					<button
-						className={`flex items-center gap-2 px-5 sm:px-6 py-3 rounded-lg text-sm font-bold transition-all duration-150 hover:bg-[#d0d2d1] active:scale-[0.98] ${styles.heroPlayBtn}`}
+						className={`flex items-center gap-2 px-5 sm:px-6 py-3 rounded-lg text-sm font-bold transition-all duration-150 active:scale-[0.98] ${styles.heroPlayBtn}`}
 						onClick={() => onWatch(show)}
 					>
 						<PlayIcon size={14} color="var(--color-ink)" />

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./account.module.css";
+import SubscriptionPage from "../subscription/SubscriptionPage";
 
 // ─── Icons ────────────────────────────────────────────────────────────────────
 
@@ -250,7 +251,8 @@ type Modal =
 	| "signout"
 	| "billing"
 	| "cancelMembership"
-	| "updatePayment";
+	| "updatePayment"
+	| "changePlan";
 
 // ─── Modal Overlay ────────────────────────────────────────────────────────────
 
@@ -1406,6 +1408,7 @@ function MembershipPage({ setModal }: { setModal: (m: Modal) => void }) {
 					</div>
 				</div>
 				<button
+					onClick={() => setModal("changePlan")}
 					className="text-sm font-medium px-4 py-2 rounded transition-colors"
 					style={{
 						border: "1px solid var(--color-stone)",
@@ -2370,6 +2373,14 @@ export function AccountView() {
 			)}
 			{modal === "updatePayment" && (
 				<UpdatePaymentModal onClose={() => setModal(null)} />
+			)}
+			{modal === "changePlan" && (
+				<div className={styles.subscriptionOverlay}>
+					<SubscriptionPage
+						onComplete={() => setModal(null)}
+						onBack={() => setModal(null)}
+					/>
+				</div>
 			)}
 			{modal === "delete1" && (
 				<DeleteAccountModal1
