@@ -1,11 +1,6 @@
 import { useState } from "react";
 import styles from "./auth.module.css";
 
-// ─── Shared assets ─────────────────────────────────────────────────────────
-
-export const BG_IMAGE =
-  "https://images.unsplash.com/photo-1483982258113-b72862e6cff6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaW5lbWF0aWMlMjBkYXJrJTIwanVuZ2xlJTIwZW50ZXJ0YWlubWVudCUyMG5pZ2h0fGVufDF8fHx8MTc4NTg0NTQ1NHww&ixlib=rb-4.1.0&q=80&w=1920";
-
 export const LOGO_SVG = (
   <svg
     viewBox="0 0 111.81 30"

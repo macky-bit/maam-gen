@@ -9,23 +9,21 @@ export interface Show {
   hero?: string;
   description?: string;
   match?: number;
-  /** "movie" or "tv" — needed to hit the right TMDB endpoints (videos, similar, etc). */
   mediaType?: "movie" | "tv";
 }
 
-export interface TMDBData {
+export interface CatalogRow {
+  title: string;
+  shows: Show[];
+  top10?: boolean;
+  exploreAll?: boolean;
+}
+
+export interface TMDBCatalogData {
   featured: Show | null;
-  trending: Show[];
-  newReleases: Show[];
-  action: Show[];
-  drama: Show[];
-  scifi: Show[];
-  horror: Show[];
-  comedy: Show[];
-  acclaimed: Show[];
-  topTen: Show[];
-  continueWatching: (Show & { progress: number })[];
-  recommended: Show[];
+  rows: CatalogRow[];
   loading: boolean;
   error: string | null;
 }
+
+export type CatalogKind = "home" | "movies" | "tvShows" | "newAndPopular";

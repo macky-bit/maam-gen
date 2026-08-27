@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchTVEpisodes, type TMDBEpisode } from "./tmdb";
 import styles from "./movie.module.css";
 
 // ─── Logo ─────────────────────────────────────────────────────────────────────
@@ -10,16 +11,6 @@ const LOGO_SVG = (
 );
 
 // ─── Episode data ─────────────────────────────────────────────────────────────
-
-const EPISODES = [
-  { ep: 1, title: "The Beginning", duration: "48m", thumb: "https://images.unsplash.com/photo-1634733049839-0292be607569?w=200&q=60", nowPlaying: false },
-  { ep: 2, title: "Into the Unknown", duration: "52m", thumb: "https://images.unsplash.com/photo-1517462964-21fdcec3f25b?w=200&q=60", nowPlaying: true },
-  { ep: 3, title: "The Reckoning", duration: "44m", thumb: "https://images.unsplash.com/photo-1711464669343-2596d0f1b526?w=200&q=60", nowPlaying: false },
-  { ep: 4, title: "Broken Chains", duration: "51m", thumb: "https://images.unsplash.com/photo-1518611540400-6b85a0704342?w=200&q=60", nowPlaying: false },
-  { ep: 5, title: "The Long Night", duration: "56m", thumb: "https://images.unsplash.com/photo-1626858707242-cb196439a4d8?w=200&q=60", nowPlaying: false },
-  { ep: 6, title: "Aftermath", duration: "49m", thumb: "https://images.unsplash.com/photo-1634510979979-4be6881d31bb?w=200&q=60", nowPlaying: false },
-  { ep: 7, title: "Endgame", duration: "61m", thumb: "https://images.unsplash.com/photo-1637059880830-59a90102de77?w=200&q=60", nowPlaying: false },
-];
 
 // ─── Icons ────────────────────────────────────────────────────────────────────
 
@@ -157,9 +148,7 @@ function Scrubber({ progress, onChange }: { progress: number; onChange: (v: numb
 
 // ─── Player area ─────────────────────────────────────────────────────────────
 
-const HERO_STILL = "https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920&q=80";
-
-function PlayerArea({ title, year, rating, match }: { title: string; year: string; rating: string; match: number }) {
+function PlayerArea({ title, year, rating, match, backgroundImage }: { title: string; year: string; rating: string; match: number; backgroundImage: string }) {
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0.28);
   const [subscribed, setSubscribed] = useState(false);
@@ -171,7 +160,7 @@ function PlayerArea({ title, year, rating, match }: { title: string; year: strin
     <div className="flex flex-col">
       {/* 16:9 video frame */}
       <div className="relative w-full" style={{ aspectRatio: "16/9" }}>
-        <img src={HERO_STILL} alt={title} className="w-full h-full object-cover rounded-xl" />
+        <img src={backgroundImage} alt={title} className="w-full h-full object-cover rounded-xl" />
         {/* Bottom gradient */}
         <div className={`absolute inset-0 rounded-xl ${styles.videoGradient}`} />
 
@@ -230,8 +219,8 @@ function PlayerArea({ title, year, rating, match }: { title: string; year: strin
 
 // ─── Episode Panel ────────────────────────────────────────────────────────────
 
-function EpisodePanel({ showTitle }: { showTitle: string }) {
-  const [activeEp, setActiveEp] = useState(2);
+function EpisodePanel({ showTitle, episodes }: { showTitle: string; episodes: TMDBEpisode[] }) {
+  const [activeEp, setActiveEp] = useState(1);
 
   return (
     <div className={`flex flex-col h-full rounded-xl overflow-hidden ${styles.episodePanel}`}>
@@ -251,7 +240,10 @@ function EpisodePanel({ showTitle }: { showTitle: string }) {
 
       {/* Episode list */}
       <div className="flex-1 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
-        {EPISODES.map((ep) => {
+        {episodes.length === 0 && (
+          <p className={`px-4 py-6 text-xs ${styles.episodeSubLabel}`}>Episode details are unavailable from TMDB.</p>
+        )}
+        {episodes.map((ep) => {
           const active = activeEp === ep.ep;
           return (
             <button
@@ -263,7 +255,7 @@ function EpisodePanel({ showTitle }: { showTitle: string }) {
                 {ep.ep}
               </span>
               <div className="relative shrink-0 rounded overflow-hidden" style={{ width: 80, aspectRatio: "16/9" }}>
-                <img src={ep.thumb} alt={ep.title} className="w-full h-full object-cover" />
+                {ep.thumb && <img src={ep.thumb} alt={ep.title} className="w-full h-full object-cover" />}
                 <div
                   className={`absolute bottom-1 right-1 px-1 rounded text-[9px] ${styles.episodeDurationBadge} ${active ? styles.episodeDurationActive : styles.episodeDurationInactive}`}
                 >
@@ -289,46 +281,26 @@ function EpisodePanel({ showTitle }: { showTitle: string }) {
 // ─── Reactions & Comments ────────────────────────────────────────────────────
 
 const REACTIONS = [
-  { emoji: "👍", label: "Upvote", count: "842" },
-  { emoji: "😂", label: "Funny", count: "213" },
-  { emoji: "❤️", label: "Love", count: "671" },
-  { emoji: "😮", label: "Surprised", count: "118" },
-  { emoji: "😠", label: "Angry", count: "54" },
-  { emoji: "😢", label: "Sad", count: "97" },
+  { emoji: "👍", label: "Upvote", count: 0 },
+  { emoji: "😂", label: "Funny", count: 0 },
+  { emoji: "❤️", label: "Love", count: 0 },
+  { emoji: "😮", label: "Surprised", count: 0 },
+  { emoji: "😠", label: "Angry", count: 0 },
+  { emoji: "😢", label: "Sad", count: 0 },
 ];
 
-const SAMPLE_COMMENTS = [
-  {
-    id: 1,
-    avatar: "JK",
-    avatarColor: "var(--color-wine)",
-    user: "jk_films",
-    time: "2h ago",
-    text: "Absolutely incredible performance. The cinematography in the third act is unmatched — pure cinema.",
-    reactions: [{ emoji: "👍", count: 34 }, { emoji: "❤️", count: 12 }],
-    replies: [
-      {
-        id: 11,
-        avatar: "MR",
-        avatarColor: "var(--color-stone)",
-        user: "m_reviews",
-        time: "1h ago",
-        text: "Totally agree. The lighting in that scene was something else.",
-        reactions: [{ emoji: "👍", count: 8 }],
-      },
-    ],
-  },
-  {
-    id: 2,
-    avatar: "SN",
-    avatarColor: "var(--color-stone)",
-    user: "screen_nerd",
-    time: "4h ago",
-    text: "Best thing I've watched this year. Already on my second rewatch.",
-    reactions: [{ emoji: "👍", count: 21 }, { emoji: "😂", count: 5 }],
-    replies: [],
-  },
-];
+interface CommentData {
+  id: number;
+  avatar: string;
+  avatarColor: string;
+  user: string;
+  time: string;
+  text: string;
+  reactions: { emoji: string; count: number }[];
+  replies: CommentData[];
+}
+
+const COMMENTS: CommentData[] = [];
 
 function ReactionMini({ emoji, count }: { emoji: string; count: number }) {
   const [active, setActive] = useState(false);
@@ -344,7 +316,7 @@ function ReactionMini({ emoji, count }: { emoji: string; count: number }) {
 }
 
 function CommentRow({ comment, nested = false }: {
-  comment: typeof SAMPLE_COMMENTS[0] | typeof SAMPLE_COMMENTS[0]["replies"][0];
+  comment: CommentData;
   nested?: boolean;
 }) {
   return (
@@ -352,7 +324,7 @@ function CommentRow({ comment, nested = false }: {
       {/* Avatar */}
       <div
         className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 ${styles.avatarBubble}`}
-        style={{ background: (comment as typeof SAMPLE_COMMENTS[0]).avatarColor ?? "var(--color-stone)" }}
+        style={{ background: comment.avatarColor || "var(--color-stone)" }}
       >
         {comment.avatar}
       </div>
@@ -376,7 +348,7 @@ function CommentRow({ comment, nested = false }: {
   );
 }
 
-function ReactionButton({ emoji, label, count }: { emoji: string; label: string; count: string }) {
+function ReactionButton({ emoji, label, count }: { emoji: string; label: string; count: number }) {
   const [active, setActive] = useState(false);
   return (
     <button
@@ -385,7 +357,7 @@ function ReactionButton({ emoji, label, count }: { emoji: string; label: string;
     >
       <span className="text-2xl">{emoji}</span>
       <span className={`text-xs font-bold ${active ? styles.reactionCountActive : styles.reactionCountInactive}`}>
-        {active ? String(parseInt(count) + 1) : count}
+        {active ? count + 1 : count}
       </span>
       <span className={`text-[10px] ${styles.reactionLabel}`}>{label}</span>
     </button>
@@ -404,7 +376,7 @@ function ReactionsAndComments({ contentType }: { contentType: "movie" | "series"
         <p className={`text-sm font-semibold ${styles.reactionHeading}`}>
           What did you think of this {contentType === "series" ? "episode" : "movie"}?
         </p>
-        <p className={`text-xs ${styles.reactionSubtext}`}>1.9K reactions</p>
+        <p className={`text-xs ${styles.reactionSubtext}`}>No reactions yet</p>
         <div className="flex items-center gap-10 mt-1">
           {REACTIONS.map(r => <ReactionButton key={r.label} {...r} />)}
         </div>
@@ -413,7 +385,7 @@ function ReactionsAndComments({ contentType }: { contentType: "movie" | "series"
       {/* ── Comments header ── */}
       <div className="flex items-center justify-between mb-4">
         <h3 className={`text-sm font-semibold ${styles.commentsHeading}`}>
-          {SAMPLE_COMMENTS.length * 3} Comments
+          {COMMENTS.length} Comments
         </h3>
         <div className="flex items-center gap-1">
           {(["Best", "Newest", "Oldest"] as const).map(tab => (
@@ -474,7 +446,7 @@ function ReactionsAndComments({ contentType }: { contentType: "movie" | "series"
 
       {/* ── Comment thread ── */}
       <div className="flex flex-col gap-6">
-        {SAMPLE_COMMENTS.map(comment => (
+        {COMMENTS.map(comment => (
           <div key={comment.id} className="flex flex-col gap-4">
             <CommentRow comment={comment} />
             {comment.replies.map(reply => (
@@ -490,15 +462,30 @@ function ReactionsAndComments({ contentType }: { contentType: "movie" | "series"
 // ─── Watch Screen ─────────────────────────────────────────────────────────────
 
 export interface WatchProps {
+  id: number;
   title: string;
   year: string;
   rating: string;
   match: number;
+  backgroundImage: string;
   isSeries?: boolean;
   onBack: () => void;
 }
 
-export default function WatchScreen({ title, year, rating, match, isSeries = false, onBack }: WatchProps) {
+export default function WatchScreen({ id, title, year, rating, match, backgroundImage, isSeries = false, onBack }: WatchProps) {
+  const [episodes, setEpisodes] = useState<TMDBEpisode[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!isSeries) return;
+    fetchTVEpisodes(id).then((items) => {
+      if (!cancelled) setEpisodes(items);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [id, isSeries]);
+
   return (
     <div className={`min-h-screen ${styles.page}`}>
       {/* Slim top bar */}
@@ -526,14 +513,14 @@ export default function WatchScreen({ title, year, rating, match, isSeries = fal
       <div className={`px-10 xl:px-12 py-4 ${isSeries ? "flex gap-5 items-start" : ""}`}>
         {/* Player */}
         <div className={isSeries ? "w-[70%] shrink-0" : "w-full"}>
-          <PlayerArea title={title} year={year} rating={rating} match={match} />
+          <PlayerArea title={title} year={year} rating={rating} match={match} backgroundImage={backgroundImage} />
           <ReactionsAndComments contentType={isSeries ? "series" : "movie"} />
         </div>
 
         {/* Episode panel (series only) */}
         {isSeries && (
           <div className="flex-1" style={{ height: "calc(56.25vw * 0.7 + 88px)" }}>
-            <EpisodePanel showTitle={title} />
+            <EpisodePanel showTitle={title} episodes={episodes} />
           </div>
         )}
       </div>

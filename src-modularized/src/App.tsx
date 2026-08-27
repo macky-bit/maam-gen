@@ -25,10 +25,12 @@ export default function App() {
   if (page === "watch" && watching) {
     return (
       <WatchScreen
+        id={watching.id}
         title={watching.title}
         year={watching.year}
         rating={watching.rating}
-        match={watching.match ?? 80}
+        match={watching.match ?? 0}
+        backgroundImage={watching.hero ?? watching.image}
         isSeries={watching.mediaType === "tv"}
         onBack={() => setPage("dashboard")}
       />

@@ -1026,111 +1026,6 @@ function ArticlePage({
 	);
 }
 
-// ─── Profile Dropdown ────────────────────────────────────────────
-function ProfileDropdown({
-	onClose,
-	onBackToStreamflix,
-}: {
-	onClose: () => void;
-	onBackToStreamflix: () => void;
-}) {
-	const ref = useRef<HTMLDivElement>(null);
-
-	useEffect(() => {
-		const handler = (e: MouseEvent) => {
-			if (ref.current && !ref.current.contains(e.target as Node)) onClose();
-		};
-		const keyHandler = (e: KeyboardEvent) => {
-			if (e.key === "Escape") onClose();
-		};
-		document.addEventListener("mousedown", handler);
-		document.addEventListener("keydown", keyHandler);
-		return () => {
-			document.removeEventListener("mousedown", handler);
-			document.removeEventListener("keydown", keyHandler);
-		};
-	}, [onClose]);
-
-	const itemStyle: React.CSSProperties = {
-		display: "block",
-		width: "100%",
-		padding: "10px 16px",
-		background: "none",
-		border: "none",
-		textAlign: "left",
-		color: C.cream,
-		fontSize: 14,
-		fontFamily: "'Barlow', sans-serif",
-		cursor: "pointer",
-		transition: "background 0.12s",
-	};
-
-	return (
-		<div
-			ref={ref}
-			style={{
-				position: "absolute",
-				top: "calc(100% + 8px)",
-				right: 0,
-				background: "var(--color-ink-soft)",
-				border: `1px solid var(--color-stone)`,
-				borderRadius: 8,
-				minWidth: 200,
-				zIndex: 100,
-				boxShadow: "0 8px 32px var(--color-ink)",
-				overflow: "hidden",
-			}}
-			role="menu"
-		>
-			{["Profile", "Manage Profiles"].map((label) => (
-				<button
-					key={label}
-					style={itemStyle}
-					role="menuitem"
-					onMouseEnter={(e) =>
-						(e.currentTarget.style.background = `var(--color-wine)`)
-					}
-					onMouseLeave={(e) => (e.currentTarget.style.background = "none")}
-					onClick={onClose}
-				>
-					{label}
-				</button>
-			))}
-			<div
-				style={{
-					borderTop: `1px solid var(--color-stone)`,
-					margin: "4px 0",
-				}}
-			/>
-			<button
-				style={{ ...itemStyle }}
-				role="menuitem"
-				onMouseEnter={(e) =>
-					(e.currentTarget.style.background = `var(--color-wine)`)
-				}
-				onMouseLeave={(e) => (e.currentTarget.style.background = "none")}
-				onClick={() => {
-					onClose();
-					onBackToStreamflix();
-				}}
-			>
-				Back to StreamFlix
-			</button>
-			<button
-				style={{ ...itemStyle, color: C.taupe }}
-				role="menuitem"
-				onMouseEnter={(e) =>
-					(e.currentTarget.style.background = `var(--color-wine)`)
-				}
-				onMouseLeave={(e) => (e.currentTarget.style.background = "none")}
-				onClick={onClose}
-			>
-				Sign Out
-			</button>
-		</div>
-	);
-}
-
 // ─── Main App ────────────────────────────────────────────────────
 export function HelpView() {
 	const [query, setQuery] = useState("");
@@ -1141,7 +1036,6 @@ export function HelpView() {
 		(typeof ARTICLES)[0] | null
 	>(null);
 	const [showModal, setShowModal] = useState(false);
-	const [showDropdown, setShowDropdown] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const suggestionsRef = useRef<HTMLDivElement>(null);
 	const searchContainerRef = useRef<HTMLDivElement>(null);
@@ -1196,11 +1090,6 @@ export function HelpView() {
 	if (selectedArticle) {
 		return (
 			<div className={styles.page} style={{ minHeight: "100vh" }}>
-				<Navbar
-					showDropdown={showDropdown}
-					setShowDropdown={setShowDropdown}
-					onBackToStreamflix={() => setSelectedArticle(null)}
-				/>
 				<ArticlePage
 					article={selectedArticle}
 					onBack={() => setSelectedArticle(null)}
@@ -1220,12 +1109,6 @@ export function HelpView() {
 				flexDirection: "column",
 			}}
 		>
-			<Navbar
-				showDropdown={showDropdown}
-				setShowDropdown={setShowDropdown}
-				onBackToStreamflix={() => {}}
-			/>
-
 			{/* Main content */}
 			<main
 				style={{
@@ -1670,119 +1553,3 @@ export function HelpView() {
 	);
 }
 
-// ─── Navbar ──────────────────────────────────────────────────────
-function Navbar({
-	showDropdown,
-	setShowDropdown,
-	onBackToStreamflix,
-}: {
-	showDropdown: boolean;
-	setShowDropdown: (v: boolean) => void;
-	onBackToStreamflix: () => void;
-}) {
-	return (
-		<header
-			style={{
-				position: "sticky",
-				top: 0,
-				zIndex: 80,
-				background: C.ink,
-				borderBottom: `1px solid var(--color-stone)`,
-				height: 72,
-				display: "flex",
-				alignItems: "center",
-			}}
-		>
-			<div
-				style={{
-					maxWidth: 1200,
-					width: "100%",
-					margin: "0 auto",
-					padding: "0 24px",
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "space-between",
-				}}
-			>
-				{/* Left */}
-				<div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-					<span
-						style={{
-							fontFamily: "'Barlow Condensed', sans-serif",
-							fontWeight: 800,
-							fontSize: 24,
-							color: C.wine,
-							letterSpacing: "0.04em",
-							lineHeight: 1,
-						}}
-					>
-						STREAMFLIX
-					</span>
-					<div
-						style={{
-							width: 1,
-							height: 30,
-							background: `var(--color-stone)`,
-						}}
-					/>
-					<span
-						style={{
-							fontFamily: "'Barlow', sans-serif",
-							fontSize: 15,
-							fontWeight: 400,
-							color: C.cream,
-							letterSpacing: "0.01em",
-						}}
-					>
-						Help Center
-					</span>
-				</div>
-
-				{/* Right: Profile */}
-				<div style={{ position: "relative" }}>
-					<button
-						onClick={() => setShowDropdown(!showDropdown)}
-						aria-haspopup="true"
-						aria-expanded={showDropdown}
-						aria-label="Profile menu"
-						style={{
-							background: "none",
-							border: "none",
-							cursor: "pointer",
-							display: "flex",
-							alignItems: "center",
-							gap: 8,
-							padding: "4px",
-						}}
-					>
-						<div
-							style={{
-								width: 34,
-								height: 34,
-								background: C.wine,
-								borderRadius: 4,
-								display: "flex",
-								alignItems: "center",
-								justifyContent: "center",
-								fontFamily: "'Barlow Condensed', sans-serif",
-								fontWeight: 700,
-								fontSize: 14,
-								color: C.cream,
-								letterSpacing: "0.05em",
-							}}
-						>
-							KC
-						</div>
-						<ChevronDownIcon color={C.taupe} size={12} />
-					</button>
-					{showDropdown && (
-						<ProfileDropdown
-							onClose={() => setShowDropdown(false)}
-							onBackToStreamflix={onBackToStreamflix}
-						/>
-					)}
-				</div>
-			</div>
-		</header>
-	);
-}

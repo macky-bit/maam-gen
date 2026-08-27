@@ -237,22 +237,38 @@ export function CarouselRow({
 
 const NAV_LINKS = ["Home", "TV Shows", "Movies", "New & Popular", "My List"];
 
+export type DashboardView = "home" | "tvShows" | "movies" | "newAndPopular";
+
+const VIEW_BY_LINK: Record<string, DashboardView | null> = {
+  Home: "home",
+  "TV Shows": "tvShows",
+  Movies: "movies",
+  "New & Popular": "newAndPopular",
+  "My List": null,
+};
+
 export function Navbar({
   onSignOut,
   searchOpen,
   setSearchOpen,
   onNavigatePage,
   onNavigateView,
+  activeView,
 }: {
   onSignOut: () => void;
   searchOpen: boolean;
   setSearchOpen: (v: boolean) => void;
   onNavigatePage?: (page: "account" | "profile" | "help") => void;
-  onNavigateView?: (view: "home" | "catWindow" | "tvSeries") => void;
+  onNavigateView?: (view: DashboardView) => void;
+  activeView: DashboardView;
 }) {
   const [profileOpen, setProfileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const navigateLink = (link: string) => {
+    const target = VIEW_BY_LINK[link];
+    if (target) onNavigateView?.(target);
+  };
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 flex items-center gap-4 sm:gap-6 px-4 sm:px-10 xl:px-12 h-14 ${styles.header}`}>
@@ -273,8 +289,9 @@ export function Navbar({
         {NAV_LINKS.map((link) => (
           <button
             key={link}
-            className={`text-sm transition-colors whitespace-nowrap ${styles.navLink} ${link === "Home" ? styles.navLinkActive : styles.navLinkInactive}`}
-            onClick={() => onNavigateView?.(link === "TV Shows" || link === "Movies" ? "tvSeries" : link === "New & Popular" ? "catWindow" : "home")}
+            className={`text-sm transition-colors whitespace-nowrap ${styles.navLink} ${VIEW_BY_LINK[link] === activeView && link !== "My List" ? styles.navLinkActive : styles.navLinkInactive}`}
+            onClick={() => navigateLink(link)}
+            aria-disabled={VIEW_BY_LINK[link] === null}
           >
             {link}
           </button>
@@ -286,10 +303,10 @@ export function Navbar({
           {NAV_LINKS.map((link) => (
             <button
               key={link}
-              className={`text-left px-4 py-2.5 text-sm ${link === "Home" ? styles.mobileNavLinkActive : styles.mobileNavLinkInactive}`}
+              className={`text-left px-4 py-2.5 text-sm ${VIEW_BY_LINK[link] === activeView && link !== "My List" ? styles.mobileNavLinkActive : styles.mobileNavLinkInactive}`}
               onClick={() => {
                 setMobileNavOpen(false);
-                onNavigateView?.(link === "TV Shows" || link === "Movies" ? "tvSeries" : link === "New & Popular" ? "catWindow" : "home");
+                navigateLink(link);
               }}
             >
               {link}
@@ -321,21 +338,12 @@ export function Navbar({
             aria-label="Notifications"
           >
             <BellIcon />
-            <span className={`absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full ${styles.notifDot}`} />
           </button>
           {notifOpen && (
             <div className={`absolute right-0 top-8 w-64 sm:w-72 rounded-xl overflow-hidden shadow-2xl ${styles.dropdown}`}>
-              {[
-                { title: "New episode available", desc: "House of the Dragon S3E1 is now streaming", time: "2m ago" },
-                { title: "You might like this", desc: "Based on your history: The Godfather", time: "1h ago" },
-                { title: "Watchlist updated", desc: "3 new titles added to My List picks", time: "3h ago" },
-              ].map((n) => (
-                <div key={n.title} className={`flex flex-col gap-0.5 px-4 py-3 border-b cursor-pointer hover:bg-white/5 transition-colors ${styles.notifRow}`}>
-                  <span className={`text-xs font-semibold ${styles.notifTitle}`}>{n.title}</span>
-                  <span className={`text-xs ${styles.notifDesc}`}>{n.desc}</span>
-                  <span className={`text-[10px] ${styles.notifTime}`}>{n.time}</span>
-                </div>
-              ))}
+              <div className={`px-4 py-4 ${styles.notifRow}`}>
+                <span className={`text-xs ${styles.notifDesc}`}>No new notifications.</span>
+              </div>
             </div>
           )}
         </div>
@@ -448,10 +456,18 @@ export function Hero({
 
 export const GENRES = ["All", "Action", "Drama", "Sci-Fi", "Horror", "Comedy"];
 
-export function GenreFilters({ active, setActive }: { active: string; setActive: (g: string) => void }) {
+export function GenreFilters({
+  active,
+  setActive,
+  genres = GENRES,
+}: {
+  active: string;
+  setActive: (g: string) => void;
+  genres?: string[];
+}) {
   return (
     <div className="flex items-center gap-2 px-4 sm:px-10 xl:px-12 py-5 flex-wrap">
-      {GENRES.map((g) => (
+        {genres.map((g) => (
         <button
           key={g}
           onClick={() => setActive(g)}

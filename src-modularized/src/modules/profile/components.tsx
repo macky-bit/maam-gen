@@ -344,105 +344,6 @@ function Avatar({
 	);
 }
 
-// ── Navbar ─────────────────────────────────────────────────────────────────
-
-function Navbar({ onManageProfiles }: { onManageProfiles: () => void }) {
-	const [dropdownOpen, setDropdownOpen] = useState(false);
-	const dropdownRef = useRef<HTMLDivElement>(null);
-
-	useEffect(() => {
-		function handleClick(e: MouseEvent) {
-			if (
-				dropdownRef.current &&
-				!dropdownRef.current.contains(e.target as Node)
-			) {
-				setDropdownOpen(false);
-			}
-		}
-		if (dropdownOpen) document.addEventListener("mousedown", handleClick);
-		return () => document.removeEventListener("mousedown", handleClick);
-	}, [dropdownOpen]);
-
-	useEffect(() => {
-		function handleKey(e: KeyboardEvent) {
-			if (e.key === "Escape") setDropdownOpen(false);
-		}
-		document.addEventListener("keydown", handleKey);
-		return () => document.removeEventListener("keydown", handleKey);
-	}, []);
-
-	const items = ["Profile", "Manage Profiles", "Help", "Sign Out"];
-
-	return (
-		<nav
-			className="fixed top-0 left-0 right-0 z-50 bg-[var(--color-ink)]"
-			style={{ borderBottom: "1px solid var(--color-stone)" }}
-		>
-			<div className="max-w-7xl mx-auto px-6 md:px-10 h-[72px] flex items-center justify-between">
-				<span
-					className="text-[var(--color-wine)] font-display font-extrabold text-2xl tracking-widest uppercase select-none"
-					style={{ fontFamily: "'Barlow Condensed', sans-serif" }}
-				>
-					STREAMFLIX
-				</span>
-
-				<div className="relative" ref={dropdownRef}>
-					<button
-						className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-wine)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-ink)] rounded-sm"
-						onClick={() => setDropdownOpen((v) => !v)}
-						aria-label="Profile menu"
-						aria-expanded={dropdownOpen}
-					>
-						<Avatar initials="KC" size="sm" />
-						<ChevronDownIcon size={14} className="text-[var(--color-taupe)]" />
-					</button>
-
-					{dropdownOpen && (
-						<div
-							className="absolute right-0 top-[calc(100%+8px)] w-44 rounded-sm shadow-xl py-1 z-50"
-							style={{
-								background: "var(--color-ink-soft)",
-								border: "1px solid var(--color-stone)",
-							}}
-						>
-							{items.map((item) => (
-								<button
-									key={item}
-									className="w-full text-left px-4 py-2.5 text-sm transition-colors focus:outline-none"
-									style={{
-										color: item === "Profile" ? "var(--color-cream)" : "var(--color-taupe)",
-										fontFamily: "'Barlow', sans-serif",
-									}}
-									onMouseEnter={(e) => {
-										(
-											e.currentTarget as HTMLElement
-										).style.background = "var(--color-wine)";
-									}}
-									onMouseLeave={(e) => {
-										(
-											e.currentTarget as HTMLElement
-										).style.background = "transparent";
-									}}
-									onClick={() => {
-										setDropdownOpen(false);
-										if (item === "Manage Profiles")
-											onManageProfiles();
-									}}
-								>
-									{item === "Profile" && (
-										<span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--color-wine)] mr-2 align-middle" />
-									)}
-									{item}
-								</button>
-							))}
-						</div>
-					)}
-				</div>
-			</div>
-		</nav>
-	);
-}
-
 // ── EditProfileModal ───────────────────────────────────────────────────────
 
 function EditProfileModal({ onClose }: { onClose: () => void }) {
@@ -718,36 +619,7 @@ function PINModal({
 
 // ── WatchHistoryPanel ──────────────────────────────────────────────────────
 
-const HISTORY_ITEMS = [
-	{
-		id: 1,
-		title: "Outer Banks",
-		subtitle: "Season 3, Episode 5",
-		date: "Aug 20, 2026",
-		img: "https://images.unsplash.com/photo-1622862817210-1dffe88af5ad?w=400&q=80",
-	},
-	{
-		id: 2,
-		title: "Mickey 17",
-		subtitle: "Full Movie",
-		date: "Aug 18, 2026",
-		img: "https://images.unsplash.com/flagged/photo-1560177776-295b9cd779de?w=400&q=80",
-	},
-	{
-		id: 3,
-		title: "Insidious: The Red Door",
-		subtitle: "Full Movie",
-		date: "Aug 14, 2026",
-		img: "https://images.unsplash.com/photo-1783109112049-4bf8c5ca96f1?w=400&q=80",
-	},
-	{
-		id: 4,
-		title: "Classroom of the Elite",
-		subtitle: "Season 2, Episode 8",
-		date: "Aug 10, 2026",
-		img: "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=400&q=80",
-	},
-];
+const HISTORY_ITEMS: { id: number; title: string; subtitle: string; date: string; img: string }[] = [];
 
 function WatchHistoryPanel({ onClose }: { onClose: () => void }) {
 	const [items, setItems] = useState(HISTORY_ITEMS);
@@ -848,11 +720,7 @@ function WatchHistoryPanel({ onClose }: { onClose: () => void }) {
 
 // ── ManageProfilesModal ────────────────────────────────────────────────────
 
-const PROFILES = [
-	{ id: 1, initials: "KC", name: "Kevin Chan", primary: true },
-	{ id: 2, initials: "JC", name: "Jane Chan", primary: false },
-	{ id: 3, initials: "K", name: "Kids", primary: false },
-];
+const PROFILES: { id: number; initials: string; name: string; primary: boolean }[] = [];
 
 function ManageProfilesModal({ onClose }: { onClose: () => void }) {
 	const [profiles, setProfiles] = useState(PROFILES);
@@ -1198,32 +1066,7 @@ function RightPanelRow({
 
 // ── Main App ───────────────────────────────────────────────────────────────
 
-const INITIAL_CARDS: CardData[] = [
-	{
-		id: 1,
-		title: "Outer Banks",
-		img: "https://images.unsplash.com/photo-1622862817210-1dffe88af5ad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-		progress: 62,
-	},
-	{
-		id: 2,
-		title: "Classroom of the Elite",
-		img: "https://images.unsplash.com/photo-1577896851231-70ef18881754?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-		progress: 35,
-	},
-	{
-		id: 3,
-		title: "Mickey 17",
-		img: "https://images.unsplash.com/flagged/photo-1560177776-295b9cd779de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-		progress: 80,
-	},
-	{
-		id: 4,
-		title: "Insidious: The Red Door",
-		img: "https://images.unsplash.com/photo-1783109112049-4bf8c5ca96f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-		progress: 18,
-	},
-];
+const INITIAL_CARDS: CardData[] = [];
 
 export function ProfileView() {
 	// Settings state
@@ -1258,8 +1101,6 @@ export function ProfileView() {
 
 	return (
 		<div className={`min-h-screen ${styles.page}`}>
-			<Navbar onManageProfiles={() => setManageOpen(true)} />
-
 			{/* Modals */}
 			{editOpen && <EditProfileModal onClose={() => setEditOpen(false)} />}
 			{pinOpen && (

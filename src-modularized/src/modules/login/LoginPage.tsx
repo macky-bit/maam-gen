@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  BG_IMAGE,
   LOGO_SVG,
   Field,
   PasswordField,
@@ -37,7 +36,6 @@ export default function LoginPage({
     <div className={`flex min-h-screen w-full ${styles.page}`}>
       {/* ── LEFT: Cinematic section ── */}
       <div className="relative hidden lg:flex lg:w-[60%] flex-col justify-end overflow-hidden">
-        <img src={BG_IMAGE} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover object-center" />
         <div className={`absolute inset-0 ${styles.overlayBase}`} />
         <div className={`absolute inset-0 ${styles.overlayWine}`} />
         <div className={`absolute inset-0 ${styles.overlayRadial}`} />
@@ -69,7 +67,6 @@ export default function LoginPage({
       <div className={`flex-1 lg:w-[40%] flex flex-col overflow-y-auto ${styles.page}`}>
         {/* Mobile background */}
         <div className="lg:hidden absolute inset-0 pointer-events-none">
-          <img src={BG_IMAGE} alt="" aria-hidden className="w-full h-full object-cover opacity-10" />
           <div className={`absolute inset-0 ${styles.mobileOverlay}`} />
         </div>
 

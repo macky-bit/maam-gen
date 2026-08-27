@@ -27,6 +27,14 @@ export const GENRE_MAP: Record<number, string> = {
 	53: "Thriller",
 	10770: "TV Movie",
 	37: "Western",
+	10759: "Action & Adventure",
+	10762: "Kids",
+	10763: "News",
+	10764: "Reality",
+	10765: "Sci-Fi & Fantasy",
+	10766: "Soap",
+	10767: "Talk",
+	10768: "War & Politics",
 };
 
 // Fetch helper — always returns [] on error so the UI never crashes
@@ -49,6 +57,44 @@ export async function tmdb<T>(
 	}
 }
 
+async function tmdbOne<T>(path: string): Promise<T | null> {
+	try {
+		const url = new URL(`${TMDB_BASE}${path}`);
+		url.searchParams.set("api_key", TMDB_API_KEY);
+		url.searchParams.set("language", "en-US");
+		const res = await fetch(url.toString());
+		if (!res.ok) throw new Error(`TMDB ${res.status}`);
+		return await res.json();
+	} catch (e) {
+		console.error("TMDB fetch error:", e);
+		return null;
+	}
+}
+
+export interface TMDBEpisode {
+	ep: number;
+	title: string;
+	duration: string;
+	thumb: string;
+}
+
+export async function fetchTVEpisodes(id: number): Promise<TMDBEpisode[]> {
+	const details = await tmdbOne<{ seasons?: { season_number: number; episode_count: number }[] }>(`/tv/${id}`);
+	const season = details?.seasons?.find((item) => item.season_number > 0 && item.episode_count > 0);
+	if (!season) return [];
+
+	const seasonData = await tmdbOne<{
+		episodes?: { episode_number: number; name?: string; runtime?: number; still_path?: string | null }[];
+	}>(`/tv/${id}/season/${season.season_number}`);
+
+	return (seasonData?.episodes ?? []).map((episode) => ({
+		ep: episode.episode_number,
+		title: episode.name ?? "",
+		duration: episode.runtime ? `${episode.runtime}m` : "",
+		thumb: episode.still_path ? `${TMDB_IMG}/w300${episode.still_path}` : "",
+	})).filter((episode) => Boolean(episode.title));
+}
+
 // Convert a raw TMDB movie/TV item into our Show shape
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function toShow(
@@ -56,7 +102,7 @@ export function toShow(
 	isHero = false,
 	mediaType: "movie" | "tv" = "movie",
 ): Show {
-	const title = item.title ?? item.name ?? "Untitled";
+	const title = item.title ?? item.name ?? "";
 	const year = (item.release_date ?? item.first_air_date ?? "").slice(0, 4);
 	const genres = ((item.genre_ids as number[]) ?? [])
 		.map((id) => GENRE_MAP[id])
@@ -67,12 +113,10 @@ export function toShow(
 		id: item.id,
 		title,
 		year,
-		rating: "TV-MA", // TMDB's free tier doesn't expose certification; default it
+		rating: "",
 		duration: "",
 		genres,
-		image: item.poster_path
-			? `${TMDB_IMG}/w342${item.poster_path}`
-			: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=400&h=600&fit=crop",
+		image: item.poster_path ? `${TMDB_IMG}/w342${item.poster_path}` : "",
 		hero:
 			isHero && item.backdrop_path
 				? `${TMDB_IMG}/original${item.backdrop_path}`
