@@ -1,0 +1,17 @@
+.page {
+  background: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-body);
+}
+
+.noScrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.noScrollbar::-webkit-scrollbar { display: none; }
+
+.backButton {
+  background: var(--color-wine);
+  border-color: var(--color-stone);
+  color: var(--color-cream);
+  font-family: var(--font-body);
+  border-radius: 0.5rem;
+}
+.backButton:hover { background: var(--color-wine-hover); }
