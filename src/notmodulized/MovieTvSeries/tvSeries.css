@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+	margin: 0;
+	padding: 0;
+	background: #0a0908;
+	color: #f2f4f3;
+	font-family: "Inter", sans-serif;
+}
+
+/* Hide scrollbars but keep scrolling */
+.hide-scroll::-webkit-scrollbar {
+	display: none;
+}
+.hide-scroll {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+/* Frosted glass utility */
+.glass {
+	backdrop-filter: blur(16px) saturate(180%);
+	-webkit-backdrop-filter: blur(16px) saturate(180%);
+}

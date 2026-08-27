@@ -1,0 +1,92 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Barlow:wght@300;400;500;600&display=swap");
+@import "tailwindcss";
+
+@theme {
+	--color-ink: #0a0908;
+	--color-wine: #49111c;
+	--color-cream: #f2f4f3;
+	--color-taupe: #a9927d;
+	--color-stone: #5e503f;
+	--font-display: "Barlow Condensed", sans-serif;
+	--font-body: "Barlow", sans-serif;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-color: #0a0908;
+	color: #f2f4f3;
+	font-family: "Barlow", sans-serif;
+}
+
+.toggle-track {
+	width: 44px;
+	height: 24px;
+	border-radius: 12px;
+	position: relative;
+	transition: background-color 0.2s;
+	cursor: pointer;
+	flex-shrink: 0;
+}
+
+.toggle-track.on {
+	background-color: #49111c;
+}
+
+.toggle-track.off {
+	background-color: #5e503f;
+}
+
+.toggle-handle {
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background-color: #f2f4f3;
+	position: absolute;
+	top: 3px;
+	transition: left 0.2s;
+}
+
+.toggle-track.on .toggle-handle {
+	left: 23px;
+}
+
+.toggle-track.off .toggle-handle {
+	left: 3px;
+}
+
+.dropdown-select {
+	background: transparent;
+	border: none;
+	color: #a9927d;
+	font-family: "Barlow", sans-serif;
+	font-size: 0.875rem;
+	cursor: pointer;
+	outline: none;
+	appearance: none;
+	padding-right: 20px;
+}
+
+.dropdown-select option {
+	background: #0a0908;
+	color: #f2f4f3;
+}
+
+.card-hover:hover .card-overlay {
+	opacity: 1;
+}
+
+.card-hover:hover {
+	transform: scale(1.03);
+	z-index: 10;
+}

@@ -1,0 +1,22 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap");
+@import "tailwindcss";
+
+:root {
+	--ink: #0a0908;
+	--wine: #49111c;
+	--cream: #f2f4f3;
+	--taupe: #a9927d;
+	--stone: #5e503f;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background-color: var(--ink);
+	color: var(--cream);
+	font-family: "Barlow", sans-serif;
+	margin: 0;
+	padding: 0;
+}
