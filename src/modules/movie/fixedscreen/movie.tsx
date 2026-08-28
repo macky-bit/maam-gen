@@ -14,6 +14,22 @@ interface WatchProps {
 }
 
 type ReactionKey = "upvote" | "funny" | "love" | "surprised" | "angry" | "sad";
+type ActivePanel = "music" | "refresher" | null;
+
+interface PlaceholderTrack {
+	id: string;
+	title: string;
+	artist: string;
+	album: string;
+	timestamp: string;
+}
+
+interface PlaceholderRefresher {
+	summary: string;
+	events: string[];
+	characters: string[];
+	keyDetails: string[];
+}
 
 const REACTIONS: Array<[ReactionKey, string, string]> = [
 	["upvote", "👍", "Upvote"],
@@ -60,6 +76,34 @@ function PlayerIcon({ playing }: { playing: boolean }) {
 	);
 }
 
+function MusicIcon() {
+	return (
+		<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+			<path d="M9 18V5l10-2v13" />
+			<circle cx="6" cy="18" r="3" />
+			<circle cx="16" cy="16" r="3" />
+		</svg>
+	);
+}
+
+function RefreshIcon() {
+	return (
+		<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+			<path d="M20 11a8 8 0 1 0-2.3 5.7" />
+			<polyline points="20 4 20 11 13 11" />
+		</svg>
+	);
+}
+
+function RefresherSection({ title, items }: { title: string; items: string[] }) {
+	return (
+		<div className={styles.refresherSection}>
+			<h4>{title}</h4>
+			<ul>{items.map((item) => <li key={item}>{item}</li>)}</ul>
+		</div>
+	);
+}
+
 export default function WatchScreen({
 	id,
 	title,
@@ -81,6 +125,8 @@ export default function WatchScreen({
 	const [volume, setVolume] = useState(80);
 	const [muted, setMuted] = useState(false);
 	const [captions, setCaptions] = useState(false);
+	const [activePanel, setActivePanel] = useState<ActivePanel>(null);
+	const [spoilersRevealed, setSpoilersRevealed] = useState(false);
 	const [progress, setProgress] =
 		useState<Record<string, number>>(loadProgress);
 	const [myReaction, setMyReaction] = useState<ReactionKey | null>(null);
@@ -102,6 +148,8 @@ export default function WatchScreen({
 		setSelectedEpisode(null);
 		setEpisodes([]);
 		setEpisodesError(false);
+		setActivePanel(null);
+		setSpoilersRevealed(false);
 		if (!isSeries)
 			return () => {
 				active = false;
@@ -138,6 +186,26 @@ export default function WatchScreen({
 	const percent = duration > 0 ? Math.min((current / duration) * 100, 100) : 0;
 	const watched = percent >= 95;
 	const playerImage = selectedEpisode?.thumb || backgroundImage;
+	const contentLabel = isSeries && selectedEpisode
+		? `${title} — Episode ${selectedEpisode.ep}: ${selectedEpisode.title}`
+		: title;
+
+	// TODO: replace with real source for soundtrack and refresher data.
+	const placeholderFeatures = useMemo<{
+		tracks: PlaceholderTrack[];
+		refresher: PlaceholderRefresher;
+	}>(() => ({
+		tracks: [
+			{ id: `${contentId}-track-1`, title: "Main Theme", artist: "Soundtrack source pending", album: contentLabel, timestamp: "Scene timestamp pending" },
+			{ id: `${contentId}-track-2`, title: "Featured Track", artist: "Soundtrack source pending", album: contentLabel, timestamp: "Scene timestamp pending" },
+		],
+		refresher: {
+			summary: `A detailed refresher for ${contentLabel} will appear here when a verified recap source is connected.`,
+			events: ["Key events are waiting for a verified refresher source."],
+			characters: ["Important character details are waiting for a verified refresher source."],
+			keyDetails: ["Story details are waiting for a verified refresher source."],
+		},
+	}), [contentId, contentLabel]);
 
 	useEffect(() => {
 		if (!playing) return;
@@ -190,6 +258,13 @@ export default function WatchScreen({
 		setSelectedEpisode(episode);
 		setPlaying(false);
 		setShowControls(true);
+		setActivePanel(null);
+		setSpoilersRevealed(false);
+	};
+
+	const togglePanel = (panel: Exclude<ActivePanel, null>) => {
+		setActivePanel((currentPanel) => currentPanel === panel ? null : panel);
+		setSpoilersRevealed(false);
 	};
 
 	const react = (key: ReactionKey) => {
@@ -377,6 +452,52 @@ export default function WatchScreen({
 						</div>
 					)}
 				</section>
+
+				<div className={styles.featureActions}>
+					<button type="button" className={activePanel === "music" ? styles.featureActive : ""} onClick={() => togglePanel("music")}>
+						<MusicIcon /> Music
+					</button>
+					<button type="button" className={activePanel === "refresher" ? styles.featureActive : ""} onClick={() => togglePanel("refresher")}>
+						<RefreshIcon /> {isSeries ? "Episode Refresher" : "Movie Refresher"}
+					</button>
+				</div>
+
+				{activePanel === "music" && (
+					<section className={styles.featurePanel}>
+						<div className={styles.featureHeader}>
+							<div><MusicIcon /><h2>Soundtrack — {contentLabel}</h2></div>
+							<button type="button" onClick={() => setActivePanel(null)} aria-label="Close soundtrack">×</button>
+						</div>
+						<div className={styles.trackList}>
+							{placeholderFeatures.tracks.map((track) => (
+								<div className={styles.trackRow} key={track.id}>
+									<span className={styles.musicTile}><MusicIcon /></span>
+									<div><strong>{track.title}</strong><small>{track.artist}</small><small>{track.album}</small></div>
+									<em>{track.timestamp}</em>
+								</div>
+							))}
+						</div>
+					</section>
+				)}
+
+				{activePanel === "refresher" && (
+					<section className={styles.featurePanel}>
+						<div className={styles.featureHeader}>
+							<div><RefreshIcon /><h2>{isSeries ? "Episode" : "Movie"} Refresher — {contentLabel}</h2></div>
+							<button type="button" onClick={() => setActivePanel(null)} aria-label="Close refresher">×</button>
+						</div>
+						<p className={styles.refresherSummary}>{placeholderFeatures.refresher.summary}</p>
+						{!spoilersRevealed ? (
+							<button type="button" className={styles.spoilerButton} onClick={() => setSpoilersRevealed(true)}>⚠ Reveal All</button>
+						) : (
+							<div className={styles.refresherGrid}>
+								<RefresherSection title="Key Events" items={placeholderFeatures.refresher.events} />
+								<RefresherSection title="Important Characters" items={placeholderFeatures.refresher.characters} />
+								<RefresherSection title="Key Details to Remember" items={placeholderFeatures.refresher.keyDetails} />
+							</div>
+						)}
+					</section>
+				)}
 
 				{isSeries && (
 					<section className={styles.episodesSection}>

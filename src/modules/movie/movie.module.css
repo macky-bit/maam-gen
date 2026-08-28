@@ -370,20 +370,3 @@
 	color: var(--color-taupe);
 	font-family: var(--font-body);
 }
-
-.featurePanel { margin-top: 1.25rem; padding: 1rem; border: 1px solid var(--color-stone); border-radius: .6rem; background: var(--color-ink-soft); }
-.featureTitle { display: flex; align-items: center; gap: .5rem; color: var(--color-cream); font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; }
-.featureTitle span { color: var(--color-taupe); font-family: var(--font-body); font-size: .75rem; font-weight: 400; }
-.trackRow { display: flex; gap: .75rem; align-items: center; padding: .75rem 0; border-top: 1px solid var(--color-stone); color: var(--color-cream); }
-.trackRow:first-of-type { margin-top: .75rem; }
-.trackRow small { display: block; color: var(--color-taupe); font-size: .72rem; }
-.musicTile { width: 2.5rem; height: 2.5rem; flex: 0 0 auto; display: grid; place-items: center; border-radius: .35rem; background: var(--color-wine); }
-.panelHeader { display: flex; justify-content: space-between; gap: 1rem; color: var(--color-taupe); }
-.panelLabel { margin-top: 1rem; color: var(--color-taupe); text-transform: uppercase; font-size: .7rem; letter-spacing: .12em; }
-.spoilerRow { margin-top: 1rem; padding: .7rem; display: flex; align-items: center; justify-content: space-between; gap: .75rem; border-radius: .4rem; background: color-mix(in srgb, var(--color-wine) 35%, transparent); color: var(--color-cream); font-size: .75rem; }
-.spoilerRow button { padding: .35rem .65rem; border: 1px solid var(--color-taupe); border-radius: 999px; }
-.reactions { padding: 1.25rem 0 .25rem; text-align: center; color: var(--color-cream); }
-.reactions > p { color: var(--color-taupe); font-size: .75rem; }
-.reactions > div { display: grid; grid-template-columns: repeat(6, 1fr); gap: .35rem; margin-top: .75rem; }
-.reactions button { display: flex; flex-direction: column; align-items: center; gap: .1rem; padding: .4rem .15rem; border: 1px solid transparent; border-radius: .45rem; color: var(--color-taupe); }
-.reactions button > span { font-size: 1.35rem; }.reactions button small { font-size: .62rem; }.reactions .reactionActive { border-color: var(--color-wine); background: color-mix(in srgb, var(--color-wine) 30%, transparent); color: var(--color-cream); }

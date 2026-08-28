@@ -4,15 +4,6 @@ import { fetchTrailerKey, fetchSimilar } from "./tmdb";
 import styles from "./movie.module.css";
 import { useMyList } from "../dashboard/myList/myListStore";
 
-const RXNS = [
-	["upvote", "👍", "Upvote", 1200], ["funny", "😂", "Funny", 310],
-	["love", "❤️", "Love", 285], ["surprised", "😮", "Surprised", 98],
-	["angry", "😡", "Angry", 42], ["sad", "😢", "Sad", 65],
-] as const;
-
-function MusicIcon() { return <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg>; }
-function RefreshIcon() { return <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><polyline points="20 4 20 11 13 11"/></svg>; }
-
 // ─── Icons (kept inline/no extra deps, matching the rest of the app) ───────
 
 function PlayIcon({
@@ -114,9 +105,6 @@ export default function PreviewModal({
 	const [muted, setMuted] = useState(true);
 	const [similar, setSimilar] = useState<Show[]>([]);
 	const [loadingTrailer, setLoadingTrailer] = useState(false);
-	const [musicOpen, setMusicOpen] = useState(false);
-	const [refresherOpen, setRefresherOpen] = useState(false);
-	const [reaction, setReaction] = useState<string | null>(null);
 	const { isSaved, toggle } = useMyList();
 	const mediaType = show?.mediaType ?? "movie";
 
@@ -146,9 +134,6 @@ export default function PreviewModal({
 		setTrailerKey(null);
 		setMuted(true);
 		setLoadingTrailer(true);
-		setMusicOpen(false);
-		setRefresherOpen(false);
-		setReaction(null);
 
 		Promise.all([
 			fetchTrailerKey(show.id, show.mediaType ?? "movie"),
@@ -167,11 +152,6 @@ export default function PreviewModal({
 
 	if (!show) return null;
 	const inList = isSaved(show.id, mediaType);
-	// TODO: replace with a real soundtrack source.
-	const tracks = [
-		{ id: 1, title: "Main Theme", artist: "StreamFlix Orchestra", album: show.title, timestamp: "0:02:14", scene: "Opening sequence" },
-		{ id: 2, title: "Into the Night", artist: "The Echoes", album: show.title, timestamp: "0:14:22", scene: "Rooftop confrontation" },
-	];
 
 	return (
 		<div
@@ -238,8 +218,6 @@ export default function PreviewModal({
 								>
 									{inList ? "✓" : <PlusIcon />}
 								</button>
-								<button onClick={() => setMusicOpen((v) => !v)} className={`h-9 md:h-10 px-3 rounded-full border flex items-center gap-2 text-xs font-semibold ${styles.circleBtn}`}><MusicIcon /> Music</button>
-								<button onClick={() => setRefresherOpen((v) => !v)} className={`h-9 md:h-10 px-3 rounded-full border flex items-center gap-2 text-xs font-semibold ${styles.circleBtn}`}><RefreshIcon /> Movie Refresher</button>
 							</div>
 						</div>
 
@@ -298,17 +276,6 @@ export default function PreviewModal({
 							)}
 						</div>
 					</div>
-
-					{musicOpen && <section className={styles.featurePanel}>
-						<h3 className={styles.featureTitle}><MusicIcon /> Soundtrack <span>{tracks.length} tracks</span></h3>
-						{tracks.map((track) => <div key={track.id} className={styles.trackRow}><span className={styles.musicTile}><MusicIcon /></span><div><strong>{track.title}</strong><small>{track.artist} · {track.album}</small><small>{track.timestamp} · {track.scene}</small></div></div>)}
-					</section>}
-
-					{refresherOpen && <div className="mt-5">
-						<section className={styles.featurePanel}><div className={styles.panelHeader}><h3 className={styles.featureTitle}><RefreshIcon /> Movie Refresher</h3><button onClick={() => setRefresherOpen(false)}>Close</button></div><p className={styles.panelLabel}>Summary</p><p className={styles.descriptionText}>{show.description || "No summary available."}</p><div className={styles.spoilerRow}><span>⚠ Some details contain spoilers</span><button>Reveal All</button></div></section>
-						<section className={styles.reactions}><h3>What did you think of this movie?</h3><p>2.0K reactions</p><div>{RXNS.map(([key, emoji, label, count]) => <button key={key} className={reaction === key ? styles.reactionActive : ""} onClick={() => setReaction(reaction === key ? null : key)}><span>{emoji}</span><small>{label}</small><small>{count + (reaction === key ? 1 : 0)}</small></button>)}</div></section>
-					</div>}
-
 					{/* More Like This */}
 					{similar.length > 0 && (
 						<div className="mt-8">

@@ -236,6 +236,100 @@
 	color: var(--color-stone);
 	font-size: 0.75rem;
 }
+.featureActions {
+	display: flex;
+	gap: 0.65rem;
+	margin-top: 1.25rem;
+	flex-wrap: wrap;
+}
+.featureActions button {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.6rem 1rem;
+	border: 1px solid var(--color-stone);
+	border-radius: 0.35rem;
+	background: transparent;
+	color: var(--color-taupe);
+	font: inherit;
+	font-size: 0.825rem;
+	cursor: pointer;
+}
+.featureActions button:hover,
+.featureActions .featureActive {
+	border-color: var(--color-wine);
+	background: var(--color-wine);
+	color: var(--color-cream);
+}
+.featurePanel {
+	margin-top: 0.8rem;
+	padding: 1.25rem;
+	border: 1px solid var(--color-stone);
+	border-radius: 0.65rem;
+	background: var(--color-ink-soft);
+}
+.featureHeader,
+.featureHeader > div {
+	display: flex;
+	align-items: center;
+}
+.featureHeader {
+	justify-content: space-between;
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+.featureHeader > div { gap: 0.55rem; }
+.featureHeader h2 { margin: 0; font-size: 1rem; }
+.featureHeader > button {
+	border: 0;
+	background: none;
+	color: var(--color-taupe);
+	font-size: 1.5rem;
+	cursor: pointer;
+}
+.trackList { display: flex; flex-direction: column; gap: 0.5rem; }
+.trackRow {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.75rem;
+	border: 1px solid color-mix(in srgb, var(--color-stone) 35%, transparent);
+	border-radius: 0.5rem;
+	background: color-mix(in srgb, var(--color-ink) 70%, transparent);
+}
+.musicTile {
+	display: grid;
+	place-items: center;
+	width: 2.6rem;
+	height: 2.6rem;
+	flex: 0 0 auto;
+	border-radius: 0.4rem;
+	background: var(--color-wine);
+}
+.trackRow > div { flex: 1; min-width: 0; }
+.trackRow strong,
+.trackRow small { display: block; }
+.trackRow small { margin-top: 0.15rem; color: var(--color-taupe); font-size: 0.72rem; }
+.trackRow em { color: var(--color-stone); font-size: 0.72rem; font-style: normal; text-align: right; }
+.refresherSummary { margin: 0; color: var(--color-taupe); line-height: 1.65; }
+.spoilerButton {
+	width: 100%;
+	margin-top: 1.1rem;
+	padding: 0.75rem;
+	border: 1px dashed var(--color-stone);
+	border-radius: 0.4rem;
+	background: transparent;
+	color: var(--color-taupe);
+	cursor: pointer;
+}
+.refresherGrid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 1rem;
+	margin-top: 1.1rem;
+}
+.refresherSection h4 { margin: 0 0 0.5rem; color: var(--color-cream); font-size: 0.82rem; }
+.refresherSection ul { margin: 0; padding-left: 1rem; color: var(--color-taupe); font-size: 0.78rem; line-height: 1.55; }
 .episodesSection,
 .reactions,
 .comments {
@@ -428,4 +522,6 @@
 	.logo {
 		font-size: 1rem;
 	}
+	.refresherGrid { grid-template-columns: 1fr; }
+	.trackRow em { display: none; }
 }
