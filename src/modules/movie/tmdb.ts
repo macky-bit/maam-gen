@@ -71,6 +71,18 @@ async function tmdbOne<T>(path: string): Promise<T | null> {
 	}
 }
 
+export async function fetchShowDetails(id: number, mediaType: "movie" | "tv" = "movie"): Promise<Show | null> {
+	const data = await tmdbOne<any>(`/${mediaType}/${id}`);
+	if (!data) return null;
+	const show = toShow(data, false, mediaType);
+	show.duration = mediaType === "movie" && data.runtime
+		? `${Math.floor(data.runtime / 60)}h ${data.runtime % 60}m`
+		: mediaType === "tv" && data.number_of_seasons
+			? `${data.number_of_seasons} season${data.number_of_seasons === 1 ? "" : "s"}`
+			: "";
+	return show;
+}
+
 export interface TMDBEpisode {
 	ep: number;
 	title: string;

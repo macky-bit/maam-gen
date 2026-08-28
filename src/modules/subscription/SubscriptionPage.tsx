@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./subscription.module.css";
 
 // ── Plan data ─────────────────────────────────────────────────────────────────
-type Plan = {
+export type Plan = {
 	id: string;
 	PlanName: string;
 	MonthlyPrice: string;
@@ -94,10 +94,11 @@ function IconGroup({ className = "" }: { className?: string }) {
 	);
 }
 
-function IconMaxUser({ className = "" }: { className?: string }) {
+function IconMaxUser({ className = "", style }: { className?: string; style?: React.CSSProperties }) {
 	return (
 		<svg
 			className={className}
+			style={style}
 			viewBox="0 0 24 24"
 			fill="none"
 			stroke="currentColor"
@@ -160,10 +161,10 @@ function IconX({ className = "" }: { className?: string }) {
 }
 
 // ── Plan card icon by id ──────────────────────────────────────────────────────
-function PlanIcon({ id, className = "" }: { id: string; className?: string }) {
-	if (id === "basic") return <IconUser className={className} />;
-	if (id === "standard") return <IconUsers className={className} />;
-	return <IconGroup className={className} />;
+function PlanIcon({ id, className = "", style }: { id: string; className?: string; style?: React.CSSProperties }) {
+	if (id === "basic") return <span style={style}><IconUser className={className} /></span>;
+	if (id === "standard") return <span style={style}><IconUsers className={className} /></span>;
+	return <span style={style}><IconGroup className={className} /></span>;
 }
 
 // ── Skeleton card ─────────────────────────────────────────────────────────────
@@ -705,9 +706,10 @@ type PageState = "loading" | "error" | "empty" | "ready";
 interface Props {
 	onComplete: () => void;
 	onBack?: () => void;
+	onSubscribe?: (plan: Plan) => void;
 }
 
-export default function SubscriptionPage({ onComplete, onBack }: Props) {
+export default function SubscriptionPage({ onComplete, onBack, onSubscribe }: Props) {
 	const [pageState, setPageState] = useState<PageState>("loading");
 	const [plans, setPlans] = useState<Plan[]>([]);
 	const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
@@ -720,7 +722,7 @@ export default function SubscriptionPage({ onComplete, onBack }: Props) {
 		if (!btnRefs.current[p.id]) {
 			btnRefs.current[p.id] = {
 				current: null,
-			} as React.RefObject<HTMLButtonElement>;
+			} as unknown as React.RefObject<HTMLButtonElement>;
 		}
 	});
 
@@ -880,7 +882,10 @@ export default function SubscriptionPage({ onComplete, onBack }: Props) {
 				<ConfirmModal
 					plan={modalPlan}
 					onCancel={handleModalClose}
-					onContinue={onComplete}
+					onContinue={() => {
+						onSubscribe?.(modalPlan);
+						onComplete();
+					}}
 				/>
 			)}
 		</div>

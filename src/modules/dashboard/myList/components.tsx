@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./myList.module.css";
+import { fetchShowDetails } from "../../movie/tmdb";
+import { addToMyList, getMyList, removeFromMyList } from "./myListStore";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -19,7 +21,9 @@ interface Title {
 	rating: string;
 	runtime?: string;
 	addedAt: number;
-	gradient: string;
+	gradient?: string;
+	image?: string;
+	mediaType?: "movie" | "tv";
 }
 
 // ── Sample data ──────────────────────────────────────────────────────────────
@@ -256,7 +260,7 @@ function ContentCard({
 			<div
 				style={{
 					aspectRatio: "16/9",
-					background: item.gradient,
+					background: item.gradient ?? "var(--color-ink-soft)",
 					borderRadius: 4,
 					border: show ? "2px solid var(--color-wine)" : "2px solid transparent",
 					overflow: "hidden",
@@ -264,6 +268,7 @@ function ContentCard({
 					transition: "border-color 0.2s",
 				}}
 			>
+				{item.image && <img src={item.image} alt={item.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />}
 				{/* Cinematic title overlay on thumbnail */}
 				<div
 					style={{
@@ -937,13 +942,18 @@ export function MyListView({ onBrowse }: { onBrowse: () => void }) {
 	const [toast, setToast] = useState<{ item: Title } | null>(null);
 	const [modal, setModal] = useState<Title | null>(null);
 
-	// Simulate loading
 	useEffect(() => {
-		const t = setTimeout(() => {
-			setTitles(INITIAL_TITLES);
+		let active = true;
+		const entries = getMyList();
+		Promise.all(entries.map(async (entry) => {
+			const show = await fetchShowDetails(entry.id, entry.mediaType);
+			return show ? { id: show.id, title: show.title, type: entry.mediaType === "tv" ? "Series" as const : "Movie" as const, year: Number(show.year) || 0, rating: show.rating, runtime: show.duration, addedAt: entry.addedAt, image: show.image, mediaType: entry.mediaType } : null;
+		})).then((items) => {
+			if (!active) return;
+			setTitles(items.flatMap((item) => item ? [item] : []));
 			setAppState("loaded");
-		}, 1200);
-		return () => clearTimeout(t);
+		}).catch(() => active && setAppState("error"));
+		return () => { active = false; };
 	}, []);
 
 	const sorted = sortTitles(titles, sortOption);
@@ -952,6 +962,7 @@ export function MyListView({ onBrowse }: { onBrowse: () => void }) {
 		(id: number) => {
 			const item = titles.find((t) => t.id === id);
 			if (!item) return;
+			removeFromMyList(item.id, item.mediaType ?? (item.type === "Series" ? "tv" : "movie"));
 			setTitles((prev) => prev.filter((t) => t.id !== id));
 			setToast({ item });
 			const sr = document.getElementById("sr-announce");
@@ -962,6 +973,7 @@ export function MyListView({ onBrowse }: { onBrowse: () => void }) {
 
 	const handleUndo = useCallback(() => {
 		if (!toast) return;
+		addToMyList(toast.item.id, toast.item.mediaType ?? (toast.item.type === "Series" ? "tv" : "movie"), toast.item.addedAt);
 		setTitles((prev) => {
 			const exists = prev.find((t) => t.id === toast.item.id);
 			if (exists) return prev;

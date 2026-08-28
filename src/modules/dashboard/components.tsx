@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import type { Show } from "../movie/types";
 import styles from "./dashboard.module.css";
+import { useMyList } from "./myList/myListStore";
 
 // ─── Logo ─────────────────────────────────────────────────────────────────────
 
@@ -150,7 +151,9 @@ export function MovieCard({
 	onInfo?: (show: Show) => void;
 }) {
 	const [hovered, setHovered] = useState(false);
-	const [inList, setInList] = useState(false);
+	const { isSaved, toggle } = useMyList();
+	const mediaType = show.mediaType ?? "movie";
+	const inList = isSaved(show.id, mediaType);
 
 	return (
 		<div
@@ -220,7 +223,7 @@ export function MovieCard({
 						<button
 							onClick={(e) => {
 								e.stopPropagation();
-								setInList((l) => !l);
+								toggle(show.id, mediaType);
 							}}
 							className={`flex items-center justify-center rounded-full w-7 h-7 border transition-colors ${inList ? styles.listBtnActive : styles.listBtnInactive}`}
 							aria-label={inList ? "Remove from list" : "Add to list"}

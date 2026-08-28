@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./account.module.css";
 import SubscriptionPage from "../subscription/SubscriptionPage";
+import type { Plan } from "../subscription/SubscriptionPage";
 
 // ─── Icons ────────────────────────────────────────────────────────────────────
 
@@ -943,14 +944,14 @@ function SignOutAllModal({ onClose }: { onClose: () => void }) {
 
 // ─── Billing Details Modal ────────────────────────────────────────────────────
 
-function BillingDetailsModal({ onClose }: { onClose: () => void }) {
+function BillingDetailsModal({ onClose, plan }: { onClose: () => void; plan: Plan | null }) {
 	return (
 		<ModalOverlay onClose={onClose}>
 			<ModalBox title="Billing Details" onClose={onClose}>
 				<div className="space-y-3">
 					{[
-						{ label: "Plan", value: "StreamFlix Premium" },
-						{ label: "Amount", value: "$17.99 / month" },
+						{ label: "Plan", value: plan ? `StreamFlix ${plan.PlanName}` : "No active plan" },
+						{ label: "Amount", value: plan ? `${plan.MonthlyPrice} / month` : "—" },
 						{ label: "Payment Method", value: "•••• 4242" },
 						{ label: "Next Billing Date", value: "September 27, 2026" },
 					].map((row) => (
@@ -997,7 +998,7 @@ function BillingDetailsModal({ onClose }: { onClose: () => void }) {
 								className="text-sm"
 								style={{ color: "var(--color-cream)" }}
 							>
-								$17.99
+								{plan?.MonthlyPrice ?? "—"}
 							</span>
 						</div>
 					))}
@@ -1350,7 +1351,7 @@ function OverviewContent({
 
 // ─── Membership Page ──────────────────────────────────────────────────────────
 
-function MembershipPage({ setModal }: { setModal: (m: Modal) => void }) {
+function MembershipPage({ setModal, plan }: { setModal: (m: Modal) => void; plan: Plan | null }) {
 	const [cancelling, setCancelling] = useState(false);
 	return (
 		<div className="space-y-8 pb-6">
@@ -1369,7 +1370,7 @@ function MembershipPage({ setModal }: { setModal: (m: Modal) => void }) {
 								className="font-display text-2xl font-bold tracking-wide mb-1"
 								style={{ color: "var(--color-cream)" }}
 							>
-								StreamFlix Premium
+								{plan ? `StreamFlix ${plan.PlanName}` : "No active plan"}
 							</p>
 							<div className="flex flex-wrap gap-3 mt-3">
 								{[
@@ -1396,7 +1397,7 @@ function MembershipPage({ setModal }: { setModal: (m: Modal) => void }) {
 								className="font-display text-xl font-bold"
 								style={{ color: "var(--color-cream)" }}
 							>
-								$17.99
+								{plan?.MonthlyPrice ?? "—"}
 							</p>
 							<p
 								className="text-xs"
@@ -1424,7 +1425,7 @@ function MembershipPage({ setModal }: { setModal: (m: Modal) => void }) {
 						e.currentTarget.style.color = "var(--color-taupe)";
 					}}
 				>
-					Change Plan
+					{plan ? "Change Plan" : "Choose a Plan"}
 				</button>
 			</div>
 
@@ -1445,7 +1446,7 @@ function MembershipPage({ setModal }: { setModal: (m: Modal) => void }) {
 							value: "September 27, 2026",
 							action: null,
 						},
-						{ label: "Amount", value: "$17.99 / month", action: null },
+						{ label: "Amount", value: plan ? `${plan.MonthlyPrice} / month` : "—", action: null },
 					].map((row, i, arr) => (
 						<div key={row.label}>
 							<div className="flex items-center py-4 gap-4">
@@ -1491,9 +1492,9 @@ function MembershipPage({ setModal }: { setModal: (m: Modal) => void }) {
 				<SectionHeading>Billing History</SectionHeading>
 				<div>
 					{[
-						{ date: "Aug 27, 2026", amount: "$17.99", status: "Paid" },
-						{ date: "Jul 27, 2026", amount: "$17.99", status: "Paid" },
-						{ date: "Jun 27, 2026", amount: "$17.99", status: "Paid" },
+						{ date: "Aug 27, 2026", amount: plan?.MonthlyPrice ?? "—", status: "Paid" },
+						{ date: "Jul 27, 2026", amount: plan?.MonthlyPrice ?? "—", status: "Paid" },
+						{ date: "Jun 27, 2026", amount: plan?.MonthlyPrice ?? "—", status: "Paid" },
 					].map((row, i, arr) => (
 						<div key={row.date}>
 							<div className="flex items-center py-3 gap-4">
@@ -2303,7 +2304,7 @@ function Sidebar({
 
 // ─── App ──────────────────────────────────────────────────────────────────────
 
-export function AccountView() {
+export function AccountView({ plan, onPlanChange }: { plan: Plan | null; onPlanChange: (plan: Plan) => void }) {
 	const [section, setSection] = useState<Section>("overview");
 	const [modal, setModal] = useState<Modal>(null);
 	const [deleteStep, setDeleteStep] = useState(1);
@@ -2319,7 +2320,7 @@ export function AccountView() {
 
 	return (
 		<div className={`min-h-screen ${styles.page}`}>
-			<main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 md:py-10">
+			<main className="max-w-6xl mx-auto px-4 sm:px-6 pt-4 pb-8 md:pt-6 md:pb-10">
 				{/* Page Heading */}
 				<h1
 					className="font-display font-black tracking-wider mb-6 md:mb-8"
@@ -2345,7 +2346,7 @@ export function AccountView() {
 							/>
 						)}
 						{section === "membership" && (
-							<MembershipPage setModal={setModal} />
+							<MembershipPage setModal={setModal} plan={plan} />
 						)}
 						{section === "security" && (
 							<SecurityPage setModal={setModal} />
@@ -2366,7 +2367,7 @@ export function AccountView() {
 			)}
 			{modal === "phone" && <AddPhoneModal onClose={() => setModal(null)} />}
 			{modal === "billing" && (
-				<BillingDetailsModal onClose={() => setModal(null)} />
+				<BillingDetailsModal onClose={() => setModal(null)} plan={plan} />
 			)}
 			{modal === "signout" && (
 				<SignOutAllModal onClose={() => setModal(null)} />
@@ -2377,6 +2378,7 @@ export function AccountView() {
 			{modal === "changePlan" && (
 				<div className={styles.subscriptionOverlay}>
 					<SubscriptionPage
+						onSubscribe={onPlanChange}
 						onComplete={() => setModal(null)}
 						onBack={() => setModal(null)}
 					/>

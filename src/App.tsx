@@ -8,6 +8,7 @@ import AccountPage from "./modules/account/AccountPage";
 import ProfilePage from "./modules/profile/ProfilePage";
 import HelpPage from "./modules/help/HelpPage";
 import SubscriptionPage from "./modules/subscription/SubscriptionPage";
+import type { Plan } from "./modules/subscription/SubscriptionPage";
 import type { Show } from "./modules/movie/types";
 
 type Page =
@@ -24,6 +25,14 @@ export default function App() {
 	const [page, setPage] = useState<Page>("login");
 	const [watching, setWatching] = useState<Show | null>(null);
 	const [previewing, setPreviewing] = useState<Show | null>(null);
+	const [activePlan, setActivePlan] = useState<Plan | null>(() => {
+		try { return JSON.parse(localStorage.getItem("sf_activePlan") ?? "null"); }
+		catch { return null; }
+	});
+	const savePlan = (plan: Plan) => {
+		setActivePlan(plan);
+		localStorage.setItem("sf_activePlan", JSON.stringify(plan));
+	};
 
 	const goToWatch = (show: Show) => {
 		setPreviewing(null); // close the modal if it was open
@@ -68,6 +77,8 @@ export default function App() {
 	if (page === "account") {
 		return (
 			<AccountPage
+				plan={activePlan}
+				onPlanChange={savePlan}
 				onBack={() => setPage("dashboard")}
 				onNavigate={(destination) => setPage(destination)}
 			/>
@@ -95,6 +106,7 @@ export default function App() {
 	if (page === "subscription") {
 		return (
 			<SubscriptionPage
+				onSubscribe={savePlan}
 				onComplete={() => setPage("dashboard")}
 				onBack={() => setPage("login")}
 			/>

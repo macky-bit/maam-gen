@@ -1133,8 +1133,8 @@ export function ProfileView() {
 			)}
 
 			{/* Page content */}
-			<div className="max-w-7xl mx-auto px-6 md:px-10 pt-[72px]">
-				<div className="py-10">
+			<div className="max-w-7xl mx-auto px-6 md:px-10 pt-4 md:pt-6">
+				<div className="pb-10">
 					{/* Page heading */}
 					<h1
 						className="text-[var(--color-cream)] font-display font-bold text-4xl tracking-wide uppercase mb-8"
